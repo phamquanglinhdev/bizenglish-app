@@ -36,17 +36,17 @@ class Grade extends Model
     */
     public function Student()
     {
-        return $this->belongsToMany(User::class, "user_student", "grade_id", "student_id");
+        return $this->belongsToMany(User::class, "student_grade", "grade_id", "student_id");
     }
 
     public function Teacher()
     {
-        return $this->belongsToMany(User::class, "user_teacher", "grade_id", "teacher_id");
+        return $this->belongsToMany(User::class, "teacher_grade", "grade_id", "teacher_id");
     }
 
     public function Client()
     {
-        return $this->belongsToMany(User::class, "user_client", "client_id", "client_id");
+        return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
     /*
     |--------------------------------------------------------------------------

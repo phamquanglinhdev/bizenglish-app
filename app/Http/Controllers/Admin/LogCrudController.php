@@ -21,49 +21,53 @@ class LogCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
     {
         CRUD::setModel(\App\Models\Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
-        CRUD::setEntityNameStrings('log', 'logs');
+        CRUD::setEntityNameStrings('Nhật ký', 'Nhật ký chung');
     }
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('grade_id');
-        CRUD::column('day');
-        CRUD::column('month');
-        CRUD::column('year');
-        CRUD::column('hour');
-        CRUD::column('minutes');
-        CRUD::column('duration');
-        CRUD::column('lesson');
-        CRUD::column('information');
-        CRUD::column('hour_salary');
-        CRUD::column('teacher_video');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::addColumn([
+            'name' => 'grade_id',
+            'type' => 'select',
+            'entity'=>'Log',
+            'model'=>"App\Model\Grade",
+            'attribute'=>'name',
+            'label'=>"Lớp",
+        ]);
+        CRUD::column('day')->label("Ngày");
+        CRUD::column('month')->label("Tháng");
+        CRUD::column('year')->label("Năm");
+        CRUD::column('hour')->label("Giờ");
+        CRUD::column('minutes')->label("Phút");
+        CRUD::column('duration')->label("Thời gian dạy");
+        CRUD::column('lesson')->label("Bài học");
+        CRUD::column('information')->label("Nội dung");
+        CRUD::column('hour_salary')->label("Lương theo giờ");
+        CRUD::column('teacher_video')->label("Video bài giảng");
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -71,31 +75,35 @@ class LogCrudController extends CrudController
     {
         CRUD::setValidation(LogRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('grade_id');
-        CRUD::field('day');
-        CRUD::field('month');
-        CRUD::field('year');
-        CRUD::field('hour');
-        CRUD::field('minutes');
-        CRUD::field('duration');
-        CRUD::field('lesson');
-        CRUD::field('information');
-        CRUD::field('hour_salary');
-        CRUD::field('teacher_video');
-        CRUD::field('created_at');
-        CRUD::field('updated_at');
+        CRUD::addField([
+            'name' => 'grade_id',
+            'type' => 'select',
+            'entity'=>'Log',
+            'model'=>"App\Models\Grade",
+            'attribute'=>'name',
+            'label'=>"Lớp",
+        ]);
+        CRUD::field('day')->label("Ngày");
+        CRUD::field('month')->label("Tháng");
+        CRUD::field('year')->label("Năm");
+        CRUD::field('hour')->label("Giờ");
+        CRUD::field('minutes')->label("Phút");
+        CRUD::field('duration')->label("Thời gian dạy(Phút)");
+        CRUD::field('lesson')->label("Bài học");
+        CRUD::field('information')->label("Nội dung");
+        CRUD::field('hour_salary')->label("Lương theo giờ");
+        CRUD::field('teacher_video')->label("Video bài giảng");
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

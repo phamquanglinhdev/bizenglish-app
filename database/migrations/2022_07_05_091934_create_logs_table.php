@@ -17,11 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("grade_id");
             $table->foreign("grade_id")->references("id")->on("grades");
-            $table->integer("day");
-            $table->integer("month");
-            $table->integer("year");
-            $table->integer("hour");
-            $table->integer("minutes");
+            $table->dateTime("time");
             $table->integer("duration");
             $table->string("lesson");
             $table->string("information");

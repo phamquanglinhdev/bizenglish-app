@@ -28,7 +28,9 @@ class Log extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+        public function Log(){
+            return $this->belongsTo(Grade::class,"grade_id","id");
+        }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
