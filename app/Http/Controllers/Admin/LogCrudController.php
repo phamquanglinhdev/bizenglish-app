@@ -47,16 +47,12 @@ class LogCrudController extends CrudController
             'attribute'=>'name',
             'label'=>"Lớp",
         ]);
-        CRUD::column('day')->label("Ngày");
-        CRUD::column('month')->label("Tháng");
-        CRUD::column('year')->label("Năm");
-        CRUD::column('hour')->label("Giờ");
-        CRUD::column('minutes')->label("Phút");
+        CRUD::column('time')->label("Thời gian");
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('information')->label("Nội dung");
         CRUD::column('hour_salary')->label("Lương theo giờ");
-        CRUD::column('teacher_video')->label("Video bài giảng");
+        CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -83,17 +79,19 @@ class LogCrudController extends CrudController
             'attribute'=>'name',
             'label'=>"Lớp",
         ]);
-        CRUD::field('day')->label("Ngày");
-        CRUD::field('month')->label("Tháng");
-        CRUD::field('year')->label("Năm");
-        CRUD::field('hour')->label("Giờ");
-        CRUD::field('minutes')->label("Phút");
+        CRUD::field('time')->label("Thời gian")->type("datetime");
         CRUD::field('duration')->label("Thời gian dạy(Phút)");
         CRUD::field('lesson')->label("Bài học");
         CRUD::field('information')->label("Nội dung");
         CRUD::field('hour_salary')->label("Lương theo giờ");
-        CRUD::field('teacher_video')->label("Video bài giảng");
-
+        CRUD::addField(
+            [
+                'name'      => 'teacher_video',
+                'label'     => 'Video bài giảng',
+                'type'      => 'upload',
+                'upload'    => true,
+                'disk'      => 'uploads_video',
+            ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
