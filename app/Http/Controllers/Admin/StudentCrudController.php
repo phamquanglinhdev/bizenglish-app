@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\StudentRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Student;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class UserCrudController
+ * Class StudentCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class UserCrudController extends CrudController
+class StudentCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,10 +28,9 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\User::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('Người dùng', 'Những người dùng');
-        $this->crud->denyAccess(['show','create']);
+        CRUD::setModel(Student::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
+        CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
     }
 
     /**
@@ -40,10 +41,10 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        CRUD::column('name')->label("Tên");
-        CRUD::column('email')->label("Email");
-        CRUD::column('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
+        $this->crud->addClause("where","type","3");
+        CRUD::addColumn(['name' => 'name', 'type' => 'text','label'=>"Tên học sinh"]);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text',"label"=>"Email của học sinh"]);
+        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -60,15 +61,16 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
+        CRUD::setValidation(StudentRequest::class);
 
-        CRUD::field('name')->label("Tên");
-        CRUD::field('email')->label("Email");
-        CRUD::field('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
+        CRUD::field('name')->label("Tên học sinh");
+        CRUD::field('email')->label("Email học sinh");
+        CRUD::field('type')->type("hidden")->value(3);
+        CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
         CRUD::addField(
             [
                 'name' => 'extra',
-                'label' => 'Thông tin thêm',
+                'label' => 'Thông tin thêm của học sinh',
                 'type' => 'repeatable',
                 'new_item_label' => 'Thêm thông tin', // customize the text of the button
                 'fields' => [
@@ -87,6 +89,14 @@ class UserCrudController extends CrudController
                 ],
             ],
         );
+        CRUD::addField(
+            [   // Password
+                'name'  => 'password',
+                'label' => 'Mật khẩu',
+                'type'  => 'password'
+            ],
+        );
+
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

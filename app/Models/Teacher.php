@@ -5,7 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class Grade extends Model
+class Teacher extends Model
 {
     use CrudTrait;
 
@@ -15,7 +15,7 @@ class Grade extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'grades';
+    protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -34,20 +34,7 @@ class Grade extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Student()
-    {
-        return $this->belongsToMany(User::class, "user_student", "grade_id", "student_id");
-    }
 
-    public function Teacher()
-    {
-        return $this->belongsToMany(User::class, "user_teacher", "grade_id", "teacher_id");
-    }
-
-    public function Client()
-    {
-        return $this->belongsToMany(User::class, "user_client", "client_id", "client_id");
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

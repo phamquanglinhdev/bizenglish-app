@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\TeacherRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class UserCrudController
+ * Class TeacherCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class UserCrudController extends CrudController
+class TeacherCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -26,10 +26,9 @@ class UserCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\User::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
-        CRUD::setEntityNameStrings('Người dùng', 'Những người dùng');
-        $this->crud->denyAccess(['show','create']);
+        CRUD::setModel(\App\Models\Teacher::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
+        CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
     }
 
     /**
@@ -40,10 +39,9 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        CRUD::column('name')->label("Tên");
-        CRUD::column('email')->label("Email");
-        CRUD::column('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
+        $this->crud->addClause("where", "type", "1");
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên"]);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của giáo viên"]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -60,15 +58,14 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
-
-        CRUD::field('name')->label("Tên");
-        CRUD::field('email')->label("Email");
-        CRUD::field('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
+        CRUD::setValidation(TeacherRequest::class);
+        CRUD::field('name')->label("Tên giáo viên");
+        CRUD::field('email')->label("Email giáo viên");
+        CRUD::field('type')->type("hidden")->value(1);
         CRUD::addField(
             [
                 'name' => 'extra',
-                'label' => 'Thông tin thêm',
+                'label' => 'Thông tin thêm của giáo viên',
                 'type' => 'repeatable',
                 'new_item_label' => 'Thêm thông tin', // customize the text of the button
                 'fields' => [
@@ -85,6 +82,13 @@ class UserCrudController extends CrudController
                         'wrapper' => ['class' => 'form-group col-md-6'],
                     ],
                 ],
+            ],
+        );
+        CRUD::addField(
+            [   // Password
+                'name' => 'password',
+                'label' => 'Mật khẩu',
+                'type' => 'password'
             ],
         );
         /**

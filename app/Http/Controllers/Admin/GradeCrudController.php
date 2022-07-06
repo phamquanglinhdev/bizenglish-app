@@ -21,41 +21,40 @@ class GradeCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
     {
         CRUD::setModel(\App\Models\Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
-        CRUD::setEntityNameStrings('grade', 'grades');
+        CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
     }
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
     protected function setupListOperation()
     {
-        CRUD::column('id');
-        CRUD::column('name');
-        CRUD::column('pricing');
-        CRUD::column('status');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
+        CRUD::column('name')->label("Tên lớp");
+        CRUD::column('pricing')->label("Gói học phí");
+        CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học","Đã kết thúc","Đã bảo lưu"]);
+        CRUD::column('created_at')->label("Ngày tạo lớp");
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -63,23 +62,21 @@ class GradeCrudController extends CrudController
     {
         CRUD::setValidation(GradeRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('name');
-        CRUD::field('pricing');
-        CRUD::field('status');
-        CRUD::field('created_at');
-        CRUD::field('updated_at');
+        CRUD::field('name')->label("Tên lớp");
+        CRUD::field('pricing')->label("Gói học phí");
+        CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học","Đã kết thúc","Đã bảo lưu"]);
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */

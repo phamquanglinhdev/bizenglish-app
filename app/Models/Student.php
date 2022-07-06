@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
-class Grade extends Model
+class Student extends Model
 {
     use CrudTrait;
 
@@ -15,12 +16,12 @@ class Grade extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'grades';
+    protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
     // protected $fillable = [];
-    // protected $hidden = [];
+//     protected $hidden = ['password'];
     // protected $dates = [];
 
     /*
@@ -28,26 +29,15 @@ class Grade extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function setPasswordAttribute($value) {
+        $this->attributes['password'] = Hash::make($value);
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Student()
-    {
-        return $this->belongsToMany(User::class, "user_student", "grade_id", "student_id");
-    }
 
-    public function Teacher()
-    {
-        return $this->belongsToMany(User::class, "user_teacher", "grade_id", "teacher_id");
-    }
-
-    public function Client()
-    {
-        return $this->belongsToMany(User::class, "user_client", "client_id", "client_id");
-    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -65,4 +55,8 @@ class Grade extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'extra' => 'array',
+    ];
 }
