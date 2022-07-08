@@ -62,6 +62,9 @@ class ClientCrudController extends CrudController
         CRUD::field('name')->label("Tên đối tác");
         CRUD::field('email')->label("Email đối tác");
         CRUD::field('type')->type("hidden")->value(2);
+        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
+        CRUD::field("facebook")->label("Link Facebook");
+        CRUD::field("address")->label("Địa chỉ");
         CRUD::addField(
             [
                 'name' => 'extra',

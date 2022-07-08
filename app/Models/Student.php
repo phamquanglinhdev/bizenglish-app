@@ -37,6 +37,12 @@ class Student extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function Detail(){
+        return view("components.detail",['route'=>route("admin.student.detail",$this->id)]);
+    }
+    public function Grades(){
+        return $this->belongsToMany(Grade::class,"student_grade","student_id","grade_id");
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -57,6 +63,6 @@ class Student extends Model
     */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'extra' => 'array',
+        'extra' => 'json',
     ];
 }

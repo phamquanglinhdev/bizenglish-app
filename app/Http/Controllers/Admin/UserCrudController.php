@@ -64,6 +64,9 @@ class UserCrudController extends CrudController
 
         CRUD::field('name')->label("Tên");
         CRUD::field('email')->label("Email");
+        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
+        CRUD::field("facebook")->label("Link Facebook");
+        CRUD::field("address")->label("Địa chỉ");
         CRUD::field('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
         CRUD::addField(
             [

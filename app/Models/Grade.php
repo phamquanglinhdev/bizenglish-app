@@ -28,7 +28,10 @@ class Grade extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getStatus(){
+        $status= ["Đang học","Đã kết thúc","Đang bảo lưu"];
+        return $status[$this->attributes["status"]];
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

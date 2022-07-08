@@ -270,7 +270,7 @@ return [
     // Other options:
     // - placehold (generic image with their first letter)
     // - example_method_name (specify the method on the User model that returns the URL)
-    'avatar_type' => 'gravatar',
+    'avatar_type' => 'avatar',
 
     /*
     |--------------------------------------------------------------------------

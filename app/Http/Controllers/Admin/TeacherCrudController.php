@@ -61,6 +61,9 @@ class TeacherCrudController extends CrudController
         CRUD::setValidation(TeacherRequest::class);
         CRUD::field('name')->label("Tên giáo viên");
         CRUD::field('email')->label("Email giáo viên");
+        CRUD::field("facebook")->label("Link Facebook");
+        CRUD::field("address")->label("Địa chỉ");
+        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
         CRUD::addField(
             [

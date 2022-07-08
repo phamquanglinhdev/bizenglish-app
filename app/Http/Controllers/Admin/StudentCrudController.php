@@ -7,6 +7,7 @@ use App\Http\Requests\UserRequest;
 use App\Models\Student;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Class StudentCrudController
@@ -31,6 +32,8 @@ class StudentCrudController extends CrudController
         CRUD::setModel(Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
+        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
+
     }
 
     /**
@@ -66,6 +69,9 @@ class StudentCrudController extends CrudController
         CRUD::field('name')->label("Tên học sinh");
         CRUD::field('email')->label("Email học sinh");
         CRUD::field('type')->type("hidden")->value(3);
+        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
+        CRUD::field("facebook")->label("Link Facebook");
+        CRUD::field("address")->label("Địa chỉ");
         CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
         CRUD::addField(
             [
@@ -113,5 +119,9 @@ class StudentCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function detail($id){
+        return view("student-detail",['data'=>Student::find($id),'crud'=>$this->crud]);
     }
 }
