@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\StudentCrudController;
+use App\Http\Controllers\Admin\TeacherCrudController;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -25,5 +26,6 @@ Route::group([
     Route::crud('student', 'StudentCrudController');
     Route::get("student/detail/{id}",[StudentCrudController::class,"detail"])->name("admin.student.detail");
     Route::crud('teacher', 'TeacherCrudController');
+    Route::get("teacher/detail/{id}",[TeacherCrudController::class,"detail"])->name("admin.teacher.detail");
     Route::crud('client', 'ClientCrudController');
 }); // this should be the absolute last line of this file

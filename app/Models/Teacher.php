@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Teacher extends Model
 {
@@ -28,13 +29,20 @@ class Teacher extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function Detail(){
+        return view("components.detail",['route'=>route("admin.teacher.detail",$this->id)]);
+    }
+    public function Grades(){
+        return $this->belongsToMany(Grade::class,"teacher_grade","teacher_id","grade_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+    public function setPasswordAttribute($value) {
+        $this->attributes['password'] = Hash::make($value);
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -52,4 +60,8 @@ class Teacher extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'extra' => 'json',
+    ];
 }

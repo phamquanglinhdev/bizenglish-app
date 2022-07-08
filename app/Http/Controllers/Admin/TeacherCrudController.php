@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TeacherRequest;
+use App\Models\Teacher;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -29,6 +30,7 @@ class TeacherCrudController extends CrudController
         CRUD::setModel(\App\Models\Teacher::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
         CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
+        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
     }
 
     /**
@@ -110,5 +112,8 @@ class TeacherCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+    protected function detail($id){
+        return view("teacher-detail",['data'=>Teacher::find($id)]);
     }
 }

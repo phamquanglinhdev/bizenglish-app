@@ -1,14 +1,11 @@
-@extends(backpack_view('blank'))
+@if(backpack_user()->type == 0)
+    @include("admin-dashboard")
+@endif
+@if(backpack_user()->type == 1)
+    @include("teacher-detail",['data'=>\App\Models\Teacher::find(backpack_user()->id)])
+@endif
+@if(backpack_user()->type == 3)
+    @include("student-detail",['data'=>\App\Models\Student::find(backpack_user()->id)])
+@endif
 
-@php
-    $widgets['before_content'][] = [
-        'type'        => 'jumbotron',
-        'heading'     => trans('backpack::base.welcome'),
-        'content'     => trans('backpack::base.use_sidebar'),
-        'button_link' => backpack_url('logout'),
-        'button_text' => trans('backpack::base.logout'),
-    ];
-@endphp
 
-@section('content')
-@endsection

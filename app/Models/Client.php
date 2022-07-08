@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 class Client extends Model
 {
@@ -28,7 +29,9 @@ class Client extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function setPasswordAttribute($value) {
+        $this->attributes['password'] = Hash::make($value);
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -52,4 +55,8 @@ class Client extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'extra' => 'json',
+    ];
 }

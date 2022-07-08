@@ -51,6 +51,9 @@ class Grade extends Model
     {
         return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
+    public function Logs(){
+        return $this->hasMany(Log::class,"grade_id","id");
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
