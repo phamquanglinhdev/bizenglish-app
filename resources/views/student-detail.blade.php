@@ -29,7 +29,9 @@
                 <div class="d-flex">
                     <div class="image_outer_container">
                         <div class="image_inner_container">
-                            <img src="{{$data->avatar??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}}" class="w-100">
+                            <img
+                                src="{{$data->avatar??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}}"
+                                class="w-100">
                         </div>
                     </div>
                 </div>
@@ -52,7 +54,10 @@
                                 <div> - {!! $extra["name"].": ".$extra['info']  !!}</div>
                             @endforeach
                         </div>
-                        <div><a href="{{route("student.edit",backpack_user()->id)}}"><i class="las la-edit"></i> Sửa thông tin</a></div>
+                        @if(backpack_user()->id==$data->id)
+                            <div><a href="{{route("student.edit",backpack_user()->id)}}"><i class="las la-edit"></i> Sửa
+                                    thông tin</a></div>
+                        @endif
                     </div>
                 </dìv>
             </div>
@@ -65,9 +70,14 @@
                     @foreach( $grades as $grade)
                         <div><i class="las la-chalkboard-teacher"></i> {{$grade->name}}</div>
                         <div><i class="las la-hourglass"></i> {{$grade->getStatus()}}</div>
+                        <div><i class="las la-user-astronaut"></i> Học sinh:
+                            @foreach($grade->Student()->get() as $student)
+                                <span><a href="{{route("admin.student.detail",$student->id)}}">{{$student->name}}</a> ,</span>
+                            @endforeach
+                        </div>
                         <div><i class="las la-user-astronaut"></i> Giáo viên:
                             @foreach($grade->Teacher()->get() as $teacher)
-                            <span><a href="#">{{$teacher->name}}</a> ,</span>
+                                <span><a href="{{route("admin.teacher.detail",$teacher->id)}}">{{$teacher->name}}</a> ,</span>
                             @endforeach
                         </div>
                         <hr>
@@ -76,24 +86,24 @@
             </div>
         </div>
         <hr>
-
-        <div class="bg-white card p-2">
-            <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>
-            @foreach($grades as $grade)
-                @php
-                    $logs =$grade->Logs()->get();
-                @endphp
-                @if($grade->Logs()->count()>0)
-                @php
-                    $column["label"] = ["Thời gian","Thời gian dạy","Bài học","Video bài giảng"];
-                    $column["key"] = ["time","duration","lesson","teacher_video"];
-                    $logs = $grade->Logs()->get();
-                @endphp
-                @include("components.log",['name'=>"Lớp $grade->name",'id'=>"grade-".$grade->id,'rows'=>$logs,'column'=>$column])
-                @endif
-            @endforeach
-        </div>
+        @if(backpack_user()->id==$data->id)
+            <div class="bg-white card p-2">
+                <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>
+                @foreach($grades as $grade)
+                    @php
+                        $logs =$grade->Logs()->get();
+                    @endphp
+                    @if($grade->Logs()->count()>0)
+                        @php
+                            $column["label"] = ["Thời gian","Thời gian dạy","Bài học","Video bài giảng"];
+                            $column["key"] = ["time","duration","lesson","teacher_video"];
+                            $logs = $grade->Logs()->get();
+                        @endphp
+                        @include("components.log",['name'=>"Lớp $grade->name",'id'=>"grade-".$grade->id,'rows'=>$logs,'column'=>$column])
+                    @endif
+                @endforeach
+            </div>
+        @endif
     </div>
-
 
 @endsection

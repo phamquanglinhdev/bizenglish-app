@@ -54,7 +54,10 @@
                                 <div> - {!! $extra["name"].": ".$extra['info']  !!}</div>
                             @endforeach
                         </div>
-                        <div><a href="{{route("teacher.edit",backpack_user()->id)}}"><i class="las la-edit"></i> Sửa thông tin</a></div>
+                        @if(backpack_user()->id==$data->id)
+                            <div><a href="{{route("teacher.edit",backpack_user()->id)}}"><i class="las la-edit"></i> Sửa
+                                    thông tin</a></div>
+                        @endif
                     </div>
                 </dìv>
             </div>
@@ -83,7 +86,7 @@
             </div>
         </div>
         <hr>
-
+        @if(backpack_user()->id==$data->id)
         <div class="bg-white card p-2">
             <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>
             @foreach($grades as $grade)
@@ -100,6 +103,7 @@
                 @endif
             @endforeach
         </div>
+        @endif
     </div>
 
 @endsection
