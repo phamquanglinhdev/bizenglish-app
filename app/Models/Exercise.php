@@ -28,13 +28,42 @@ class Exercise extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function Log()
+    {
+        return $this->belongsTo(Log::class, "log_id", "id");
+    }
+    public function Grade(){
+        $grade = $this->Log()->first()->Grade()->first()->name;
+//        return $this->Log()->first()->belongsTo(Grade::class,"grade_id","id");
+        return $grade;
+    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function setVideoAttribute($value)
+    {
+        $attribute_name = "video";
+        $disk = "uploads_video";
+        $destination_path = "";
 
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+        // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+    }
+
+    public function setDocumentAttribute($value)
+    {
+        $attribute_name = "document";
+        $disk = "uploads_document";
+        $destination_path = "";
+
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+        // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
