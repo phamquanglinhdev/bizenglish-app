@@ -41,6 +41,7 @@ class GradeCrudController extends CrudController
     {
         CRUD::column('name')->label("Tên lớp");
         CRUD::column('pricing')->label("Gói học phí");
+        CRUD::column('minutes')->label("Số phút");
         CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học","Đã kết thúc","Đã bảo lưu"]);
         CRUD::column('created_at')->label("Ngày tạo lớp");
 
@@ -64,6 +65,7 @@ class GradeCrudController extends CrudController
 
         CRUD::field('name')->label("Tên lớp");
         CRUD::field('pricing')->label("Gói học phí");
+        CRUD::field('minutes')->label("Số phút")->type("number");
         CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học","Đã kết thúc","Đã bảo lưu"]);
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)

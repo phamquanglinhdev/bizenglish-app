@@ -31,6 +31,7 @@ class LogCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings('Nhật ký', 'Nhật ký chung');
         $this->crud->addButtonFromModelFunction("line","detail","detail","line");
+        $this->crud->addButtonFromModelFunction("line","pushExercise","pushExercise","line");
         $this->crud->denyAccess(["show","delete"]);
         if(backpack_user()->type!=0){
             $this->crud->denyAccess(["update"]);

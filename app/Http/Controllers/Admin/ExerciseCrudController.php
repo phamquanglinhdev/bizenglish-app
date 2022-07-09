@@ -83,8 +83,8 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        if(isset($_POST['log_id'])){
-            CRUD::field('log_id')->type("hidden")->value($_POST['log_id']);
+        if($_REQUEST['log_id']!=-1){
+            CRUD::field('log_id')->type("hidden")->value($_REQUEST['log_id']);
         }else{
             return redirect("/admin");
         }

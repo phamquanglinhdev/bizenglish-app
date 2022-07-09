@@ -38,7 +38,9 @@ class Log extends Model
     {
         return view("components.detail", ['route' => route("admin.log.detail", $this->id)]);
     }
-
+    public function pushExercise(){
+        return view("components.push",['route'=>route('exercise.create',['log_id'=>$this->id])]);
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
