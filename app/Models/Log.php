@@ -47,6 +47,10 @@ class Log extends Model
     {
         return $this->hasMany(Comment::class, "log_id", "id");
     }
+    public function Teacher()
+    {
+        return $this->belongsTo(Teacher::class, "teacher_id", "id");
+    }
 
     public function setTeacherVideoAttribute($value)
     {

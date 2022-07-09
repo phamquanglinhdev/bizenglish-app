@@ -26,24 +26,26 @@
             </div>
             <div class="col-md-6 col-12">
                 <div class="h2 mt-5">Nhận xét</div>
-                @foreach($log->Comments()->get() as $comment)
-                    <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
-                        <div class="">
+                @if($log->Comments()->count()>0)
+                    @foreach($log->Comments()->get() as $comment)
+                        <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
+                            <div class="">
                         <span>
                             <img src="{{$comment->Owner()->first()->avatar}}" style="width: 3em;height: 3em"
                                  class="rounded-circle">
                         </span>
-                            <span>{{$comment->Owner()->first()->name}}</span>
-                            <span class="badge badge-{{$comment->Role($comment->Owner()->first()->type)["color"]}}">
+                                <span>{{$comment->Owner()->first()->name}}</span>
+                                <span class="badge badge-{{$comment->Role($comment->Owner()->first()->type)["color"]}}">
                                 {{$comment->Role($comment->Owner()->first()->type)["label"]}}
                             </span>
-                            <hr>
-                            <div>
-                                {{$comment->message}}
+                                <hr>
+                                <div>
+                                    {{$comment->message}}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
 
                 <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
                     <div class="">
@@ -52,8 +54,8 @@
                                  class="rounded-circle">
                         </span>
                         <span>{{backpack_user()->name}}</span>
-                        <span class="badge badge-{{$comment->Role(backpack_user()->type)["color"]}}">
-                                {{$comment->Role(backpack_user()->type)["label"]}}
+                        <span class="badge badge-{{\App\Models\Comment::Role(backpack_user()->type)["color"]}}">
+                                {{\App\Models\Comment::Role(backpack_user()->type)["label"]}}
                         </span>
                         <hr>
                         <div>

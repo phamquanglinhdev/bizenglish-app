@@ -32,6 +32,7 @@ class Teacher extends Model
     public function Detail(){
         return view("components.detail",['route'=>route("admin.teacher.detail",$this->id)]);
     }
+
     public function Grades(){
         return $this->belongsToMany(Grade::class,"teacher_grade","teacher_id","grade_id");
     }

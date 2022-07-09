@@ -53,7 +53,15 @@ class LogCrudController extends CrudController
             'attribute'=>'name',
             'label'=>"Lớp",
         ]);
-        CRUD::column('time')->label("Thời gian");
+
+        CRUD::addColumn([
+            'name' => 'teacher_id',
+            'type' => 'select',
+            'entity'=>'Teacher',
+            'model'=>"App\Model\Teacher",
+            'attribute'=>'name',
+            'label'=>"Giáo viên dạy",
+        ]);
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
@@ -83,6 +91,11 @@ class LogCrudController extends CrudController
             'model'=>"App\Models\Grade",
             'attribute'=>'name',
             'label'=>"Lớp",
+        ]);
+        CRUD::addField([
+            'name' => 'teacher_id',
+            'value'=>backpack_user()->id,
+            'type'=>'hidden',
         ]);
         CRUD::field('time')->label("Thời gian")->type("datetime");
         CRUD::field('duration')->label("Thời gian dạy(Phút)");
