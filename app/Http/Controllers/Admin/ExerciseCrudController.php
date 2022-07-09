@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ExerciseRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use http\Env\Request;
 
 /**
  * Class ExerciseCrudController
@@ -40,7 +41,7 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->crud->removeButton('create');
         if (backpack_user()->type >= 3) {
             $this->crud->addClause("where", "student_id", "=", backpack_user()->id);
         } else {
@@ -78,13 +79,17 @@ class ExerciseCrudController extends CrudController
      * Define what happens when the Create operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     protected function setupCreateOperation()
     {
+        if(isset($_POST['log_id'])){
+            CRUD::field('log_id')->type("hidden")->value($_POST['log_id']);
+        }else{
+            return redirect("/admin");
+        }
         CRUD::setValidation(ExerciseRequest::class);
         CRUD::field('student_id')->type("hidden")->value(backpack_user()->id);
-        CRUD::field('log_id');
         CRUD::addField(
             [
                 'name' => 'video',

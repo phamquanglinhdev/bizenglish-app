@@ -10,11 +10,10 @@
     </li>
 @endif
 <!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
-@if(backpack_user()->type<=1)
+@if(backpack_user()->type<=3)
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a></li>
 @endif
-<hr>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('comment') }}'><i class='nav-icon la la-comment'></i>Nhận xét</a></li>
+{{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('comment') }}'><i class='nav-icon la la-comment'></i>Nhận xét</a></li>--}}
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('exercise') }}'><i class='nav-icon la la-book'></i> Bài tập</a></li>
 
 

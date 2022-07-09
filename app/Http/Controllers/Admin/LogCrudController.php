@@ -35,6 +35,9 @@ class LogCrudController extends CrudController
         if(backpack_user()->type!=0){
             $this->crud->denyAccess(["update"]);
         }
+        if(backpack_user()->type>1){
+            $this->crud->denyAccess(["create"]);
+        }
     }
 
     /**
@@ -45,6 +48,9 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if(backpack_user()->type==3){
+            $this->crud->addClause('rep');
+        }
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',

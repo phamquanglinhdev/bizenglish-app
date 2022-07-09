@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Log extends Model
 {
@@ -47,6 +48,7 @@ class Log extends Model
     {
         return $this->hasMany(Comment::class, "log_id", "id");
     }
+
     public function Teacher()
     {
         return $this->belongsTo(Teacher::class, "teacher_id", "id");
@@ -62,12 +64,31 @@ class Log extends Model
 
         // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeRep($query)
+    {
+        $grades = DB::table("student_grade")->where("student_id", "=", backpack_user()->id)->get();
+        if ($grades->count() > 0) {
+            $query->where("grade_id", $grades->first()->grade_id);
+            foreach ($grades as $grade) {
+                $query = $query->orWhere("grade_id", $grade->grade_id);
+            }
+        }else{
+            $query->where("id",-1);
+        }
+        return $query;
+//            ->join('student','grade.id' , '=' ,'logs.logs_id')
+//            ->join('shop_user','shop_user.shop_id' , '=' ,'logs.id')
+//            ->where('shop_user.user_id',backpack_user()->id)
+//            ->select('logs.*');
 
+
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
