@@ -86,24 +86,24 @@
             </div>
         </div>
         <hr>
-        @if(backpack_user()->id==$data->id)
-            <div class="bg-white card p-2">
-                <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>
-                @foreach($grades as $grade)
-                    @php
-                        $logs =$grade->Logs()->get();
-                    @endphp
-                    @if($grade->Logs()->count()>0)
-                        @php
-                            $column["label"] = ["Thời gian","Thời gian dạy","Bài học","Video bài giảng"];
-                            $column["key"] = ["time","duration","lesson","teacher_video"];
-                            $logs = $grade->Logs()->get();
-                        @endphp
-                        @include("components.log",['name'=>"Lớp $grade->name",'id'=>"grade-".$grade->id,'rows'=>$logs,'column'=>$column])
-                    @endif
-                @endforeach
-            </div>
-        @endif
+{{--        @if(backpack_user()->id==$data->id)--}}
+{{--            <div class="bg-white card p-2">--}}
+{{--                <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>--}}
+{{--                @foreach($grades as $grade)--}}
+{{--                    @php--}}
+{{--                        $logs =$grade->Logs()->get();--}}
+{{--                    @endphp--}}
+{{--                    @if($grade->Logs()->count()>0)--}}
+{{--                        @php--}}
+{{--                            $column["label"] = ["Thời gian","Thời gian dạy","Bài học","Video bài giảng"];--}}
+{{--                            $column["key"] = ["time","duration","lesson","teacher_video"];--}}
+{{--                            $logs = $grade->Logs()->get();--}}
+{{--                        @endphp--}}
+{{--                        @include("components.log",['name'=>"Lớp $grade->name",'id'=>"grade-".$grade->id,'rows'=>$logs,'column'=>$column])--}}
+{{--                    @endif--}}
+{{--                @endforeach--}}
+{{--            </div>--}}
+{{--        @endif--}}
     </div>
 
 @endsection
