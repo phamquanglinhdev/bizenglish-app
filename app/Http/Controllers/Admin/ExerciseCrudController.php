@@ -47,8 +47,13 @@ class ExerciseCrudController extends CrudController
         } else {
             CRUD::addColumn([
                 'name' => 'student_id',
-                'type' => 'number'
+                'type' => 'select',
+                'model'=>'App\Models\Student',
+                'entity'=>'Student',
+                'attribute'=>'name',
             ]);
+            $this->crud->denyAccess(["update"]);
+            $this->crud->allowAccess(["delete"]);
         }
         CRUD::addColumn([
             'name' => 'log_id',

@@ -37,6 +37,9 @@ class Exercise extends Model
 //        return $this->Log()->first()->belongsTo(Grade::class,"grade_id","id");
         return $grade;
     }
+    public function Student(){
+        return $this->belongsTo(Student::class,"student_id","id");
+    }
 
     /*
     |--------------------------------------------------------------------------
