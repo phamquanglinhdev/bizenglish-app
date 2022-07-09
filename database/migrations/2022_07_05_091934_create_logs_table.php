@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime("time");
             $table->integer("duration");
             $table->string("lesson");
-            $table->string("information");
+            $table->longText("information");
             $table->integer("hour_salary");
             $table->string("teacher_video");
             $table->timestamps();

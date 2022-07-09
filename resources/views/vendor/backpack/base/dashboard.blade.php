@@ -7,5 +7,3 @@
 @if(backpack_user()->type == 3)
     @include("student-detail",['data'=>\App\Models\Student::find(backpack_user()->id)])
 @endif
-
-

@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('teacher_comment', function (Blueprint $table) {
-            $table->unsignedBigInteger("teacher_id");
+        Schema::create('user_comment', function (Blueprint $table) {
+            $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("comment_id");
-            $table->foreign("teacher_id")->references("id")->on("users");
+            $table->foreign("user_id")->references("id")->on("users");
             $table->foreign("comment_id")->references("id")->on("comments");
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('teacher_comment');
+        Schema::dropIfExists('user_comment');
     }
 };

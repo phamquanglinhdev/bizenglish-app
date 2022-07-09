@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\LogRequest;
+use App\Models\Log;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -29,6 +30,11 @@ class LogCrudController extends CrudController
         CRUD::setModel(\App\Models\Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings('Nhật ký', 'Nhật ký chung');
+        $this->crud->addButtonFromModelFunction("line","detail","detail","line");
+        $this->crud->denyAccess(["show","delete"]);
+        if(backpack_user()->type!=0){
+            $this->crud->denyAccess(["update"]);
+        }
     }
 
     /**
@@ -42,7 +48,7 @@ class LogCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',
-            'entity'=>'Log',
+            'entity'=>'Grade',
             'model'=>"App\Model\Grade",
             'attribute'=>'name',
             'label'=>"Lớp",
@@ -50,8 +56,7 @@ class LogCrudController extends CrudController
         CRUD::column('time')->label("Thời gian");
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");
-        CRUD::column('information')->label("Nội dung");
-        CRUD::column('hour_salary')->label("Lương theo giờ");
+        CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
 
         /**
@@ -74,7 +79,7 @@ class LogCrudController extends CrudController
         CRUD::addField([
             'name' => 'grade_id',
             'type' => 'select',
-            'entity'=>'Log',
+            'entity'=>'Grade',
             'model'=>"App\Models\Grade",
             'attribute'=>'name',
             'label'=>"Lớp",
@@ -82,7 +87,7 @@ class LogCrudController extends CrudController
         CRUD::field('time')->label("Thời gian")->type("datetime");
         CRUD::field('duration')->label("Thời gian dạy(Phút)");
         CRUD::field('lesson')->label("Bài học");
-        CRUD::field('information')->label("Nội dung");
+        CRUD::field('information')->label("Nội dung")->type("tinymce");
         CRUD::field('hour_salary')->label("Lương theo giờ");
         CRUD::addField(
             [
@@ -108,5 +113,13 @@ class LogCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+    protected function detail($id)
+    {
+        if(Log::find($id)){
+            return view("log-detail",['log'=>Log::find($id)]);
+        }
+        return view("errors.404");
+
     }
 }

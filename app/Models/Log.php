@@ -28,14 +28,26 @@ class Log extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-        public function Log(){
-            return $this->belongsTo(Grade::class,"grade_id","id");
-        }
+    public function Grade()
+    {
+        return $this->belongsTo(Grade::class, "grade_id", "id");
+    }
+
+    public function detail()
+    {
+        return view("components.detail", ['route' => route("admin.log.detail", $this->id)]);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function Comments()
+    {
+        return $this->hasMany(Comment::class, "log_id", "id");
+    }
+
     public function setTeacherVideoAttribute($value)
     {
         $attribute_name = "teacher_video";

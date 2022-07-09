@@ -28,13 +28,22 @@ class Comment extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+        public static function Role($type){
+            $role["label"] = ["Admin","Giáo viên","Đối tác","Học viên"];
+            $role["color"] = ["danger","primary","secondary","success"];
+            $value["label"] = $role["label"][$type];
+            $value["color"] = $role["color"][$type];
+            return $value;
+        }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+        public function Owner(){
+            return $this->belongsToMany(User::class,"user_comment","comment_id","user_id");
+        }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

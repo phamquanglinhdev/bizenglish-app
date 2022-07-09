@@ -41,7 +41,7 @@ class User extends Authenticatable
         'extra' => 'json',
     ];
 
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
-    }
+//    public function setPasswordAttribute($value) {
+//        $this->attributes['password'] = Hash::make($value);
+//    }
 }

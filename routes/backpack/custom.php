@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\LogCrudController;
 use App\Http\Controllers\Admin\StudentCrudController;
 use App\Http\Controllers\Admin\TeacherCrudController;
 use Illuminate\Support\Facades\Route;
@@ -21,8 +22,10 @@ Route::group([
     Route::crud('user', 'UserCrudController');
     Route::crud('grade', 'GradeCrudController');
     Route::crud('log', 'LogCrudController');
+    Route::get('log/detail/{id}', [LogCrudController::class,"detail"])->name("admin.log.detail");
     Route::crud('exercise', 'ExerciseCrudController');
     Route::crud('comment', 'CommentCrudController');
+    Route::post('comment/push', 'CommentCrudController@store')->name("admin.comment.store");
     Route::crud('student', 'StudentCrudController');
     Route::get("student/detail/{id}",[StudentCrudController::class,"detail"])->name("admin.student.detail");
     Route::crud('teacher', 'TeacherCrudController');

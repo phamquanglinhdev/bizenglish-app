@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => "BizEnglish Admin",
             'email' => "admin@biz.com",
-            'password' => Hash::make("Linhz123@"),
+            'password' => Hash::make("password"),
             'type' => 0,
         ]);
 
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             $data = [
                 'name' => fake()->name(),
                 'email' => fake()->safeEmail(),
-                'password' => Hash::make("Linhz123@"),
+                'password' => Hash::make("password"),
                 'type' => $type,
             ];
             if($type == 3){
