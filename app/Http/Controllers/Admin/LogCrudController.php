@@ -115,7 +115,7 @@ class LogCrudController extends CrudController
                 'label'     => 'Video bài giảng',
                 'type'      => 'upload',
                 'upload'    => true,
-                'disk'      => 'google',
+                'disk'      => 'uploads_video',
             ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
