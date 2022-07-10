@@ -38,9 +38,12 @@ class Log extends Model
     {
         return view("components.detail", ['route' => route("admin.log.detail", $this->id)]);
     }
-    public function pushExercise(){
-        return view("components.push",['route'=>route('exercise.create',['log_id'=>$this->id])]);
+
+    public function pushExercise()
+    {
+        return view("components.push", ['route' => route('exercise.create', ['log_id' => $this->id])]);
     }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -64,7 +67,7 @@ class Log extends Model
 
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
 
-         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+//         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
     }
 
     /*
@@ -80,8 +83,8 @@ class Log extends Model
             foreach ($grades as $grade) {
                 $query = $query->orWhere("grade_id", $grade->grade_id);
             }
-        }else{
-            $query->where("id",-1);
+        } else {
+            $query->where("id", -1);
         }
         return $query;
 //            ->join('student','grade.id' , '=' ,'logs.logs_id')
