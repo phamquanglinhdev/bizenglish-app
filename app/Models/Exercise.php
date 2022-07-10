@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Exercise extends Model
 {
@@ -72,7 +73,21 @@ class Exercise extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeRep($query)
+    {
+        $logs = Teacher::find(backpack_user()->id)->Logs()->get();
+        if ($logs->count() > 0) {
+            $query->where("log_id", $logs->first()->id);
+            foreach ($logs as $log) {
+                $query = $query->orWhere("log_id", $log->id);
+            }
+        } else {
+            $query->where("id", -1);
+        }
+        return $query;
 
+
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

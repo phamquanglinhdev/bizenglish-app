@@ -41,11 +41,15 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if(backpack_user()->type == 1){
+            $this->crud->addClause("rep");
+        }
         $this->crud->removeButton('create');
         if (backpack_user()->type >= 3) {
             $this->crud->addClause("where", "student_id", "=", backpack_user()->id);
         } else {
             CRUD::addColumn([
+                'label'=>'Học sinh',
                 'name' => 'student_id',
                 'type' => 'select',
                 'model'=>'App\Models\Student',
