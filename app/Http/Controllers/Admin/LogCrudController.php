@@ -33,7 +33,7 @@ class LogCrudController extends CrudController
         $this->crud->addButtonFromModelFunction("line","detail","detail","line");
         $this->crud->addButtonFromModelFunction("line","pushExercise","pushExercise","line");
         $this->crud->denyAccess(["show","delete"]);
-        if(backpack_user()->type!=0){
+        if(backpack_user()->type>1){
             $this->crud->denyAccess(["update"]);
         }
         if(backpack_user()->type>1){
@@ -115,7 +115,7 @@ class LogCrudController extends CrudController
                 'label'     => 'Video bài giảng',
                 'type'      => 'upload',
                 'upload'    => true,
-                'disk'      => 'uploads_video',
+                'disk'      => 'google',
             ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
