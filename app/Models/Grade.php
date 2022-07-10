@@ -28,15 +28,24 @@ class Grade extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function getStatus(){
-        $status= ["Đang học","Đã kết thúc","Đang bảo lưu"];
+    public function getStatus()
+    {
+        $status = ["Đang học", "Đã kết thúc", "Đang bảo lưu"];
         return $status[$this->attributes["status"]];
     }
+
+    public function fewDate(): bool
+    {
+        $minutes = $this->Logs()->count("duration");
+       return ($this->minutes)-$minutes > 60;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
     public function Student()
     {
         return $this->belongsToMany(User::class, "student_grade", "grade_id", "student_id");
@@ -51,8 +60,10 @@ class Grade extends Model
     {
         return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
-    public function Logs(){
-        return $this->hasMany(Log::class,"grade_id","id");
+
+    public function Logs()
+    {
+        return $this->hasMany(Log::class, "grade_id", "id");
     }
     /*
     |--------------------------------------------------------------------------

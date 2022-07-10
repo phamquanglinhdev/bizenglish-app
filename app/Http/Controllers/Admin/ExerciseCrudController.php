@@ -88,10 +88,8 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        if($_REQUEST['log_id']!=-1){
+        if(isset($_REQUEST['log_id'])){
             CRUD::field('log_id')->type("hidden")->value($_REQUEST['log_id']);
-        }else{
-            return redirect("/admin");
         }
         CRUD::setValidation(ExerciseRequest::class);
         CRUD::field('student_id')->type("hidden")->value(backpack_user()->id);

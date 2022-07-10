@@ -6,6 +6,8 @@ use App\Http\Requests\LogRequest;
 use App\Models\Log;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use http\Env\Request;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class LogCrudController
@@ -30,14 +32,11 @@ class LogCrudController extends CrudController
         CRUD::setModel(\App\Models\Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings('Nhật ký', 'Nhật ký chung');
-        $this->crud->addButtonFromModelFunction("line","detail","detail","line");
-        $this->crud->addButtonFromModelFunction("line","pushExercise","pushExercise","line");
-        $this->crud->denyAccess(["show","delete"]);
-        if(backpack_user()->type>1){
-            $this->crud->denyAccess(["update"]);
-        }
-        if(backpack_user()->type>1){
-            $this->crud->denyAccess(["create"]);
+        $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
+        $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
+        $this->crud->denyAccess(["show"]);
+        if (backpack_user()->type != 1) {
+            $this->crud->denyAccess(["update", "create", "delete"]);
         }
     }
 
@@ -49,25 +48,25 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        if(backpack_user()->type==3){
+        if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',
-            'entity'=>'Grade',
-            'model'=>"App\Model\Grade",
-            'attribute'=>'name',
-            'label'=>"Lớp",
+            'entity' => 'Grade',
+            'model' => "App\Model\Grade",
+            'attribute' => 'name',
+            'label' => "Lớp",
         ]);
 
         CRUD::addColumn([
             'name' => 'teacher_id',
             'type' => 'select',
-            'entity'=>'Teacher',
-            'model'=>"App\Model\Teacher",
-            'attribute'=>'name',
-            'label'=>"Giáo viên dạy",
+            'entity' => 'Teacher',
+            'model' => "App\Model\Teacher",
+            'attribute' => 'name',
+            'label' => "Giáo viên dạy",
         ]);
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");
@@ -94,15 +93,15 @@ class LogCrudController extends CrudController
         CRUD::addField([
             'name' => 'grade_id',
             'type' => 'select',
-            'entity'=>'Grade',
-            'model'=>"App\Models\Grade",
-            'attribute'=>'name',
-            'label'=>"Lớp",
+            'entity' => 'Grade',
+            'model' => "App\Models\Grade",
+            'attribute' => 'name',
+            'label' => "Lớp",
         ]);
         CRUD::addField([
             'name' => 'teacher_id',
-            'value'=>backpack_user()->id,
-            'type'=>'hidden',
+            'value' => backpack_user()->id,
+            'type' => 'hidden',
         ]);
         CRUD::field('time')->label("Thời gian")->type("datetime");
         CRUD::field('duration')->label("Thời gian dạy(Phút)");
@@ -111,11 +110,11 @@ class LogCrudController extends CrudController
         CRUD::field('hour_salary')->label("Lương theo giờ");
         CRUD::addField(
             [
-                'name'      => 'teacher_video',
-                'label'     => 'Video bài giảng',
-                'type'      => 'upload',
-                'upload'    => true,
-                'disk'      => 'uploads_video',
+                'name' => 'teacher_video',
+                'label' => 'Video bài giảng',
+                'type' => 'upload',
+                'upload' => true,
+                'disk' => 'uploads_video',
             ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -134,12 +133,29 @@ class LogCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
     protected function detail($id)
     {
-        if(Log::find($id)){
-            return view("log-detail",['log'=>Log::find($id)]);
+        if (Log::find($id)) {
+            return view("log-detail", ['log' => Log::find($id)]);
         }
         return view("errors.404");
+    }
 
+    public function acceptByStudent(\Illuminate\Http\Request $request)
+    {
+        $id = backpack_user()->id;
+        $isExist = DB::table("student_log")->where("log_id", $request->log_id)->where("student_id", $id)->count();
+        if ($isExist == 0) {
+            DB::table("student_log")->insert([
+                'student_id' => $id,
+                'log_id' => $request->log_id,
+                'accept' => $request->accept??0,
+                'comment' => $request->comment,
+            ]);
+        } else {
+            return redirect()->back()->with("message","Đã xác nhận rồi");
+        }
+        return redirect()->back()->with("message","Xác nhận thành công");
     }
 }

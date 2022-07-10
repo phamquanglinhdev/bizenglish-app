@@ -70,6 +70,12 @@ class Log extends Model
 //         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
     }
 
+    public function reported($id)
+    {
+        $isExist = $this->belongsToMany(Student::class,"student_log","log_id","student_id")->count();
+        return $isExist > 0;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

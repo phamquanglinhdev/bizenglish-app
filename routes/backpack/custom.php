@@ -23,6 +23,7 @@ Route::group([
     Route::crud('grade', 'GradeCrudController');
     Route::crud('log', 'LogCrudController');
     Route::get('log/detail/{id}', [LogCrudController::class,"detail"])->name("admin.log.detail");
+    Route::post('log/exercise/', [LogCrudController::class,"acceptByStudent"])->name("admin.log.accept");
     Route::crud('exercise', 'ExerciseCrudController');
     Route::crud('comment', 'CommentCrudController');
     Route::post('comment/push', 'CommentCrudController@store')->name("admin.comment.store");
@@ -31,4 +32,6 @@ Route::group([
     Route::crud('teacher', 'TeacherCrudController');
     Route::get("teacher/detail/{id}",[TeacherCrudController::class,"detail"])->name("admin.teacher.detail");
     Route::crud('client', 'ClientCrudController');
+    Route::crud('customer', 'CustomerCrudController');
+    Route::get('customer/switcher/{id}', 'CustomerCrudController@switcher')->name("admin.customer.switch");
 }); // this should be the absolute last line of this file
