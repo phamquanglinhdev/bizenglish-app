@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Grade extends Model
 {
@@ -60,6 +61,10 @@ class Grade extends Model
     {
         return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
+    public function Staff()
+    {
+        return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
+    }
 
     public function Logs()
     {
@@ -70,7 +75,21 @@ class Grade extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function scopeOwner($query)
+    {
+        $grades = DB::table("staff_grade")->where("staff_id",backpack_user()->id)->get();
+        if($grades->count()>0){
+            $query->where("id",$grades->first()->grade_id);
+            foreach ($grades as $grade){
+                $query->orWhere("id",$grade->grade_id);
+            }
+        }else{
+            $query->where("id",-1);
+        }
+        return $query;
 
+
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

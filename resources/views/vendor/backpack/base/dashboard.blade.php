@@ -1,5 +1,8 @@
-@if(backpack_user()->type == 0)
+@if(backpack_user()->type == -1)
     @include("admin-dashboard")
+@endif
+@if(backpack_user()->type == 0)
+    @include("staff-detail",['data'=>\App\Models\Staff::find(backpack_user()->id)])
 @endif
 @if(backpack_user()->type == 1)
     @include("teacher-detail",['data'=>\App\Models\Teacher::find(backpack_user()->id)])

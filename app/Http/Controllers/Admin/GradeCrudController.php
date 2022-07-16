@@ -39,7 +39,14 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type!=-1){
+            $this->crud->addClause("owner");
+        }
         CRUD::column('name')->label("Tên lớp");
+        CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
+        CRUD::column('student_id')->type("select")->label("Học viên");
+        CRUD::column('teacher_id')->type("select")->label("Giáo viên");
+        CRUD::column('client_id')->type("select")->label("Đối tác");
         CRUD::column('pricing')->label("Gói học phí");
         CRUD::column('minutes')->label("Số phút");
         CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học","Đã kết thúc","Đã bảo lưu"]);
@@ -124,6 +131,47 @@ class GradeCrudController extends CrudController
                 }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
             ],
         );
+        if(backpack_user()->type==-1){
+            CRUD::addField(
+                [    // Select2Multiple = n-n relationship (with pivot table)
+                    'label'     => "Nhân viên quản lý",
+                    'type'      => 'select2_multiple',
+                    'name'      => 'staff', // the method that defines the relationship in your Model
+
+                    // optional
+                    'entity'    => 'Staff', // the method that defines the relationship in your Model
+                    'model'     => "App\Models\User", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                    // 'select_all' => true, // show Select All and Clear buttons?
+
+                    // optional
+                    'options'   => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->where('type', 0)->get();
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                ],
+            );
+        }else{
+            CRUD::addField(
+                [    // Select2Multiple = n-n relationship (with pivot table)
+                    'label'     => "Nhân viên quản lý",
+                    'type'      => 'select2_multiple',
+                    'name'      => 'staff', // the method that defines the relationship in your Model
+
+                    // optional
+                    'entity'    => 'Staff', // the method that defines the relationship in your Model
+                    'model'     => "App\Models\User", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                    // 'select_all' => true, // show Select All and Clear buttons?
+
+                    // optional
+                    'options'   => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->where('id', backpack_user()->id)->get();
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                ],
+            );
+        }
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

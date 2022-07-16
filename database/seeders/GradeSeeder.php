@@ -21,32 +21,32 @@ class GradeSeeder extends Seeder
             $name = fake()->company();
             $price =fake()->domainName();
             $data = [
-                'name'=>$name,
+                'name'=>"C00".$i,
                 'pricing'=>$price,
                 'status'=>rand(0,2),
+                'minutes'=>rand(4,10)*100
             ];
             $grade = Grade::create($data);
-            $students = User::where("type","=",3)->get();
-            foreach ($students as $user){
-                DB::table("student_grade")->insert([
-                    'student_id'=>$user->id,
-                    'grade_id'=>$grade->id,
-                ]);
-            }
-            $teacher = User::where("type","=",1)->get();
-            foreach ($teacher as $user){
-                DB::table("teacher_grade")->insert([
-                    'teacher_id'=>$user->id,
-                    'grade_id'=>$grade->id,
-                ]);
-            }
-            $client = User::where("type","=",2)->get();
-            foreach ($client as $user){
-                DB::table("client_grade")->insert([
-                    'client_id'=>$user->id,
-                    'grade_id'=>$grade->id,
-                ]);
-            }
+            $student = User::where("type","=",3)->first();
+            DB::table("student_grade")->insert([
+                'student_id'=>$student->id,
+                'grade_id'=>$grade->id,
+            ]);
+            $teacher = User::where("type","=",1)->first();
+            DB::table("teacher_grade")->insert([
+                'teacher_id'=>$teacher->id,
+                'grade_id'=>$grade->id,
+            ]);
+            $client = User::where("type","=",2)->first();
+            DB::table("client_grade")->insert([
+                'client_id'=>$client->id,
+                'grade_id'=>$grade->id,
+            ]);
+            $staff = User::where("type","=",0)->first();
+            DB::table("staff_grade")->insert([
+                'staff_id'=>$staff->id,
+                'grade_id'=>$grade->id,
+            ]);
         }
     }
 }

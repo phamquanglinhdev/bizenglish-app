@@ -78,7 +78,7 @@ class Exercise extends Model
         $logs = Teacher::find(backpack_user()->id)->Logs()->get();
         if ($logs->count() > 0) {
             $query->where("log_id", $logs->first()->id);
-            foreach ($logs as $log) {
+            foreach ($logs as $key => $log) {
                 $query = $query->orWhere("log_id", $log->id);
             }
         } else {

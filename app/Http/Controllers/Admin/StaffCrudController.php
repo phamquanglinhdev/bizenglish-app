@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\StudentRequest;
-use App\Http\Requests\UserRequest;
-use App\Models\Student;
+use App\Http\Requests\StaffRequest;
+use App\Models\Staff;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Route;
 
 /**
- * Class StudentCrudController
+ * Class StaffCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class StudentCrudController extends CrudController
+class StaffCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -29,11 +27,10 @@ class StudentCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(Student::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
-        CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
-        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
-
+        CRUD::setModel(\App\Models\Staff::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/staff');
+        CRUD::setEntityNameStrings('Nhân viên', 'Danh sách nhân viên');
+        $this->crud->denyAccess(["show"]);
     }
 
     /**
@@ -44,12 +41,11 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","type","3");
-        CRUD::addColumn(['name' => 'name', 'type' => 'text','label'=>"Tên học sinh"]);
-        CRUD::addColumn(['name' => 'staff_id', 'type' => 'select','attribute'=>"name","entity"=>"Staff","label"=>"Nhân viên quản lý"]);
-        CRUD::addColumn(['name' => 'code', 'type' => 'text','label'=>"Mã học sinh"]);
-        CRUD::addColumn(['name' => 'email', 'type' => 'text',"label"=>"Email của học sinh"]);
-        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
+        $this->crud->addClause("where", "type", "0");
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên nhân viên"]);
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của nhân viên"]);
+        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -66,19 +62,38 @@ class StudentCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(StudentRequest::class);
+        CRUD::setValidation(StaffRequest::class);
 
-        CRUD::field('name')->label("Tên học sinh");
-        CRUD::field('email')->label("Email học sinh");
-        CRUD::field('type')->type("hidden")->value(3);
+        CRUD::field('name')->label("Tên nhân viên");
+        CRUD::field('email')->label("Email nhân viên");
+        CRUD::field('type')->type("hidden")->value(0);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-        CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
+        CRUD::field("code")->type("hidden");
+        CRUD::addField(
+            [    // Select2Multiple = n-n relationship (with pivot table)
+                'label'     => "Học sinh quản lý (Khi nhân viên tạo học sinh cũng sẽ tự động thêm vào)",
+                'type'      => 'select2_multiple',
+                'name'      => 'students', // the method that defines the relationship in your Model
+
+                // optional
+                'entity'    => 'Students', // the method that defines the relationship in your Model
+                'model'     => "App\Models\User", // foreign key model
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
+                // 'select_all' => true, // show Select All and Clear buttons?
+
+                // optional
+                'options'   => (function ($query) {
+                    return $query->orderBy('name', 'ASC')->where('type', 3)->get();
+                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+            ],
+        );
         CRUD::addField(
             [
                 'name' => 'extra',
-                'label' => 'Thông tin thêm của học sinh',
+                'label' => 'Thông tin thêm của nhân viên',
                 'type' => 'repeatable',
                 'new_item_label' => 'Thêm thông tin', // customize the text of the button
                 'fields' => [
@@ -99,9 +114,9 @@ class StudentCrudController extends CrudController
         );
         CRUD::addField(
             [   // Password
-                'name'  => 'password',
+                'name' => 'password',
                 'label' => 'Mật khẩu',
-                'type'  => 'password'
+                'type' => 'password'
             ],
         );
 
@@ -112,18 +127,18 @@ class StudentCrudController extends CrudController
          */
     }
 
+
     /**
      * Define what happens when the Update operation is loaded.
      *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected function setupUpdateOperation()
+    protected function setupUpdateOperation(): void
     {
         $this->setupCreateOperation();
     }
-
     protected function detail($id){
-        return view("student-detail",['data'=>Student::find($id)]);
+        return view("staff-detail",['data'=>Staff::find($id)]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\LogCrudController;
+use App\Http\Controllers\Admin\StaffCrudController;
 use App\Http\Controllers\Admin\StudentCrudController;
 use App\Http\Controllers\Admin\TeacherCrudController;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,6 @@ Route::group([
     Route::crud('client', 'ClientCrudController');
     Route::crud('customer', 'CustomerCrudController');
     Route::get('customer/switcher/{id}', 'CustomerCrudController@switcher')->name("admin.customer.switch");
+    Route::crud('staff', 'StaffCrudController');
+    Route::get("staff/detail/{id}",[StaffCrudController::class,"detail"])->name("admin.staff.detail");
 }); // this should be the absolute last line of this file

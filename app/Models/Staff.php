@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-class Student extends Model
+class Staff extends Model
 {
     use CrudTrait;
 
@@ -32,21 +36,25 @@ class Student extends Model
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "NV".$this->id;
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
     public function Detail(){
-        return view("components.detail",['route'=>route("admin.student.detail",$this->id)]);
+        return view("components.detail",['route'=>route("admin.staff.detail",$this->id)]);
     }
-    public function Grades(){
-        return $this->belongsToMany(Grade::class,"student_grade","student_id","grade_id");
+    public function Grades(): BelongsToMany
+    {
+        return $this->belongsToMany(Grade::class,"staff_grade","staff_id","grade_id");
     }
-    public function Staff(){
-        return $this->belongsTo(User::class,"staff_id","id");
+    public function Students(): HasMany
+    {
+        return $this->hasMany(User::class,"staff_id","id");
     }
-
 
     /*
     |--------------------------------------------------------------------------

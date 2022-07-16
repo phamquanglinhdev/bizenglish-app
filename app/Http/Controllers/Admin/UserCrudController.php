@@ -43,6 +43,7 @@ class UserCrudController extends CrudController
 
         CRUD::column('name')->label("Tên");
         CRUD::column('email')->label("Email");
+        CRUD::column('code')->label("Mã");
         CRUD::column('type')->label("Phân quyền")->type("select_from_array")->options(["Quản trị", "Giáo viên", "Đối tác", "Học sinh"]);
 
         /**
