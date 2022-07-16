@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class Student extends Model
@@ -32,6 +33,9 @@ class Student extends Model
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "HS".$this->id;
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -53,7 +57,6 @@ class Student extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

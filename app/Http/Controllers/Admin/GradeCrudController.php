@@ -140,7 +140,7 @@ class GradeCrudController extends CrudController
 
                     // optional
                     'entity'    => 'Staff', // the method that defines the relationship in your Model
-                    'model'     => "App\Models\User", // foreign key model
+                    'model'     => "App\Models\Staff", // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
                     'pivot'     => true, // on create&update, do you need to add/delete pivot table entries?
                     // 'select_all' => true, // show Select All and Clear buttons?

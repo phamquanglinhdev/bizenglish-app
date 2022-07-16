@@ -31,6 +31,7 @@ class TeacherCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
         CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
         $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
+        $this->crud->denyAccess(["show"]);
     }
 
     /**
@@ -42,9 +43,17 @@ class TeacherCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("where", "type", "1");
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã giáo viên"]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của giáo viên"]);
-
+        CRUD::addColumn([
+            'name' => 'skills',
+            'entity'=>'Skills',
+            'model'=>"App\Models\Skill",
+            'label'=>'Tag',
+            'type' => 'relationship',
+            'attribute'=>'name'
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -67,6 +76,15 @@ class TeacherCrudController extends CrudController
         CRUD::field("address")->label("Địa chỉ");
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
+        CRUD::field('code')->type("hidden");
+        CRUD::addField([
+            'name' => 'skills',
+            'entity'=>'Skills',
+            'model'=>"App\Models\Skill",
+            'label'=>'Tag',
+            'type' => 'relationship',
+            'attribute'=>'name'
+        ]);
         CRUD::addField(
             [
                 'name' => 'extra',

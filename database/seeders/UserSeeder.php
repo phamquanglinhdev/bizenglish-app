@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -31,7 +32,7 @@ class UserSeeder extends Seeder
             "type"=>0,
         ]);
 
-        for ($i = 1; $i < 30; $i++) {
+        for ($i = 3; $i < 30; $i++) {
             $type = rand(1,3);
             $data = [
                 'name' => fake()->name(),
@@ -44,12 +45,14 @@ class UserSeeder extends Seeder
                 $data["student_status"]=rand(0,2);
                 $data["code"] = "GV".$i;
 
+
             }
             if($type == 3){
                 $data["student_type"]=rand(0,2);
                 $data["student_status"]=rand(0,2);
                 $data["code"] = "HS".$i;
                 $data["staff_id"] =2;
+
 
             }
             if($type == 2){
@@ -58,6 +61,14 @@ class UserSeeder extends Seeder
 
             }
             User::create($data);
+            if($type==1){
+                DB::table("teacher_skill")->insert(
+                    [
+                        'teacher_id'=>$i,
+                        'skill_id'=> rand(1,7),
+                    ]
+                );
+            }
         }
     }
 }

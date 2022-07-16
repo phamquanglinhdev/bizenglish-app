@@ -32,7 +32,7 @@ class StudentCrudController extends CrudController
         CRUD::setModel(Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
-        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
+        $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
 
     }
 
@@ -44,12 +44,18 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","type","3");
-        CRUD::addColumn(['name' => 'name', 'type' => 'text','label'=>"Tên học sinh"]);
-        CRUD::addColumn(['name' => 'staff_id', 'type' => 'select','attribute'=>"name","entity"=>"Staff","label"=>"Nhân viên quản lý"]);
-        CRUD::addColumn(['name' => 'code', 'type' => 'text','label'=>"Mã học sinh"]);
-        CRUD::addColumn(['name' => 'email', 'type' => 'text',"label"=>"Email của học sinh"]);
-        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
+        $this->crud->addClause("where", "type", "3");
+        if (backpack_user()->type == 0) {
+            $this->crud->addClause("where", "staff_id", backpack_user()->id);
+        } else {
+            CRUD::addColumn(['name' => 'staff_id', 'type' => 'select', 'attribute' => "name", "entity" => "Staff", "label" => "Nhân viên quản lý"]);
+        }
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh"]);
+
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);
+        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+        CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -74,7 +80,10 @@ class StudentCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-        CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng","Không tiềm năng","Chưa học thử"]);
+        if (backpack_user()->type <= 0) {
+            CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+            CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
+        }
         CRUD::addField(
             [
                 'name' => 'extra',
@@ -99,9 +108,9 @@ class StudentCrudController extends CrudController
         );
         CRUD::addField(
             [   // Password
-                'name'  => 'password',
+                'name' => 'password',
                 'label' => 'Mật khẩu',
-                'type'  => 'password'
+                'type' => 'password'
             ],
         );
 
@@ -123,7 +132,8 @@ class StudentCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function detail($id){
-        return view("student-detail",['data'=>Student::find($id)]);
+    protected function detail($id)
+    {
+        return view("student-detail", ['data' => Student::find($id)]);
     }
 }

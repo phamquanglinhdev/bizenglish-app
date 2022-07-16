@@ -39,10 +39,10 @@ class ClientCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","type","2");
-        CRUD::addColumn(['name' => 'name', 'type' => 'text','label'=>"Tên đối tác"]);
-        CRUD::addColumn(['name' => 'email', 'type' => 'text',"label"=>"Email của đối tác"]);
-
+        $this->crud->addClause("where", "type", "2");
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên đối tác"]);
+        CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của đối tác"]);
+        CRUD::column("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -65,6 +65,9 @@ class ClientCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
+        if (backpack_user()->type <= 0) {
+            CRUD::field("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"]);
+        }
         CRUD::addField(
             [
                 'name' => 'extra',
@@ -89,9 +92,9 @@ class ClientCrudController extends CrudController
         );
         CRUD::addField(
             [   // Password
-                'name'  => 'password',
+                'name' => 'password',
                 'label' => 'Mật khẩu',
-                'type'  => 'password'
+                'type' => 'password'
             ],
         );
 

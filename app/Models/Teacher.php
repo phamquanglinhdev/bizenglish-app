@@ -39,6 +39,9 @@ class Teacher extends Model
     public function Logs(){
         return $this->hasMany(Log::class,"teacher_id","id");
     }
+    public function Skills(){
+        return $this->belongsToMany(Skill::class,"teacher_skill","teacher_id","skill_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -46,6 +49,9 @@ class Teacher extends Model
     */
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
+    }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "GV".$this->id;
     }
     /*
     |--------------------------------------------------------------------------
