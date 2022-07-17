@@ -71,6 +71,11 @@ class TeacherCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
         ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:

@@ -39,12 +39,34 @@ class ClientCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "2");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên đối tác"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của đối tác"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
-        CRUD::column("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"]);
+        CRUD::addColumn([
+            'name' => 'client_status',
+            'type' => 'select_from_array',
+            'label' => 'Tình trạng hợp tác',
+            'options' => ["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"],
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $term = [];
+                if (preg_match("/$searchTerm/i", "Đang hợp tác")) {
+                    $term[] = 0;
+                }
+                if (preg_match("/$searchTerm/i", "Hợp tác ít")) {
+                    $term[] = 1;
+                }
+                if (preg_match("/$searchTerm/i", "Ngừng hợp tác")) {
+                    $term[] = 2;
+                }
+                foreach ($term as $item){
+                    $query->orWhere('client_status', '=', $item);
+                }
+
+            }
+
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');

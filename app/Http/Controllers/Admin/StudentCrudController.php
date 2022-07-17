@@ -71,6 +71,11 @@ class StudentCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
         ]);
 
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);
