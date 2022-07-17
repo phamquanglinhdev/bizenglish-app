@@ -46,11 +46,20 @@ class TeacherCrudController extends CrudController
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã giáo viên"]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của giáo viên"]);
+        CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([
             'name' => 'skills',
             'entity'=>'Skills',
             'model'=>"App\Models\Skill",
             'label'=>'Tag',
+            'type' => 'relationship',
+            'attribute'=>'name'
+        ]);
+        CRUD::addColumn([
+            'name' => 'grades',
+            'entity'=>'Grades',
+            'model'=>"App\Models\Grade",
+            'label'=>'Lớp',
             'type' => 'relationship',
             'attribute'=>'name'
         ]);
@@ -77,6 +86,7 @@ class TeacherCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
         CRUD::field('code')->type("hidden");
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addField([
             'name' => 'skills',
             'entity'=>'Skills',

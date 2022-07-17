@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\LogRequest;
+use App\Models\Grade;
 use App\Models\Log;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
 use http\Env\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -29,15 +31,19 @@ class LogCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Log::class);
+
+        CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
-        CRUD::setEntityNameStrings('Nhật ký', 'Nhật ký chung');
+        CRUD::setEntityNameStrings("Nhật ký","Nhật ký");
         $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
-        $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
+        if(backpack_user()->type==3){
+            $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
+        }
         $this->crud->denyAccess(["show"]);
         if (backpack_user()->type != 1) {
             $this->crud->denyAccess(["update", "create", "delete"]);
         }
+
     }
 
     /**
@@ -48,6 +54,17 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if(isset($_REQUEST["grade_id"])){
+            $grade = Grade::find(($_REQUEST["grade_id"]));
+            CRUD::setEntityNameStrings("Nhật ký","Lớp ".$grade->name);
+            Widget::add([
+                'type'     => 'view',
+                'view'     => 'test',
+                'grade' => $grade,
+            ]);
+            $this->crud->addClause("where","grade_id",$grade->id);
+        }
+
         if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
@@ -92,7 +109,7 @@ class LogCrudController extends CrudController
 
         CRUD::addField([
             'name' => 'grade_id',
-            'type' => 'select',
+            'type' => 'select2',
             'entity' => 'Grade',
             'model' => "App\Models\Grade",
             'attribute' => 'name',

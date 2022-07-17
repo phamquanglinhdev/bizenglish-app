@@ -29,6 +29,9 @@ class Comment extends Model
     |--------------------------------------------------------------------------
     */
         public static function Role($type){
+            if($type==-1){
+                $type=0;
+            }
             $role["label"] = ["Admin","Giáo viên","Đối tác","Học viên"];
             $role["color"] = ["danger","primary","secondary","success"];
             $value["label"] = $role["label"][$type];

@@ -39,6 +39,7 @@ class UserSeeder extends Seeder
                 'email' => fake()->safeEmail(),
                 'password' => Hash::make("password"),
                 'type' => $type,
+                'phone'=>fake()->phoneNumber()
             ];
             if($type == 1){
                 $data["student_type"]=rand(0,2);
@@ -52,6 +53,7 @@ class UserSeeder extends Seeder
                 $data["student_status"]=rand(0,2);
                 $data["code"] = "HS".$i;
                 $data["staff_id"] =2;
+                $data["student_parent"] = fake()->name();
 
 
             }

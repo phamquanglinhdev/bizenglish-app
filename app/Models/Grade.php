@@ -40,6 +40,16 @@ class Grade extends Model
         $minutes = $this->Logs()->count("duration");
        return ($this->minutes)-$minutes > 60;
     }
+    public function setAttachmentAttribute($value)
+    {
+        $attribute_name = "attachment";
+        $disk = "uploads_document";
+        $destination_path = "";
+
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+        // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+    }
 
     /*
     |--------------------------------------------------------------------------

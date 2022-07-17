@@ -47,6 +47,7 @@ class CustomerCrudController extends CrudController
         $this->crud->addClause("where", "type", "4");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của khách hàng"]);
+        CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::column("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
         $this->crud->denyAccess(["show"]);
 
@@ -69,6 +70,7 @@ class CustomerCrudController extends CrudController
 
         CRUD::field('name')->label("Tên khách hàng");
         CRUD::field('email')->label("Email khách hàng");
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::field('type')->type("hidden")->value(4);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");

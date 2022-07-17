@@ -42,6 +42,7 @@ class ClientCrudController extends CrudController
         $this->crud->addClause("where", "type", "2");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên đối tác"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của đối tác"]);
+        CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::column("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -61,6 +62,7 @@ class ClientCrudController extends CrudController
         CRUD::setValidation(ClientRequest::class);
         CRUD::field('name')->label("Tên đối tác");
         CRUD::field('email')->label("Email đối tác");
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::field('type')->type("hidden")->value(2);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");

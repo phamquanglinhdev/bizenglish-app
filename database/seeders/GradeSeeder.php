@@ -19,12 +19,12 @@ class GradeSeeder extends Seeder
     {
         for($i=1;$i<=3;$i++){
             $name = fake()->company();
-            $price =fake()->domainName();
             $data = [
                 'name'=>"C00".$i,
-                'pricing'=>$price,
+                'pricing'=>rand(10,30)*10000,
                 'status'=>rand(0,2),
-                'minutes'=>rand(4,10)*100
+                'minutes'=>rand(4,10)*100,
+                'attachment'=>'/uploads/document/example.docx',
             ];
             $grade = Grade::create($data);
             $student = User::where("type","=",3)->first();

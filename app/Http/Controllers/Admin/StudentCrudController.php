@@ -33,6 +33,7 @@ class StudentCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
+        $this->crud->denyAccess(["show"]);
 
     }
 
@@ -45,14 +46,24 @@ class StudentCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("where", "type", "3");
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
         if (backpack_user()->type == 0) {
             $this->crud->addClause("where", "staff_id", backpack_user()->id);
         } else {
             CRUD::addColumn(['name' => 'staff_id', 'type' => 'select', 'attribute' => "name", "entity" => "Staff", "label" => "Nhân viên quản lý"]);
         }
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh"]);
+        CRUD::addColumn(['name' => 'student_parent', 'type' => 'text', 'label' => "Người giám hộ"]);
+        CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
+        CRUD::addColumn([
+            'name' => 'grades',
+            'entity'=>'Grades',
+            'model'=>"App\Models\Grade",
+            'label'=>'Lớp',
+            'type' => 'relationship',
+            'attribute'=>'name'
+        ]);
 
-        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);
         CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
         CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
@@ -76,6 +87,8 @@ class StudentCrudController extends CrudController
 
         CRUD::field('name')->label("Tên học sinh");
         CRUD::field('email')->label("Email học sinh");
+        CRUD::addField(['name' => 'student_parent', 'type' => 'text', 'label' => "Tên người giám hộ (Để trống nếu HS tự đăng ký)"]);
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::field('type')->type("hidden")->value(3);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
