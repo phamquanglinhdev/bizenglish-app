@@ -54,6 +54,7 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("orderBy","time","DESC");
         if(isset($_REQUEST["grade_id"])){
             $grade = Grade::find(($_REQUEST["grade_id"]));
             CRUD::setEntityNameStrings("Nhật ký","Lớp ".$grade->name);
@@ -105,6 +106,7 @@ class LogCrudController extends CrudController
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
+        CRUD::column('time')->label("Thời gian");
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
