@@ -41,6 +41,7 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("where","disable",0);
         if(backpack_user()->type == 1){
             $this->crud->addClause("rep");
         }

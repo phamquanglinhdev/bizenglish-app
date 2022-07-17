@@ -44,6 +44,7 @@ class CustomerCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("where","disable",0);
         $this->crud->addClause("where", "type", "4");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của khách hàng"]);

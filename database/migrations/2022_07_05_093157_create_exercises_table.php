@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign("log_id")->references("id")->on("logs");
             $table->string("video")->nullable();
             $table->string("document")->nullable();
-
+            $table->integer("disable")->default(0);
             $table->timestamps();
         });
     }

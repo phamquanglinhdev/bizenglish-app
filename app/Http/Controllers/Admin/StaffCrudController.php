@@ -42,7 +42,7 @@ class StaffCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->crud->addClause("where","disable",0);
         $this->crud->addClause("where", "type", "0");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên nhân viên"]);
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);

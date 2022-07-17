@@ -43,6 +43,7 @@ class CommentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("where","disable",0);
         CRUD::column('id');
         CRUD::column('message');
         CRUD::column('inherit_id');

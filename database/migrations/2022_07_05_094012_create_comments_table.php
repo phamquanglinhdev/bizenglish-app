@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreign("inherit_id")->references("id")->on("comments");
             $table->unsignedBigInteger("log_id");
             $table->foreign("log_id")->references("id")->on("logs");
+            $table->integer("disable")->default(0);
             $table->timestamps();
         });
     }

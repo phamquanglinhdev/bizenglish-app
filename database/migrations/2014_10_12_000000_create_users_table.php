@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer("client_status")->nullable();
             $table->integer("student_status")->nullable();
             $table->string("student_parent")->nullable();
+            $table->integer("disable")->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->longText("information")->nullable();
             $table->string("attachment")->nullable();
             $table->integer("status");
+            $table->integer("disable")->default(0);
             $table->timestamps();
         });
     }

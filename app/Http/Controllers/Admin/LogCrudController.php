@@ -54,6 +54,7 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("where","disable",0);
         $this->crud->addClause("orderBy","time","DESC");
         if(isset($_REQUEST["grade_id"])){
             $grade = Grade::find(($_REQUEST["grade_id"]));

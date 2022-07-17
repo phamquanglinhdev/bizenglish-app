@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GradeRequest;
 use App\Models\Grade;
+use App\Models\Log;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -30,7 +31,7 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
-        $this->crud->denyAccess(["show", "delete"]);
+        $this->crud->denyAccess(["show"]);
     }
 
     /**
@@ -41,6 +42,7 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->crud->addClause("where","disable",0);
         if (backpack_user()->type != -1) {
             $this->crud->addClause("owner");
         }
@@ -209,5 +211,14 @@ class GradeCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+    public function destroy($id)
+    {
+        Log::where("grade_id","=",$id)->update([
+            'disable'=>1,
+        ]);
+        return Grade::find($id)->update([
+            'disable'=>1,
+        ]);
     }
 }

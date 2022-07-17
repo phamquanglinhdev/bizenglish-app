@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make("password"),
             'type' => -1,
             'code'=>"AD1",
+            'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
         ]);
         User::create([
             'name' => "Trần Minh Hạ",
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make("password"),
             'code' => "NV1",
             "type"=>0,
+            'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
         ]);
 
         for ($i = 3; $i < 30; $i++) {
@@ -39,7 +41,8 @@ class UserSeeder extends Seeder
                 'email' => fake()->safeEmail(),
                 'password' => Hash::make("password"),
                 'type' => $type,
-                'phone'=>fake()->phoneNumber()
+                'phone'=>fake()->phoneNumber(),
+                'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
             ];
             if($type == 1){
                 $data["student_type"]=rand(0,2);

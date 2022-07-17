@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string("lesson");
             $table->longText("information");
             $table->integer("hour_salary");
-            $table->string("teacher_video");
+            $table->string("teacher_video")->nullable();
+            $table->integer("disable")->default(0);
             $table->timestamps();
         });
     }

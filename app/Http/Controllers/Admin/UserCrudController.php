@@ -40,7 +40,7 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->crud->addClause("where","disable",0);
         CRUD::column('name')->label("Tên");
         CRUD::column('email')->label("Email");
         CRUD::column('code')->label("Mã");
@@ -108,4 +108,5 @@ class UserCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
 }
