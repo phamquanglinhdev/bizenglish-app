@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string("name");
             $table->integer("pricing");
             $table->longText("information")->nullable();
-            $table->string("attachment");
+            $table->string("attachment")->nullable();
             $table->integer("status");
             $table->timestamps();
         });

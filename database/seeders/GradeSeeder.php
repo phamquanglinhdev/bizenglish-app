@@ -18,7 +18,6 @@ class GradeSeeder extends Seeder
     public function run()
     {
         for($i=1;$i<=3;$i++){
-            $name = fake()->company();
             $data = [
                 'name'=>"C00".$i,
                 'pricing'=>rand(10,30)*10000,
