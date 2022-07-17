@@ -17,34 +17,34 @@ class GradeSeeder extends Seeder
      */
     public function run()
     {
-        for($i=1;$i<=3;$i++){
+        for ($i = 1; $i <= 3; $i++) {
             $data = [
-                'name'=>"C00".$i,
-                'pricing'=>rand(10,30)*10000,
-                'status'=>rand(0,2),
-                'minutes'=>rand(4,10)*100,
-                'attachment'=>'/uploads/document/example.docx',
+                'name' => "C00" . $i,
+                'pricing' => rand(10, 30) * 10000,
+                'status' => rand(0, 2),
+                'minutes' => rand(4, 10) * 100,
+                'attachment' => 'example.docx',
             ];
-            $grade = Grade::create($data);
-            $student = User::where("type","=",3)->first();
+            $grade = DB::table("grades")->insert($data);
+            $student = User::where("type", "=", 3)->first();
             DB::table("student_grade")->insert([
-                'student_id'=>$student->id,
-                'grade_id'=>$grade->id,
+                'student_id' => $student->id,
+                'grade_id' => $grade->id,
             ]);
-            $teacher = User::where("type","=",1)->first();
+            $teacher = User::where("type", "=", 1)->first();
             DB::table("teacher_grade")->insert([
-                'teacher_id'=>$teacher->id,
-                'grade_id'=>$grade->id,
+                'teacher_id' => $teacher->id,
+                'grade_id' => $grade->id,
             ]);
-            $client = User::where("type","=",2)->first();
+            $client = User::where("type", "=", 2)->first();
             DB::table("client_grade")->insert([
-                'client_id'=>$client->id,
-                'grade_id'=>$grade->id,
+                'client_id' => $client->id,
+                'grade_id' => $grade->id,
             ]);
-            $staff = User::where("type","=",0)->first();
+            $staff = User::where("type", "=", 0)->first();
             DB::table("staff_grade")->insert([
-                'staff_id'=>$staff->id,
-                'grade_id'=>$grade->id,
+                'staff_id' => $staff->id,
+                'grade_id' => $grade->id,
             ]);
         }
     }
