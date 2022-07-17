@@ -37,8 +37,13 @@ class Grade extends Model
 
     public function fewDate(): bool
     {
-        $minutes = $this->Logs()->count("duration");
+        $minutes = $this->Logs()->sum("duration");
        return ($this->minutes)-$minutes > 60;
+    }
+    public function percentCount(): float|int
+    {
+        $duration = $this->Logs()->sum("duration");
+        return $duration/$this->minutes*100;
     }
     public function setAttachmentAttribute($value)
     {

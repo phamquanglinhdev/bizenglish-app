@@ -35,7 +35,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-center mt-2 h3 text-muted font-italic">{{$data->name}}</div>
+                <div class="text-center mt-2 h3 text-muted font-italic">
+                    {{$data->name}}
+                </div>
                 <dìv class="card p-2 rounded">
                     <div><i class="las la-mail-bulk text text-success"></i> <span
                             class="font-italic">{{$data->email}}</span></div>
@@ -68,7 +70,11 @@
                         $grades = $data->Grades()->get()
                     @endphp
                     @foreach( $grades as $grade)
-                        <div><i class="las la-chalkboard-teacher"></i> {{$grade->name}}</div>
+                        <div><i class="las la-chalkboard-teacher"></i>
+                            <a href="{{route("log.index")}}?grade_id={{$grade->id}}">
+                                {{$grade->name}}
+                            </a>
+                        </div>
                         <div><i class="las la-hourglass"></i> {{$grade->getStatus()}}</div>
                         <div><i class="las la-user-astronaut"></i> Học sinh:
                             @foreach($grade->Student()->get() as $student)
@@ -86,24 +92,6 @@
             </div>
         </div>
         <hr>
-        @if(backpack_user()->id==$data->id)
-        <div class="bg-white card p-2">
-            <div class="bg-cyan text-white h3 p-2 rounded">Bài học</div>
-            @foreach($grades as $grade)
-                @php
-                    $logs =$grade->Logs()->get();
-                @endphp
-                @if($grade->Logs()->count()>0)
-                    @php
-                        $column["label"] = ["Thời gian","Thời gian dạy","Bài học","Video bài giảng","Lương theo giờ"];
-                        $column["key"] = ["time","duration","lesson","teacher_video","hour_salary"];
-                        $logs = $grade->Logs()->get();
-                    @endphp
-                    @include("components.teacher-log",['name'=>"Lớp $grade->name",'id'=>"grade-".$grade->id,'rows'=>$logs,'column'=>$column])
-                @endif
-            @endforeach
-        </div>
-        @endif
     </div>
 
 @endsection

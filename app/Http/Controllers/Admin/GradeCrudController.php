@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GradeRequest;
+use App\Models\Grade;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -26,9 +27,10 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Grade::class);
+        CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
+        $this->crud->denyAccess(["show", "delete"]);
     }
 
     /**
@@ -42,7 +44,15 @@ class GradeCrudController extends CrudController
         if (backpack_user()->type != -1) {
             $this->crud->addClause("owner");
         }
-        CRUD::column('name')->label("Tên lớp");
+        CRUD::column('name')->label("Tên lớp")->wrapper(
+            [
+                // 'element' => 'a', // the element will default to "a" so you can skip it here
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/log?grade_id=$entry->id");
+                },
+                // 'target' => '_blank',
+                // 'class' => 'some-class',
+            ]);
         CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('student_id')->type("select")->label("Học viên");
         CRUD::column('teacher_id')->type("select")->label("Giáo viên");
@@ -78,11 +88,11 @@ class GradeCrudController extends CrudController
         CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
         CRUD::addField(
             [
-                'name'      => 'attachment',
-                'label'     => 'Tài liệu',
-                'type'      => 'upload',
-                'upload'    => true,
-                'disk'      => 'uploads_document',
+                'name' => 'attachment',
+                'label' => 'Tài liệu',
+                'type' => 'upload',
+                'upload' => true,
+                'disk' => 'uploads_document',
             ]);
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)

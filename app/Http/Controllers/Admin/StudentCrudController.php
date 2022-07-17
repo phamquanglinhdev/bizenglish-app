@@ -61,7 +61,15 @@ class StudentCrudController extends CrudController
             'model'=>"App\Models\Grade",
             'label'=>'Lớp',
             'type' => 'relationship',
-            'attribute'=>'name'
+            'attribute'=>'name',
+            'wrapper'   => [
+                // 'element' => 'a', // the element will default to "a" so you can skip it here
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/log?grade_id=$related_key");
+                },
+                // 'target' => '_blank',
+                // 'class' => 'some-class',
+            ],
         ]);
 
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);

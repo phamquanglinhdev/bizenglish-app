@@ -75,6 +75,14 @@ class LogCrudController extends CrudController
             'model' => "App\Model\Grade",
             'attribute' => 'name',
             'label' => "Lớp",
+            'wrapper'   => [
+                // 'element' => 'a', // the element will default to "a" so you can skip it here
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/log?grade_id=$related_key");
+                },
+                // 'target' => '_blank',
+                // 'class' => 'some-class',
+            ],
         ]);
 
         CRUD::addColumn([
@@ -84,6 +92,14 @@ class LogCrudController extends CrudController
             'model' => "App\Model\Teacher",
             'attribute' => 'name',
             'label' => "Giáo viên dạy",
+            'wrapper'   => [
+                // 'element' => 'a', // the element will default to "a" so you can skip it here
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/teacher/detail/$related_key");
+                },
+                // 'target' => '_blank',
+                // 'class' => 'some-class',
+            ],
         ]);
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");
