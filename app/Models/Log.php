@@ -75,7 +75,9 @@ class Log extends Model
         $isExist = $this->belongsToMany(Student::class,"student_log","log_id","student_id")->count();
         return $isExist > 0;
     }
-
+    public function Students(){
+        return $this->belongsToMany(Student::class,"student_log","log_id","student_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

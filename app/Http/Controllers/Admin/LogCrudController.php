@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\LogRequest;
 use App\Models\Grade;
 use App\Models\Log;
+use App\Models\Student;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -34,7 +35,7 @@ class LogCrudController extends CrudController
 
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
-        CRUD::setEntityNameStrings("Nhật ký","Nhật ký");
+        CRUD::setEntityNameStrings("Nhật ký học","Nhật ký học");
         $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
         if(backpack_user()->type==3){
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
@@ -58,7 +59,7 @@ class LogCrudController extends CrudController
         $this->crud->addClause("orderBy","time","DESC");
         if(isset($_REQUEST["grade_id"])){
             $grade = Grade::find(($_REQUEST["grade_id"]));
-            CRUD::setEntityNameStrings("Nhật ký","Lớp ".$grade->name);
+            CRUD::setEntityNameStrings("Nhật ký học","Lớp ".$grade->name);
             Widget::add([
                 'type'     => 'view',
                 'view'     => 'test',
@@ -102,6 +103,28 @@ class LogCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
+        ]);
+        CRUD::addColumn([
+            'name' => 'Students',
+            'type' => 'select',
+            'entity' => 'Students',
+            'model' => "App\Model\Student",
+            'attribute' => 'name',
+            'label' => "Học sinh xác nhận",
+            'wrapper'   => [
+                // 'element' => 'a', // the element will default to "a" so you can skip it here
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/student/detail/$related_key");
+                },
+
+                // 'target' => '_blank',
+                // 'class' => 'some-class',
+            ],
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->orWhereHas('Students', function ($q) use ($column, $searchTerm) {
+                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                });
+            }
         ]);
         CRUD::column('duration')->label("Thời gian dạy");
         CRUD::column('lesson')->label("Bài học");

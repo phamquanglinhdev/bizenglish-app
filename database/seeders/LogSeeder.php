@@ -31,6 +31,15 @@ class LogSeeder extends Seeder
             ];
             $log = Log::create($data);
             DB::table("logs")->where("id", "=", $log->id)->update(['teacher_video' => Hash::make("example") . ".mp4"]);
+            $student = $log->Grade()->first()->Student()->get();
+            foreach ($student as $item){
+                DB::table("student_log")->insert([
+                    'log_id'=>$log->id,
+                    'student_id'=>$item->id,
+                    'accept'=>1,
+                    'comment'=>null,
+                ]);
+            }
         }
     }
 }
