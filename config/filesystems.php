@@ -51,6 +51,10 @@ return [
             'driver' => 'local',
             'root' =>  public_path().'/uploads/document',
         ],
+        'uploads_audio' => [
+            'driver' => 'local',
+            'root' =>  public_path().'/uploads/audio',
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
