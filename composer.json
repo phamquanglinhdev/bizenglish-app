@@ -13,7 +13,8 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "masbug/flysystem-google-drive-ext": "^2.2",
-        "zanysoft/laravel-zip": "^2.0"
+        "zanysoft/laravel-zip": "^2.0",
+      "ext-zip": "*"
     },
     "require-dev": {
         "backpack/generators": "^3.1",

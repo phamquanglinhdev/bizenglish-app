@@ -67,7 +67,7 @@ class LessonCrudController extends CrudController
         CRUD::addField(
             [
                 'name' => 'pdf',
-                'label' => 'Upload File Tài liệu',
+                'label' => 'Duyệt file',
                 'type' => 'browse',
 //                'upload'    => true,
 //                'disk'      => 'uploads_document',

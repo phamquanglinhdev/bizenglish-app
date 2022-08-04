@@ -150,11 +150,11 @@ return [
     'weekLabel' => 'W',
 
     // Lĩnh vực
-    'Browse_uploads' => 'Duyệt qua các video tải lên',
+    'browse_uploads' => 'Chọn',
     'select_all' => 'Chọn tất cả',
     'select_files' => 'Chọn tệp',
     'select_file' => 'Chọn tệp',
-    'clear' => 'Clear',
+    'clear' => 'Xóa',
     'page_link' => 'Liên kết trang',
     'page_link_placeholder' => 'https://example.com/your-desosystem-page',
     'Internal_link' => 'Liên kết nội bộ',
