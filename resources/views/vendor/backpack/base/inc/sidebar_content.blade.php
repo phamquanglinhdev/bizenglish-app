@@ -38,6 +38,7 @@
 @if(backpack_user()->type<=3)
     {{--    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>--}}
     {{--    </li>--}}
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lesson') }}'><i class='nav-icon la la-file-pdf'></i> Giáo trình</a></li>
 @endif
 {{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('comment') }}'><i class='nav-icon la la-comment'></i>Nhận xét</a></li>--}}
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('exercise') }}'>
@@ -46,4 +47,3 @@
 
 
 
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('lesson') }}'><i class='nav-icon la la-question'></i> Lessons</a></li>

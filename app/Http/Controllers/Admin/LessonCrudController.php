@@ -30,6 +30,7 @@ class LessonCrudController extends CrudController
         CRUD::setModel(\App\Models\Lesson::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lesson');
         CRUD::setEntityNameStrings('Giáo trình', 'Những giáo trình');
+        $this->crud->denyAccess(["show"]);
     }
 
     /**
@@ -41,7 +42,7 @@ class LessonCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::column('name')->label("Tên giáo trình");
-        CRUD::column('pdf')->label("Đường dẫn PDF");
+        CRUD::column('pdf')->label("Đường dẫn PDF")->type("pdf");
         CRUD::column('updated_at')->label("Cập nhật lần cuối");;
 
         /**
@@ -71,30 +72,6 @@ class LessonCrudController extends CrudController
 //                'upload'    => true,
 //                'disk'      => 'uploads_document',
             ]);
-        CRUD::addField(
-            [
-                'name' => 'audios',
-                'label' => 'File Audio',
-                'type' => 'repeatable',
-                'new_item_label' => 'Thêm trang', // customize the text of the button
-                'fields' => [
-                    [
-                        'name' => 'page',
-                        'type' => 'text',
-                        'label' => 'Trang',
-                        'wrapper' => ['class' => 'form-group col-md-6'],
-                    ],
-                    [
-                        'name' => 'audio',
-                        'label' => 'File âm thanh',
-                        'type' => 'browse',
-//                        'upload'    => true,
-//                        'disk'      => 'uploads_audio',
-                        'wrapper' => ['class' => 'form-group col-md-6'],
-                    ],
-                ],
-            ],
-        );
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

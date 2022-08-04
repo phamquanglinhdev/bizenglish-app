@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\StudentRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Student;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Facades\Route;
@@ -79,7 +80,7 @@ class StudentCrudController extends CrudController
         ]);
 
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);
-        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+//        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
         CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
 
         /**
@@ -106,11 +107,17 @@ class StudentCrudController extends CrudController
         CRUD::field('type')->type("hidden")->value(3);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
+
         CRUD::field("address")->label("Địa chỉ");
         if (backpack_user()->type <= 0) {
-            CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+//            CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
             CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         }
+        CRUD::addField([
+            'name'=>'code',
+            'type'=>'hidden',
+            'value'=>'HS'.User::max("id")+1,
+        ]);
         CRUD::addField(
             [
                 'name' => 'extra',

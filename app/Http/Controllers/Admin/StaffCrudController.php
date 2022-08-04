@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StaffRequest;
 use App\Models\Staff;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -95,7 +96,11 @@ class StaffCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-        CRUD::field("code")->type("hidden");
+        CRUD::addField([
+            'name'=>'code',
+            'type'=>'hidden',
+            'value'=>'NV'.User::max("id")+1,
+        ]);
 
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)
