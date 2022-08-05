@@ -76,6 +76,11 @@ class CustomerCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
+         CRUD::addField([
+            'name'=>'code',
+            'type'=>'hidden',
+            'value'=>'KH'.User::max("id")+1,
+        ]);
         CRUD::field("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
         CRUD::addField(
             [
