@@ -33,9 +33,9 @@ class Student extends Model
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function setCodeAttribute() {
-        $this->attributes['code'] = "HS".$this->id;
-    }
+    // public function setCodeAttribute() {
+    //     $this->attributes['code'] = "HS".$this->id;
+    // }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -34,9 +34,9 @@ class Customer extends Model
     {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function setCodeAttribute() {
-        $this->attributes['code'] = "KH".$this->id;
-    }
+    // public function setCodeAttribute() {
+    //     $this->attributes['code'] = "KH".$this->id;
+    // }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
