@@ -48,6 +48,7 @@ class CustomerCrudController extends CrudController
         $this->crud->addClause("where","disable",0);
         $this->crud->addClause("where", "type", "4");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã khách hàng"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của khách hàng"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::column("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
@@ -138,7 +139,8 @@ class CustomerCrudController extends CrudController
     protected function switcher($id)
     {
         Customer::find($id)->update([
-            'type'=>3
+            'type'=>3,
+            'code'=>str_replace("KH","HS",Customer::find($id)->first()->code),
         ]);
         return redirect()->back();
     }
