@@ -19,7 +19,7 @@ class Teacher extends Model
     protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = ['id'];
+    protected $guarded = [];
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
@@ -47,12 +47,16 @@ class Teacher extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function getID(){
+        return $this->id ?? Teacher::max("id")+1;
+    }
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    // public function setCodeAttribute() {
-    //     $this->attributes['code'] = "GV".$this->id;
-    // }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "GV".$this->getID();
+
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

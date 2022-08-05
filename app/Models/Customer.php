@@ -21,7 +21,7 @@ class Customer extends Model
     protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = ['id'];
+    protected $guarded = [];
     // protected $fillable = [];
 //     protected $hidden = ['password'];
     // protected $dates = [];
@@ -30,13 +30,16 @@ class Customer extends Model
         'extra' => 'json',
     ];
 
-    public function setPasswordAttribute($value)
-    {
+    public function getID(){
+        return $this->id ?? Customer::max("id")+1;
+    }
+    public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    // public function setCodeAttribute() {
-    //     $this->attributes['code'] = "KH".$this->id;
-    // }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "KH".$this->getID();
+
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -23,7 +23,7 @@ class Staff extends Model
     protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = ['id'];
+    protected $guarded = [];
     // protected $fillable = [];
 //     protected $hidden = ['password'];
     // protected $dates = [];
@@ -33,12 +33,16 @@ class Staff extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function getID(){
+        return $this->id ?? Staff::max("id")+1;
+    }
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    // public function setCodeAttribute() {
-    //     $this->attributes['code'] = "NV".$this->id;
-    // }
+    public function setCodeAttribute() {
+        $this->attributes['code'] = "NV".$this->getID();
+
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

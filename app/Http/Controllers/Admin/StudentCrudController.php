@@ -116,7 +116,7 @@ class StudentCrudController extends CrudController
         CRUD::addField([
             'name'=>'code',
             'type'=>'hidden',
-            'value'=>'HS'.User::max("id")+1,
+//            'value'=>'HS'.User::max("id")+1,
         ]);
         CRUD::addField(
             [
