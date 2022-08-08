@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\LessonRequest;
-use App\Models\Lesson;
+use App\Http\Requests\BookRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class LessonCrudController
+ * Class BookCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class LessonCrudController extends CrudController
+class BookCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -27,10 +26,11 @@ class LessonCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Lesson::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/lesson');
-        CRUD::setEntityNameStrings('Giáo trình', 'Những giáo trình');
-        $this->crud->denyAccess(["show"]);
+        CRUD::setModel(\App\Models\Book::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/book');
+        CRUD::setEntityNameStrings('Bộ sách', 'Các bộ sách');
+        $this->crud->denyAccess(["delete","show"]);
+        $this->crud->addButtonFromModelFunction("line","copy","Copy","line");
     }
 
     /**
@@ -41,18 +41,9 @@ class LessonCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name')->label("Tên giáo trình");
-        CRUD::column('pdf')->label("Đường dẫn PDF")->type("pdf");
-        CRUD::addColumn(
-            [
-                'name' => 'book_id',
-                'label' => 'Bộ sách',
-                'type' => 'select',
-                'model' => 'App\Models\Book',
-                'entity' => 'Book',
-                'attribute' => 'name',
-            ]);
-        CRUD::column('updated_at')->label("Cập nhật lần cuối");;
+        CRUD::column('name')->label("Tên sách");
+        CRUD::column('thumbnail')->label("Ảnh")->type("image");
+
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -69,26 +60,11 @@ class LessonCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(LessonRequest::class);
-        CRUD::field('user_id')->type("hidden")->value(backpack_user()->id);
-        CRUD::field('name')->type("text")->label("Tên");
-        CRUD::addField(
-            [
-                'name' => 'book_id',
-                'label' => 'Bộ sách',
-                'type' => 'select2',
-                'model' => 'App\Models\Book',
-                'entity' => 'Book',
-                'attribute' => 'name',
-            ]);
-        CRUD::addField(
-            [
-                'name' => 'pdf',
-                'label' => 'Duyệt file',
-                'type' => 'browse',
-//                'upload'    => true,
-//                'disk'      => 'uploads_document',
-            ]);
+        CRUD::setValidation(BookRequest::class);
+
+        CRUD::field('name')->label("Tên sách");
+        CRUD::field('slug')->type("hidden");
+        CRUD::field('thumbnail')->label("Ảnh")->type("image")->crop(true)->aspect_ratio(1907/2560);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -108,8 +84,4 @@ class LessonCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    protected function detail($id)
-    {
-        return view("lesson-show", ['lesson' => Lesson::find($id)->first()]);
-    }
 }

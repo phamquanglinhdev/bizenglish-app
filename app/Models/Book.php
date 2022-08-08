@@ -5,7 +5,8 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-class Lesson extends Model
+
+class Book extends Model
 {
     use CrudTrait;
 
@@ -15,7 +16,7 @@ class Lesson extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'lessons';
+    protected $table = 'books';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -28,15 +29,22 @@ class Lesson extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function Copy(){
+        return view("components.copy",['slug'=>$this->slug]);
+    }
+    public function setSlugAttribute(){
+        if($this->slug=="" || $this->slug==null){
+            $this->attributes["slug"] = Str::random(50);
+        }
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Book(){
-        return $this->belongsTo(Book::class,"book_id","id");
+    public function Lessons(){
+        return $this->hasMany(Lesson::class,"book_id","id");
     }
-
     /*
     |--------------------------------------------------------------------------
     | SCOPES

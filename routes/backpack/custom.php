@@ -39,4 +39,5 @@ Route::group([
     Route::get("staff/detail/{id}",[StaffCrudController::class,"detail"])->name("admin.staff.detail");
     Route::crud('lesson', 'LessonCrudController');
     Route::get("lesson/detail/{id}",[\App\Http\Controllers\Admin\LessonCrudController::class,"detail"])->name("admin.lesson.detail");
+    Route::crud('book', 'BookCrudController');
 }); // this should be the absolute last line of this file

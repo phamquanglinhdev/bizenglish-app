@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,3 +22,4 @@ Route::get('upload-file', function() {
     Storage::disk('google')->put('google-drive.txt', 'AHII');
     dd('Đã upload file lên google drive thành công!');
 });
+Route::get("/book/{slug}",[BookController::class,"show","slug"])->name("show-book");
