@@ -96,11 +96,11 @@ class StaffCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-        if(backpack_user()->role<0){
+        if (backpack_user()->role < 0) {
             CRUD::addField([
                 'name' => 'code',
                 'type' => 'text',
-                'code' => "Mã nhân viên",
+                'label' => "Mã nhân viên",
             ]);
         }
 
