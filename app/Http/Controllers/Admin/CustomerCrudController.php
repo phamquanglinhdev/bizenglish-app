@@ -78,7 +78,7 @@ class CustomerCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-        if(backpack_user()<1){
+        if (backpack_user()->role < 1) {
             CRUD::addField([
                 'name' => 'code',
                 'type' => 'text',

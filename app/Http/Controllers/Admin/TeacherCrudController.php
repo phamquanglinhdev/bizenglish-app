@@ -103,7 +103,7 @@ class TeacherCrudController extends CrudController
         if(backpack_user()->role<1){
             CRUD::addField([
                 'name'=>'code',
-                'type'=>'hidden',
+                'type'=>'text',
                 "label"=>"Mã giáo viên"
             ]);
         }
