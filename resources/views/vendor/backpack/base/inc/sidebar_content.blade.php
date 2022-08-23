@@ -49,3 +49,4 @@
 
 
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i class='nav-icon la la-question'></i> Books</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('teaching') }}'><i class='nav-icon la la-question'></i> Teachings</a></li>
