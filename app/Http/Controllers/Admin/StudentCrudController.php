@@ -46,7 +46,7 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
         if (backpack_user()->type == 0) {
@@ -59,12 +59,12 @@ class StudentCrudController extends CrudController
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([
             'name' => 'grades',
-            'entity'=>'Grades',
-            'model'=>"App\Models\Grade",
-            'label'=>'Lớp',
+            'entity' => 'Grades',
+            'model' => "App\Models\Grade",
+            'label' => 'Lớp',
             'type' => 'relationship',
-            'attribute'=>'name',
-            'wrapper'   => [
+            'attribute' => 'name',
+            'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/log?grade_id=$related_key");
@@ -74,7 +74,7 @@ class StudentCrudController extends CrudController
             ],
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
                 });
             }
         ]);
@@ -113,11 +113,15 @@ class StudentCrudController extends CrudController
 //            CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
             CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         }
-        CRUD::addField([
-            'name'=>'code',
-            'type'=>'hidden',
+        if(backpack_user()->role<1){
+            CRUD::addField([
+                'name' => 'code',
+                'type' => 'text',
+                'label' => "Mã học sinh",
+
 //            'value'=>'HS'.User::max("id")+1,
-        ]);
+            ]);
+        }
         CRUD::addField(
             [
                 'name' => 'extra',

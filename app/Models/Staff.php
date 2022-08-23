@@ -39,10 +39,10 @@ class Staff extends Model
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function setCodeAttribute() {
-        $this->attributes['code'] = "NV".$this->getID();
-
-    }
+//    public function setCodeAttribute() {
+//        $this->attributes['code'] = "NV".$this->getID();
+//
+//    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

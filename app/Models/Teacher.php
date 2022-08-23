@@ -53,10 +53,10 @@ class Teacher extends Model
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
     }
-    public function setCodeAttribute() {
-        $this->attributes['code'] = "GV".$this->getID();
-
-    }
+//    public function setCodeAttribute() {
+//        $this->attributes['code'] = "GV".$this->getID();
+//
+//    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

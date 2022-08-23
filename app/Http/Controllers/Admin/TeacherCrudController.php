@@ -100,11 +100,13 @@ class TeacherCrudController extends CrudController
         CRUD::field("address")->label("Địa chỉ");
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
-        CRUD::addField([
-            'name'=>'code',
-            'type'=>'hidden',
-            'value'=>'GV'.User::max("id")+1,
-        ]);
+        if(backpack_user()->role<1){
+            CRUD::addField([
+                'name'=>'code',
+                'type'=>'hidden',
+                "label"=>"Mã giáo viên"
+            ]);
+        }
         CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addField([
             'name' => 'skills',

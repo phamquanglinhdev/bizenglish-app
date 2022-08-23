@@ -67,7 +67,7 @@
                 <div class="bg-cyan text-white h3 p-2 rounded">Lớp học</div>
                 <div class="bg-white p-2 card">
                     @php
-                        $grades = $data->Grades()->get()
+                        $grades = $data->Grades()->where("disable",0)->get()
                     @endphp
                     @foreach( $grades as $grade)
                         <div><i class="las la-chalkboard-teacher"></i>

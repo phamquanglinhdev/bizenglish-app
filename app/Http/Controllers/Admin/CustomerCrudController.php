@@ -32,8 +32,8 @@ class CustomerCrudController extends CrudController
         CRUD::setModel(Customer::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/customer');
         CRUD::setEntityNameStrings('Khách hàng', 'Những khách hàng');
-        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
-        $this->crud->addButtonFromModelFunction("line","Switch","Switch","line");
+        $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
+        $this->crud->addButtonFromModelFunction("line", "Switch", "Switch", "line");
 
     }
 
@@ -45,7 +45,7 @@ class CustomerCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "4");
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã khách hàng"]);
@@ -78,11 +78,13 @@ class CustomerCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
-         CRUD::addField([
-            'name'=>'code',
-            'type'=>'hidden',
-            'value'=>'KH'.User::max("id")+1,
-        ]);
+        if(backpack_user()<1){
+            CRUD::addField([
+                'name' => 'code',
+                'type' => 'text',
+                "label" => "Mã khách hàng",
+            ]);
+        }
         CRUD::field("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
         CRUD::addField(
             [
@@ -136,11 +138,12 @@ class CustomerCrudController extends CrudController
     {
         return view("student-detail", ['data' => Student::find($id)]);
     }
+
     protected function switcher($id)
     {
         Customer::find($id)->update([
-            'type'=>3,
-            'code'=>str_replace("KH","HS",Customer::find($id)->first()->code),
+            'type' => 3,
+            'code' => str_replace("KH", "HS", Customer::find($id)->first()->code),
         ]);
         return redirect()->back();
     }
