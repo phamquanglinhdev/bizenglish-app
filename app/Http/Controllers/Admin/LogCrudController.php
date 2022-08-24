@@ -6,6 +6,7 @@ use App\Http\Requests\LogRequest;
 use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Student;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
@@ -35,15 +36,28 @@ class LogCrudController extends CrudController
 
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
-        CRUD::setEntityNameStrings("Nhật ký học","Nhật ký học");
+        CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
         $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
-        if(backpack_user()->type==3){
+        if (backpack_user()->type == 3) {
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
         }
         $this->crud->denyAccess(["show"]);
         if (backpack_user()->type != 1) {
             $this->crud->denyAccess(["update", "create", "delete"]);
         }
+        $this->crud->setResponsiveTable(true);
+        $this->crud->setOperationSetting('exportButtons', true);
+        $this->crud->setOperationSetting('detailsRow', true);
+
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'active',
+            'label' => 'Active'
+        ],
+            false,
+            function () { // if the filter is active
+                // $this->crud->addClause('active'); // apply the "active" eloquent scope
+            });
 
     }
 
@@ -55,17 +69,17 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
-        $this->crud->addClause("orderBy","time","DESC");
-        if(isset($_REQUEST["grade_id"])){
+        $this->crud->addClause("where", "disable", 0);
+        $this->crud->addClause("orderBy", "start", "DESC");
+        if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
-            CRUD::setEntityNameStrings("Nhật ký học","Lớp ".$grade->name);
+            CRUD::setEntityNameStrings("Nhật ký học", "Lớp " . $grade->name);
             Widget::add([
-                'type'     => 'view',
-                'view'     => 'test',
+                'type' => 'view',
+                'view' => 'test',
                 'grade' => $grade,
             ]);
-            $this->crud->addClause("where","grade_id",$grade->id);
+            $this->crud->addClause("where", "grade_id", $grade->id);
         }
 
         if (backpack_user()->type == 3) {
@@ -78,7 +92,7 @@ class LogCrudController extends CrudController
             'model' => "App\Model\Grade",
             'attribute' => 'name',
             'label' => "Lớp",
-            'wrapper'   => [
+            'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/log?grade_id=$related_key");
@@ -86,6 +100,7 @@ class LogCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
+
         ]);
 
         CRUD::addColumn([
@@ -95,7 +110,7 @@ class LogCrudController extends CrudController
             'model' => "App\Model\Teacher",
             'attribute' => 'name',
             'label' => "Giáo viên dạy",
-            'wrapper'   => [
+            'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/teacher/detail/$related_key");
@@ -111,7 +126,7 @@ class LogCrudController extends CrudController
             'model' => "App\Model\Student",
             'attribute' => 'name',
             'label' => "Học sinh xác nhận",
-            'wrapper'   => [
+            'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/student/detail/$related_key");
@@ -122,15 +137,17 @@ class LogCrudController extends CrudController
             ],
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('Students', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
                 });
             }
         ]);
-        CRUD::column('duration')->label("Thời gian dạy");
+
         CRUD::column('lesson')->label("Bài học");
-        CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
-        CRUD::column('time')->label("Thời gian");
+        CRUD::column('start')->label("Thời gian bắt đầu")->type("datetime");
+        CRUD::column('end')->label("Thời gian kết thúc")->type("datetime");
+        CRUD::column('duration')->label("Thời gian dạy")->suffix("phút");
+        CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -156,14 +173,22 @@ class LogCrudController extends CrudController
             'model' => "App\Models\Grade",
             'attribute' => 'name',
             'label' => "Lớp",
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
+            })
         ]);
         CRUD::addField([
             'name' => 'teacher_id',
             'value' => backpack_user()->id,
             'type' => 'hidden',
         ]);
-        CRUD::field('time')->label("Thời gian")->type("datetime");
-        CRUD::field('duration')->label("Thời gian dạy(Phút)");
+        CRUD::field('start')->label("Thời gian bắt đầu")->type("datetime")->wrapper([
+            "class" => "col-md-6 col-12 mb-2"
+        ]);
+        CRUD::field('end')->label("Thời gian kết thúc")->type("datetime")->wrapper([
+            "class" => "col-md-6 col-12 mb-2"
+        ]);
+        CRUD::field('duration')->label("Thời gian dạy thực tế")->suffix("phút");
         CRUD::field('lesson')->label("Bài học");
         CRUD::field('information')->label("Nội dung")->type("tinymce");
         CRUD::field('hour_salary')->label("Lương theo giờ");
@@ -209,12 +234,12 @@ class LogCrudController extends CrudController
             DB::table("student_log")->insert([
                 'student_id' => $id,
                 'log_id' => $request->log_id,
-                'accept' => $request->accept??0,
+                'accept' => $request->accept ?? 0,
                 'comment' => $request->comment,
             ]);
         } else {
-            return redirect()->back()->with("message","Đã xác nhận rồi");
+            return redirect()->back()->with("message", "Đã xác nhận rồi");
         }
-        return redirect()->back()->with("message","Xác nhận thành công");
+        return redirect()->back()->with("message", "Xác nhận thành công");
     }
 }

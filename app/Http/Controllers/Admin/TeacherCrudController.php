@@ -163,6 +163,7 @@ class TeacherCrudController extends CrudController
         $this->setupCreateOperation();
     }
     protected function detail($id){
-        return view("teacher-detail",['data'=>Teacher::find($id)]);
+//        return view("teacher-detail",['data'=>Teacher::find($id)]);
+        return redirect(url("admin/teaching?teacher_id=$id"));
     }
 }

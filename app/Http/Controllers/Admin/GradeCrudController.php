@@ -61,7 +61,7 @@ class GradeCrudController extends CrudController
         CRUD::column('client_id')->type("select")->label("Đối tác");
         CRUD::column('pricing')->label("Gói học phí")->type("number");
         CRUD::column('minutes')->label("Số phút");
-        CRUD::column('attachment')->label("Tài liệu")->type("read");
+        CRUD::column('attachment')->label("Tài liệu")->type("link");
         CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
         CRUD::column('created_at')->label("Ngày tạo lớp");
 
@@ -92,9 +92,10 @@ class GradeCrudController extends CrudController
             [
                 'name' => 'attachment',
                 'label' => 'Tài liệu',
-                'type' => 'upload',
-                'upload' => true,
-                'disk' => 'uploads_document',
+                'type' => 'text',
+//                'upload' => true,
+//                'disk' => 'uploads_document',
+                'prefix'=>"Link drive",
             ]);
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)

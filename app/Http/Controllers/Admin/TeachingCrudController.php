@@ -107,7 +107,8 @@ class TeachingCrudController extends CrudController
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
-        CRUD::column('time')->label("Thời gian");
+        CRUD::column('start')->label("Thời gian bắt đầu");
+        CRUD::column('end')->label("Thời gian kết thúc");
         CRUD::addColumn([
             'name' => 'Students',
             'type' => 'select',

@@ -12,6 +12,8 @@
 
 <span>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_start')
-    <a href="{{$column["route"]}}">{{$column['text']}}</a>
+    <a href="{{$value}}">
+        <i class="lab la-google-drive"></i> Xem
+    </a>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_end')
 </span>

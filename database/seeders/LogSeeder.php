@@ -22,7 +22,8 @@ class LogSeeder extends Seeder
             $data = [
                 'teacher_id'=>Teacher::where("type","=",1)->first()->id,
                 'grade_id' => rand(1, 3),
-                'time' => fake()->dateTime("now"),
+                'start' => fake()->dateTime("now"),
+                'end' => fake()->dateTime("now"),
                 'duration' => rand(15, 45),
                 'lesson' => 'Lesson Template: ' . fake()->name(),
                 'information' => "Test",
