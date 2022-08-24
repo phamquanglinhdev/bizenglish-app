@@ -17,12 +17,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("grade_id");
             $table->foreign("grade_id")->references("id")->on("grades");
-            $table->dateTime("start");
-            $table->dateTime("end");
+            $table->dateTime("date");
+            $table->string("start");
+            $table->string("end");
             $table->integer("duration");
             $table->string("lesson");
             $table->longText("information");
             $table->integer("hour_salary");
+            $table->integer("log_salary")->nullable();
             $table->string("teacher_video")->nullable();
             $table->integer("disable")->default(0);
             $table->timestamps();

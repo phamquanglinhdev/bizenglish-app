@@ -11,7 +11,7 @@
     if(!empty($value)) {
         $column['text'] = \Carbon\Carbon::parse($value)
             ->locale(App::getLocale())
-            ->isoFormat($column['format']);
+            ->isoFormat("DD-MM-YYYY");
 
         $column['text'] = $column['prefix'].$column['text'].$column['suffix'];
     }

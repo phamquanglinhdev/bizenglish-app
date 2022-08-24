@@ -133,20 +133,20 @@ return [
     'no'  => 'Không',
 
     // CRUD filters navbar view
-    'filters'        => 'Filters',
+    'filters'        => 'Lọc',
     'toggle_filters' => 'Toggle filters',
-    'remove_filters' => 'Remove filters',
-    'apply' => 'Apply',
+    'remove_filters' => 'Xóa bộ lọc',
+    'apply' => 'Xác nhận',
 
     //filters language strings
     'choose_file'=>"Chọn ảnh",
-    'today' => 'Today',
-    'yesterday' => 'Yesterday',
-    'last_7_days' => 'Last 7 Days',
-    'last_30_days' => 'Last 30 Days',
-    'this_month' => 'This Month',
-    'last_month' => 'Last Month',
-    'custom_range' => 'Custom Range',
+    'today' => 'Hôm nay',
+    'yesterday' => 'Hôm qua',
+    'last_7_days' => '7 Ngày trước',
+    'last_30_days' => '30 Ngày trước',
+    'this_month' => 'Tháng này',
+    'last_month' => 'Tháng trước',
+    'custom_range' => 'Tùy chỉnh',
     'weekLabel' => 'W',
 
     // Lĩnh vực
@@ -177,4 +177,5 @@ return [
 
     // được trả về khi không tìm thấy bản dịch nào trong các đầu vào đã chọn
     'blank_translations' => '(rỗng)',
+
 ];

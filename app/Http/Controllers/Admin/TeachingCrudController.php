@@ -34,6 +34,12 @@ class TeachingCrudController extends CrudController
         CRUD::setEntityNameStrings('Giờ dạy', 'Các giờ dạy');
         $this->crud->denyAccess(["create", "show", "delete"]);
         if (isset($_REQUEST["teacher_id"])) {
+            $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
+            $this->crud->setOperationSetting('exportButtons', true);
+            $this->crud->setOperationSetting('detailsRow', true);
+            if ($_REQUEST["teacher_id"] != backpack_user()->id) {
+                $this->crud->denyAccess(["update"]);
+            }
             $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
             $data = Teacher::where("id", "=", $_REQUEST["teacher_id"])->first();
             Widget::add([
@@ -41,7 +47,20 @@ class TeachingCrudController extends CrudController
                 'view' => 'teacher-detail',
                 "data" => $data,
             ]);
+            $this->crud->addFilter([
+                'type' => 'date_range',
+                'name' => 'from_to',
+                'label' => 'Lọc theo ngày'
+            ],
+                false,
+                function ($value) { // if the filter is active, apply these constraints
+                    $dates = json_decode($value);
+                    $this->crud->addClause('where', 'date', '>=', $dates->from);
+                    $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+                });
+            $this->crud->addClause("where", "teacher_id", backpack_user()->id);
         }
+
     }
 
     /**
@@ -52,23 +71,23 @@ class TeachingCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
         $this->crud->addClause("where", "disable", 0);
-        $this->crud->addClause("orderBy", "time", "DESC");
-//        if(isset($_REQUEST["grade_id"])){
-//            $grade = Grade::find(($_REQUEST["grade_id"]));
-//            CRUD::setEntityNameStrings("Nhật ký học","Lớp ".$grade->name);
-//            Widget::add([
-//                'type'     => 'view',
-//                'view'     => 'test',
-//                'grade' => $grade,
-//            ]);
-//            $this->crud->addClause("where","grade_id",$grade->id);
-//        }
 
-//        if (backpack_user()->type == 3) {
-//            $this->crud->addClause('rep');
-//        }
+        $this->crud->addClause("orderBy", "start", "DESC");
+        if (isset($_REQUEST["grade_id"])) {
+            $grade = Grade::find(($_REQUEST["grade_id"]));
+            CRUD::setEntityNameStrings("Nhật ký học", "Lớp " . $grade->name);
+            Widget::add([
+                'type' => 'view',
+                'view' => 'test',
+                'grade' => $grade,
+            ]);
+            $this->crud->addClause("where", "grade_id", $grade->id);
+        }
+
+        if (backpack_user()->type == 3) {
+            $this->crud->addClause('rep');
+        }
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',
@@ -84,6 +103,7 @@ class TeachingCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
+
         ]);
 
         CRUD::addColumn([
@@ -102,13 +122,6 @@ class TeachingCrudController extends CrudController
                 // 'class' => 'some-class',
             ],
         ]);
-
-        CRUD::column('duration')->label("Thời gian dạy")->suffix(" phút");
-        CRUD::column('lesson')->label("Bài học");
-        CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
-        CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
-        CRUD::column('start')->label("Thời gian bắt đầu");
-        CRUD::column('end')->label("Thời gian kết thúc");
         CRUD::addColumn([
             'name' => 'Students',
             'type' => 'select',
@@ -132,6 +145,16 @@ class TeachingCrudController extends CrudController
             }
         ]);
 
+        CRUD::column('lesson')->label("Bài học");
+        CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
+        CRUD::column('date')->label("Ngày")->type("date");
+        CRUD::column('start')->label("Bắt đầu")->type("time");
+        CRUD::column('end')->label("Kết thúc")->type("time");
+        CRUD::column('duration')->label("Thời gian dạy")->suffix("phút");
+        if (backpack_user()->role <= 1) {
+            CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
+            CRUD::column('log_salary')->label("Lương của buổi học")->suffix(" đ")->type("number");
+        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

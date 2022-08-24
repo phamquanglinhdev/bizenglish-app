@@ -42,23 +42,25 @@ class LogCrudController extends CrudController
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
         }
         $this->crud->denyAccess(["show"]);
-        if (backpack_user()->type != 1) {
+        if (backpack_user()->type > 1) {
             $this->crud->denyAccess(["update", "create", "delete"]);
         }
         $this->crud->setResponsiveTable(true);
         $this->crud->setOperationSetting('exportButtons', true);
         $this->crud->setOperationSetting('detailsRow', true);
 
+        // daterange filter
         $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'active',
-            'label' => 'Active'
+            'type' => 'date_range',
+            'name' => 'from_to',
+            'label' => 'Lọc theo ngày'
         ],
             false,
-            function () { // if the filter is active
-                // $this->crud->addClause('active'); // apply the "active" eloquent scope
+            function ($value) { // if the filter is active, apply these constraints
+                $dates = json_decode($value);
+                $this->crud->addClause('where', 'date', '>=', $dates->from);
+                $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
             });
-
     }
 
     /**
@@ -70,6 +72,7 @@ class LogCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("where", "disable", 0);
+//        $this->crud->addClause('where', 'date', '>=', '2022-08-23 23:59:59');
         $this->crud->addClause("orderBy", "start", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
@@ -144,10 +147,14 @@ class LogCrudController extends CrudController
 
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
-        CRUD::column('start')->label("Thời gian bắt đầu")->type("datetime");
-        CRUD::column('end')->label("Thời gian kết thúc")->type("datetime");
+        CRUD::column('date')->label("Ngày")->type("date");
+        CRUD::column('start')->label("Bắt đầu")->type("time");
+        CRUD::column('end')->label("Kết thúc")->type("time");
         CRUD::column('duration')->label("Thời gian dạy")->suffix("phút");
-        CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
+        if (backpack_user()->role <= 1) {
+            CRUD::column('hour_salary')->label("Lương theo giờ")->suffix(" đ")->type("number");
+            CRUD::column('log_salary')->label("Lương của buổi học")->suffix(" đ")->type("number");
+        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -164,6 +171,7 @@ class LogCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+
         CRUD::setValidation(LogRequest::class);
 
         CRUD::addField([
@@ -182,16 +190,26 @@ class LogCrudController extends CrudController
             'value' => backpack_user()->id,
             'type' => 'hidden',
         ]);
-        CRUD::field('start')->label("Thời gian bắt đầu")->type("datetime")->wrapper([
-            "class" => "col-md-6 col-12 mb-2"
+        CRUD::field('date')->label("Ngày")->type("date")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('end')->label("Thời gian kết thúc")->type("datetime")->wrapper([
-            "class" => "col-md-6 col-12 mb-2"
+        CRUD::field('start')->label("Bắt đầu")->type("time")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('duration')->label("Thời gian dạy thực tế")->suffix("phút");
+        CRUD::field('end')->label("Ksết thúc")->type("time")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
+        ]);
+        CRUD::field('duration')->label("Thời gian dạy thực tế")->suffix("phút")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
+        ]);
+        CRUD::field('hour_salary')->label("Lương theo giờ")->suffix("đ")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
+        ]);
+        CRUD::field('log_salary')->attributes(["readonly" => true])->suffix("đ")->label("Lương của buổi học")->wrapper([
+            "class" => "col-md-4 col-12 mb-2"
+        ]);
         CRUD::field('lesson')->label("Bài học");
         CRUD::field('information')->label("Nội dung")->type("tinymce");
-        CRUD::field('hour_salary')->label("Lương theo giờ");
         CRUD::addField(
             [
                 'name' => 'teacher_video',
@@ -205,6 +223,7 @@ class LogCrudController extends CrudController
          * - CRUD::field('price')->type('number');
          * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
+        Widget::add()->type('script')->content(asset('assets/js/admin/forms/log.js'));
     }
 
     /**
@@ -242,4 +261,5 @@ class LogCrudController extends CrudController
         }
         return redirect()->back()->with("message", "Xác nhận thành công");
     }
+
 }

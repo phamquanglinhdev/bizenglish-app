@@ -1,5 +1,5 @@
 @php
-    $data = $widget["data"];
+    $data = $widget["data"]??$data;
 @endphp
 <style>
 

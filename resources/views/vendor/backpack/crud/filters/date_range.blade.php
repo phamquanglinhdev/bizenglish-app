@@ -17,7 +17,7 @@
         ],
         'locale' => [
             'firstDay' => 0,
-            'format' => config('backpack.base.default_date_format'),
+            'format' => "DD-MM-YYYY",
             'applyLabel'=> trans('backpack::crud.apply'),
             'cancelLabel'=> trans('backpack::crud.cancel'),
             'customRangeLabel' => trans('backpack::crud.custom_range')

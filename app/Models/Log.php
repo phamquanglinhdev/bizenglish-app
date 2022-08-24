@@ -44,6 +44,11 @@ class Log extends Model
         return view("components.push", ['route' => route('exercise.create', ['log_id' => $this->id])]);
     }
 
+    public function setLogSalaryAttribute()
+    {
+        $this->attributes["log_salary"] = $this->duration / 60 * $this->hour_salary;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -72,12 +77,15 @@ class Log extends Model
 
     public function reported($id)
     {
-        $isExist = $this->belongsToMany(Student::class,"student_log","log_id","student_id")->count();
+        $isExist = $this->belongsToMany(Student::class, "student_log", "log_id", "student_id")->count();
         return $isExist > 0;
     }
-    public function Students(){
-        return $this->belongsToMany(Student::class,"student_log","log_id","student_id");
+
+    public function Students()
+    {
+        return $this->belongsToMany(Student::class, "student_log", "log_id", "student_id");
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
