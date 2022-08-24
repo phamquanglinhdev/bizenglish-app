@@ -4,8 +4,68 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03e016dc23604214ec9d30775b69961a",
+    "content-hash": "3ddb5515015ef19d370048a659a18828",
     "packages": [
+        {
+            "name": "arsbs23/backpack-pro",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ARSBS23/backpack-pro.git",
+                "reference": "83b8c87e16b6528dc75a12edfaec170888b51240"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ARSBS23/backpack-pro/zipball/83b8c87e16b6528dc75a12edfaec170888b51240",
+                "reference": "83b8c87e16b6528dc75a12edfaec170888b51240",
+                "shasum": ""
+            },
+            "require": {
+                "backpack/crud": "^5.1.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~5|~6",
+                "phpunit/phpunit": "~9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Backpack\\Pro\\AddonServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Backpack\\Pro\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cristian Tabacitu",
+                    "email": "cristian.tabacitu@backpackforlaravel.com",
+                    "homepage": "https://backpackforlaravel.com"
+                }
+            ],
+            "description": "Operations, Fields, Columns, Filters and Widgets for not-so-simple admin panels.",
+            "homepage": "https://github.com/digitallyhappy/backpack-pro",
+            "keywords": [
+                "Backpack Addon",
+                "Backpack for Laravel",
+                "backpack",
+                "laravel",
+                "pro"
+            ],
+            "support": {
+                "issues": "https://github.com/ARSBS23/backpack-pro/issues",
+                "source": "https://github.com/ARSBS23/backpack-pro/tree/v1.1.1"
+            },
+            "time": "2022-06-24T15:35:16+00:00"
+        },
         {
             "name": "backpack/crud",
             "version": "5.3.6",
