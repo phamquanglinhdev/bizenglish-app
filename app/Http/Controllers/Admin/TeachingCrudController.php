@@ -58,7 +58,7 @@ class TeachingCrudController extends CrudController
                     $this->crud->addClause('where', 'date', '>=', $dates->from);
                     $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
                 });
-            $this->crud->addClause("where", "teacher_id", backpack_user()->id);
+            $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
         }
 
     }
@@ -73,7 +73,7 @@ class TeachingCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
 
-        $this->crud->addClause("orderBy", "start", "DESC");
+        $this->crud->addClause("orderBy", "date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
             CRUD::setEntityNameStrings("Nhật ký học", "Lớp " . $grade->name);
