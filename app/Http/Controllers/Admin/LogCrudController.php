@@ -73,7 +73,7 @@ class LogCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
 //        $this->crud->addClause('where', 'date', '>=', '2022-08-23 23:59:59');
-        $this->crud->addClause("orderBy", "start", "DESC");
+        $this->crud->addClause("orderBy", "date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
             CRUD::setEntityNameStrings("Nhật ký học", "Lớp " . $grade->name);
