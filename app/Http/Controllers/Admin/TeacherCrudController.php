@@ -100,7 +100,7 @@ class TeacherCrudController extends CrudController
         CRUD::field("address")->label("Địa chỉ");
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
-        if(backpack_user()->role<1){
+        if(backpack_user()->type<1){
             CRUD::addField([
                 'name'=>'code',
                 'type'=>'text',

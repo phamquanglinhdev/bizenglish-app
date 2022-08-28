@@ -151,7 +151,7 @@ class TeachingCrudController extends CrudController
         CRUD::column('start')->label("Bắt đầu")->type("time");
         CRUD::column('end')->label("Kết thúc")->type("time");
         CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
-        if (backpack_user()->role <= 1) {
+        if (backpack_user()->type <= 1) {
             CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
             CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
         }

@@ -12,7 +12,10 @@
     </style>
     <div class="container-fluid">
 
-        <div class="h2 mt-5">Lớp học : {{$log->Grade()->first()->name}}</div>
+        <div class="h2 mt-5">
+            Lớp học : {{$log->Grade()->first()->name}}
+            <a href="{{route("log.index")}}" class="d-print-none font-sm"><i class="la la-angle-double-left"></i> Quay về  <span>Nhật ký</span></a>
+        </div>
         @if($log->Grade()->first()->fewDate())
             <div class="bg-danger p-2 rounded mb-2">Khóa học còn dưới 60 phút học</div>
         @endif

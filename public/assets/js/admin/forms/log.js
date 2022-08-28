@@ -24,3 +24,42 @@ function calSalary() {
     $("input[name='log_salary']").val(log_salary);
 }
 
+
+$(document).ready(function () {
+    let name = $("#status_name");
+    EffectWhenChangeStatus(name.val())
+    name.change(function (e) {
+            console.log(name.val())
+            EffectWhenChangeStatus(name.val())
+        }
+    );
+
+    function EffectWhenChangeStatus(value) {
+        messages = $("#status_message");
+        suffix = $("#status_time .input-group-append .input-group-text");
+        inputs = $("#status_time");
+        switch (value * 1) {
+            case 0:
+                inputs.hide()
+                messages.hide()
+                break;
+            case 1:
+            case 2:
+                inputs.show()
+                messages.hide()
+                suffix.text("Phút")
+                break;
+            case 3:
+            case 4:
+                inputs.show()
+                messages.hide()
+                suffix.text("Giờ")
+                break;
+            default:
+                inputs.hide()
+                messages.show()
+        }
+    }
+});
+
+

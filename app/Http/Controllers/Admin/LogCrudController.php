@@ -37,10 +37,12 @@ class LogCrudController extends CrudController
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
-        $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
         if (backpack_user()->type == 3) {
+            $this->crud->addButtonFromModelFunction("line", "setAcceptLog", "setAcceptLog", "line");
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
         }
+        $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
+
         $this->crud->denyAccess(["show"]);
         if (backpack_user()->type > 1) {
             $this->crud->denyAccess(["update", "create", "delete"]);
@@ -122,28 +124,7 @@ class LogCrudController extends CrudController
                 // 'class' => 'some-class',
             ],
         ]);
-        CRUD::addColumn([
-            'name' => 'Students',
-            'type' => 'select',
-            'entity' => 'Students',
-            'model' => "App\Model\Student",
-            'attribute' => 'name',
-            'label' => "Học sinh xác nhận",
-            'wrapper' => [
-                // 'element' => 'a', // the element will default to "a" so you can skip it here
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url("/student/detail/$related_key");
-                },
 
-                // 'target' => '_blank',
-                // 'class' => 'some-class',
-            ],
-            'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->orWhereHas('Students', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%' . $searchTerm . '%');
-                });
-            }
-        ]);
 
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
@@ -151,11 +132,37 @@ class LogCrudController extends CrudController
         CRUD::column('start')->label("Bắt đầu")->type("time");
         CRUD::column('end')->label("Kết thúc")->type("time");
         CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
-        if (backpack_user()->role <= 1) {
-            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number");
+
+        if (backpack_user()->type <= 1) {
+            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class"=>"text-center"]);
             CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
         }
+        CRUD::addColumn([
 
+            'type' => 'model_function',
+            'function_name' => 'StatusShow',
+            'label' => "Tình trạng lớp học",
+        ]);
+        CRUD::addColumn([
+//            'name' => 'StudentAccept',
+            'type' => 'model_function',
+            'function_name' => 'StudentAccept',
+            'label' => "Học sinh xác nhận",
+//            'wrapper' => [
+//                // 'element' => 'a', // the element will default to "a" so you can skip it here
+//                'href' => function ($crud, $column, $entry, $related_key) {
+//                    return backpack_url("/student/detail/$related_key");
+//                },
+//
+//                // 'target' => '_blank',
+//                // 'class' => 'some-class',
+//            ],
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhereHas('Students', function ($q) use ($column, $searchTerm) {
+//                    $q->where('name', 'like', '%' . $searchTerm . '%');
+//                });
+//            }
+        ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -218,6 +225,55 @@ class LogCrudController extends CrudController
                 'upload' => true,
                 'disk' => 'uploads_video',
             ]);
+        CRUD::addField(
+            [   // repeatable
+                'name' => 'status',
+                'label' => 'Tình trạng lớp học',
+                'type' => 'repeatable',
+                'fields' => [ // also works as: "fields"
+                    [
+                        'name' => 'name',
+                        'label' => 'Trạng thái',
+                        'type' => "select_from_array",
+                        'options' => [
+                            "Học viên và giáo viên vào đúng giờ.",
+                            "Học viên vào muộn ... phút",
+                            "Giáo viên vào muộn ... phút",
+                            "Học viên hủy buổi học trước … giờ",
+                            "Giáo viên hủy buổi học trước … giờ",
+                            "Khác...",
+                        ],
+                        "value" => 0,
+                        "attributes" => ["id" => "status_name"],
+                        'wrapper' => ['class' => 'form-group col-md-6 '],
+                    ],
+                    [
+                        'name' => 'time',
+                        'type' => 'number',
+                        'label' => 'Thời gian',
+                        'suffix' => "Phút",
+                        'wrapper' => ['class' => 'form-group col-md-6', "id" => "status_time"],
+                    ],
+                    [
+                        'name' => 'message',
+                        'type' => 'textarea',
+                        'label' => 'Tình trạng khác',
+                        'wrapper' => ["id" => "status_message"],
+                    ],
+                ],
+
+                // optional
+                'new_item_label' => 'Add Group', // customize the text of the button
+                'init_rows' => 1, // number of empty rows to be initialized, by default 1
+                'min_rows' => 1, // minimum rows allowed, when reached the "delete" buttons will be hidden
+                'max_rows' => 1, // maximum rows allowed, when reached the "new item" button will be hidden
+                // allow reordering?
+                // 'reorder' => false, // hide up&down arrows next to each row (no reordering)
+                // 'reorder' => true, // show up&down arrows next to each row
+                //  'reorder' => 'order', // show arrows AND add a hidden subfield with that name (value gets updated when rows move)
+                // 'reorder' => ['name' => 'order', 'type' => 'number', 'attributes' => ['data-reorder-input' => true]], // show arrows AND add a visible number subfield
+            ],
+        );
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -261,5 +317,4 @@ class LogCrudController extends CrudController
         }
         return redirect()->back()->with("message", "Xác nhận thành công");
     }
-
 }

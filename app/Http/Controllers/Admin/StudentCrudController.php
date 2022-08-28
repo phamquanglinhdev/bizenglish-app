@@ -113,7 +113,7 @@ class StudentCrudController extends CrudController
 //            CRUD::field("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
             CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         }
-        if (backpack_user()->role < 1) {
+        if (backpack_user()->type < 1) {
             CRUD::addField([
                 'name' => 'code',
                 'type' => 'text',

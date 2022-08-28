@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("grade_id");
             $table->foreign("grade_id")->references("id")->on("grades");
-            $table->dateTime("date");
+            $table->date("date");
             $table->string("start");
             $table->string("end");
             $table->integer("duration");
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer("log_salary")->nullable();
             $table->string("teacher_video")->nullable();
             $table->integer("disable")->default(0);
+            $table->longText("status")->nullable();
             $table->timestamps();
         });
     }

@@ -177,7 +177,13 @@
 <script>
     window.addEventListener("load", () => {
         // document.getElementById("remove_filters_button").style.display = "none";
+        document.getElementById("remove_filters_button").href = "{{route("log.index")}}";
+        @if(isset($_REQUEST["teacher_id"]))
         document.getElementById("remove_filters_button").href = "{{route("teaching.index")}}?teacher_id={{$_REQUEST["teacher_id"]}}";
+        @endif
+        @if(isset($_REQUEST["grade_id"]))
+        document.getElementById("remove_filters_button").href = "{{route("log.index")}}?grade_id={{$_REQUEST["grade_id"]}}";
+        @endif
         document.getElementById("remove_filters_button").removeAttribute("id")
     });
 </script>
