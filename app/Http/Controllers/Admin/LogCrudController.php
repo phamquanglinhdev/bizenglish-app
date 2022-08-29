@@ -316,7 +316,7 @@ class LogCrudController extends CrudController
             ]);
             $code = backpack_user()->code;
             $name = backpack_user()->name;
-            if ($request->accept) {
+            if ($request->accept==0) {
                 $accept = "Sai";
             } else {
                 $accept = "Đúng";
