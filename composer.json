@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.14.1",
+        "laravel/slack-notification-channel": "^2.4",
         "laravel/tinker": "^2.7",
         "masbug/flysystem-google-drive-ext": "^2.2",
         "zanysoft/laravel-zip": "^2.0"

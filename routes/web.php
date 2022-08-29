@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\SlackController;
 use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -18,8 +19,9 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('upload-file', function() {
+Route::get('upload-file', function () {
     Storage::disk('google')->put('google-drive.txt', 'AHII');
     dd('Đã upload file lên google drive thành công!');
 });
-Route::get("/book/{slug}",[BookController::class,"show","slug"])->name("show-book");
+Route::get("/book/{slug}", [BookController::class, "show", "slug"])->name("show-book");
+

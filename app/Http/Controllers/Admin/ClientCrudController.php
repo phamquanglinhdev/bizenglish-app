@@ -41,6 +41,7 @@ class ClientCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "2");
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã đối tác"]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên đối tác"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của đối tác"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
@@ -84,6 +85,7 @@ class ClientCrudController extends CrudController
     {
         CRUD::setValidation(ClientRequest::class);
         CRUD::field('name')->label("Tên đối tác");
+        CRUD::addField(['name' => 'code', 'type' => 'text', 'label' => "Mã đối tác"]);
         CRUD::field('email')->label("Email đối tác");
         CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::field('type')->type("hidden")->value(2);

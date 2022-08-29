@@ -14,7 +14,8 @@
 
         <div class="h2 mt-5">
             Lớp học : {{$log->Grade()->first()->name}}
-            <a href="{{route("log.index")}}" class="d-print-none font-sm"><i class="la la-angle-double-left"></i> Quay về  <span>Nhật ký</span></a>
+            <a href="{{route("log.index")}}" class="d-print-none font-sm"><i class="la la-angle-double-left"></i> Quay
+                về <span>Nhật ký</span></a>
         </div>
         @if($log->Grade()->first()->fewDate())
             <div class="bg-danger p-2 rounded mb-2">Khóa học còn dưới 60 phút học</div>
@@ -34,7 +35,8 @@
                     <div class="d-inline">
                         <a class="btn btn-success" href="{{route("exercise.create")}}?log_id={{$log->id}}">Nộp bài
                             tập</a>
-                        <a id="accept_btn" class="btn btn-success" href="#" data-toggle="modal" data-target="#accept">Phản hồi</a>
+                        <a id="accept_btn" class="btn btn-success" href="#" data-toggle="modal" data-target="#accept">Phản
+                            hồi</a>
                     </div>
                 @endif
             </div>
@@ -46,7 +48,8 @@
                     <div class="modal-dialog modal-dialog-centered ">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Trước tiên hãy nhận xét vể buổi học nào !!</h5>
+                                <h5 class="modal-title" id="staticBackdropLabel">Trước tiên hãy nhận xét vể buổi học nào
+                                    !!</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -65,11 +68,13 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleFormControlTextarea1">Nhận xét (Nếu có)</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1"
+                                        <textarea class="form-control" name="comment" id="exampleFormControlTextarea1"
                                                   rows="3"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-success">Gủi phản hồi</button>
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Phản hồi sau nhé</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Phản hồi sau
+                                        nhé
+                                    </button>
                                 </form>
                             </div>
                         </div>

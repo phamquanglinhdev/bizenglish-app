@@ -7,11 +7,13 @@ use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Student;
 use App\Models\User;
+use App\Notifications\SlackNotification;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use http\Env\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 /**
  * Class LogCrudController
@@ -134,7 +136,7 @@ class LogCrudController extends CrudController
         CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
 
         if (backpack_user()->type <= 1) {
-            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class"=>"text-center"]);
+            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class" => "text-center"]);
             CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
         }
         CRUD::addColumn([
@@ -312,6 +314,18 @@ class LogCrudController extends CrudController
                 'accept' => $request->accept ?? 0,
                 'comment' => $request->comment,
             ]);
+            $code = backpack_user()->code;
+            $name = backpack_user()->name;
+            if ($request->accept) {
+                $accept = "Sai";
+            } else {
+                $accept = "Đúng";
+            }
+            $grade = Log::where("id", "=", $request->log_id)->first()->Grade()->first()->name;
+            $message = $request->comment;
+            $messages = "Mã $code : $name đã xác nhận buổi học của lớp $grade là $accept với lời nhắn : $message";
+            Notification::route('slack', "https://hooks.slack.com/services/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")
+                ->notify(new SlackNotification($messages));
         } else {
             return redirect()->back()->with("message", "Đã xác nhận rồi");
         }
