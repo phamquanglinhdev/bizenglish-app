@@ -71,11 +71,21 @@ class SlackNotification extends Notification
 
             ]
         );
+        $url = "https://fb.me";
         return (new SlackMessage())
             ->from('All Laravel')
             ->to('#reported_class')
             ->image('https://allaravel.com/themes/allaravel/assets/img/all-laravel-logo.png')
-            ->content($this->message);
+            ->content($this->message)
+            ->attachment(function ($attachment) use ($url) {
+                $attachment->title('Xem chi tiết', $url);
+//                    ->fields([
+//                        'Title' => 'Server Expenses',
+//                        'Amount' => '$1,234',
+//                        'Via' => 'American Express',
+//                        'Was Overdue' => ':-1:',
+//                    ]);
+            });
     }
 
 

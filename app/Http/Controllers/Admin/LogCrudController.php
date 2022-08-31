@@ -311,12 +311,12 @@ class LogCrudController extends CrudController
             DB::table("student_log")->insert([
                 'student_id' => $id,
                 'log_id' => $request->log_id,
-                'accept' => $request->accept ?? 0,
+                'accept' => $request->accept,
                 'comment' => $request->comment,
             ]);
             $code = backpack_user()->code;
             $name = backpack_user()->name;
-            if ($request->accept==0) {
+            if ($request->accept == 1) {
                 $accept = "Sai";
             } else {
                 $accept = "Đúng";
