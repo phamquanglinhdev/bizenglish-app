@@ -157,6 +157,7 @@ class LogCrudController extends CrudController
             'function_name' => 'StatusShow',
             'label' => "Tình trạng lớp học",
         ]);
+        CRUD::column('assessment')->label("Nhận xét của giáo viên")->type("textarea");
         CRUD::addColumn([
 //            'name' => 'StudentAccept',
             'type' => 'model_function',
@@ -223,10 +224,10 @@ class LogCrudController extends CrudController
         CRUD::field('duration')->label("Thời gian dạy thực tế")->suffix("phút")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('hour_salary')->label("Lương theo giờ")->suffix("đ")->wrapper([
+        CRUD::field('hour_salary')->label("Lương theo giờ")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('log_salary')->attributes(["readonly" => true])->suffix("đ")->label("Lương của buổi học")->wrapper([
+        CRUD::field('log_salary')->attributes(["readonly" => true])->label("Lương của buổi học")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
         CRUD::field('lesson')->label("Bài học");
@@ -288,6 +289,8 @@ class LogCrudController extends CrudController
                 // 'reorder' => ['name' => 'order', 'type' => 'number', 'attributes' => ['data-reorder-input' => true]], // show arrows AND add a visible number subfield
             ],
         );
+        CRUD::field('assessment')->label("Nhận xét của giáo viên")->type("textarea");
+        CRUD::field('question')->label("Bài tập cho học sinh")->type("tinymce");
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

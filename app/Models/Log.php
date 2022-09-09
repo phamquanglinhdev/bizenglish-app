@@ -99,7 +99,7 @@ class Log extends Model
                 } else {
                     $acp = "Sai";
                 }
-                $message = "<div> $name xác nhận thông tin là $acp </div>";
+                $message = "<div> Xác nhận $acp </div>";
                 if ($student->comment != null) {
                     $message .= "<div>Thông tin thêm: $student->comment</div> ";
                 }
