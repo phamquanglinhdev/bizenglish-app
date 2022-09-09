@@ -87,22 +87,23 @@ class Log extends Model
 
     public function StudentAccept()
     {
-        $ac = $this->belongsToMany(Student::class, "student_log", "log_id", "student_id");
+        $ac = DB::table("student_log")->where("log_id", "=", $this->id);
         if ($ac->count() == 0) {
             return "Chưa có HS xác nhận";
         } else {
-            $students = $this->belongsToMany(Student::class, "student_log", "log_id", "student_id")->get();
+            $students = DB::table("student_log")->where("log_id", "=", $this->id)->get();
             foreach ($students as $student) {
+                $name = DB::table("users")->where("id", "=", $student->student_id)->first()->name;
                 if ($student->accept == 0) {
                     $acp = "Đúng";
                 } else {
                     $acp = "Sai";
                 }
-                $message = "<div>$student->name xác nhận thông tin là $acp </div>";
+                $message = "<div> $name xác nhận thông tin là $acp </div>";
                 if ($student->comment != null) {
                     $message .= "<div>Thông tin thêm: $student->comment</div> ";
                 }
-//                $message.="<hr>";
+
 
             }
             return $message;

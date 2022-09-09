@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\ReportFromStudent;
 use App\Http\Requests\LogRequest;
 use App\Models\Grade;
 use App\Models\Log;
@@ -324,8 +325,19 @@ class LogCrudController extends CrudController
             $grade = Log::where("id", "=", $request->log_id)->first()->Grade()->first()->name;
             $message = $request->comment;
             $messages = "Mã $code : $name đã xác nhận buổi học của lớp $grade là $accept với lời nhắn : $message";
-            Notification::route('slack', "https://hooks.slack.com/services/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")
-                ->notify(new SlackNotification($messages));
+            $title = "Thông báo từ lớp học";
+            $link = route("admin.log.detail", $request->log_id);
+            ReportFromStudent::dispatch($title, $messages, $link);
+            $users = User::where("type", "<=", 0)->get();
+            foreach ($users as $user) {
+                \App\Models\Notification::create([
+                    "title" => "Phản hồi của học sinh",
+                    "user_id" => $user->id,
+                    "message" => $messages,
+                    "link" => $link,
+                    "read" => 0,
+                ]);
+            }
         } else {
             return redirect()->back()->with("message", "Đã xác nhận rồi");
         }

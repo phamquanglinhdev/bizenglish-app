@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\NotificationRequest;
+use App\Models\Notification;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -26,7 +27,7 @@ class NotificationCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Notification::class);
+        CRUD::setModel(Notification::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/notification');
         CRUD::setEntityNameStrings('Thông báo', 'Những thông báo');
         $this->crud->denyAccess(["show", "update", "delete", "create"]);
@@ -41,8 +42,10 @@ class NotificationCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("orderBy", "created_at", "DESC");
+        $this->crud->addClause("where", "user_id", backpack_user()->id);
         CRUD::column('title')->label("Tiêu đề");
         CRUD::column('message')->label("Nội dung")->limit(250);
+        CRUD::column('read')->label("Đã đọc")->type("check");
         CRUD::column('created_at')->label("Thời gian");
 
         /**

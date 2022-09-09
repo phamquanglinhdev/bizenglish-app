@@ -14,13 +14,15 @@
     $column['escaped'] = $column['escaped'] ?? true;
     $column['prefix'] = $column['prefix'] ?? '';
     $column['suffix'] = $column['suffix'] ?? '';
-    
+
     $column['text'] = $column['prefix'].$column['text'].$column['suffix'];
 @endphp
 
 <span>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_start')
-    <i class="la {{ $icon }}"></i>
+    <span class="d-flex justify-content-center">
+        <i class="la {{ $icon }}"></i>
+    </span>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_end')
 </span>
 

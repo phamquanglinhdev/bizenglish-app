@@ -16,6 +16,10 @@ return new class extends Migration {
             $table->id();
             $table->string("title")->nullable();
             $table->string("message");
+            $table->string("link")->nullable();
+            $table->integer("read")->default(0);
+            $table->unsignedBigInteger("user_id");
+            $table->foreign("user_id")->references("id")->on("users");
             $table->timestamps();
         });
     }
