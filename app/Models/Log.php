@@ -171,12 +171,27 @@ class Log extends Model
 
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getHourSalary()
+    {
+        if ($this->teacher_id == backpack_user()->id || backpack_user()->type < 1)
+            return "<div class='text-center'>" . number_format($this->hour_salary) . "</div>";
+        return "<div class='text-center'>---</div>";
 
+    }
+
+    public function getLogSalary()
+    {
+        if ($this->teacher_id == backpack_user()->id || backpack_user()->type < 1)
+            return "<div class='text-center'>" . number_format($this->log_salary) . "</div>";
+        return "<div class='text-center'>---</div>";
+
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

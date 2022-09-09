@@ -66,6 +66,7 @@ class LogCrudController extends CrudController
                 $this->crud->addClause('where', 'date', '>=', $dates->from);
                 $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
             });
+
     }
 
     /**
@@ -137,8 +138,18 @@ class LogCrudController extends CrudController
         CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
 
         if (backpack_user()->type <= 1) {
-            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class" => "text-center"]);
-            CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
+//            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class" => "text-center"]);
+//            CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
+            CRUD::addColumn([
+                'label' => "Lương theo giờ",
+                'type' => 'model_function',
+                'function_name' => 'getHourSalary'
+            ]);
+            CRUD::addColumn([
+                'label' => "Lương buổi học",
+                'type' => 'model_function',
+                'function_name' => 'getLogSalary'
+            ]);
         }
         CRUD::addColumn([
 
