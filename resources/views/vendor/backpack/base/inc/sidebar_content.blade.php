@@ -52,9 +52,5 @@
 </li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
 </li>
-
-
-
-
-
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-question"></i> Notifications</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>Thông
+        báo</a></li>
