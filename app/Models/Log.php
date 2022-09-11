@@ -125,16 +125,16 @@ class Log extends Model
         return $this->belongsTo(Teacher::class, "teacher_id", "id");
     }
 
-    public function setTeacherVideoAttribute($value)
-    {
-        $attribute_name = "teacher_video";
-        $disk = "uploads_video";
-        $destination_path = "";
-
-        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
-
-//         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
-    }
+//    public function setTeacherVideoAttribute($value)
+//    {
+//        $attribute_name = "teacher_video";
+//        $disk = "uploads_video";
+//        $destination_path = "";
+//
+//        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+//
+////         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+//    }
 
     public function reported($id)
     {
@@ -177,6 +177,11 @@ class Log extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+    public function getVideo()
+    {
+        return json_decode($this->teacher_video);
+    }
+
     public function getHourSalary()
     {
         if ($this->teacher_id == backpack_user()->id || backpack_user()->type < 1)

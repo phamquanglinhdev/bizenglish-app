@@ -35,15 +35,16 @@ class Grade extends Model
         return $status[$this->attributes["status"]];
     }
 
-    public function fewDate(): bool
+    public function fewDates(): bool
     {
-        $minutes = $this->Logs()->sum("duration");
-       return ($this->minutes)-$minutes > 60;
+        $durations = $this->Logs()->sum("duration");
+        return ($this->minutes) - $durations > 60;
     }
+
     public function percentCount(): float|int
     {
-        $duration = $this->Logs()->sum("duration");
-        return $duration/$this->minutes*100;
+        $durations = $this->Logs()->sum("duration");
+        return $durations / $this->minutes * 100;
     }
 //    public function setAttachmentAttribute($value)
 //    {
@@ -76,6 +77,7 @@ class Grade extends Model
     {
         return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
+
     public function Staff()
     {
         return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
@@ -85,6 +87,7 @@ class Grade extends Model
     {
         return $this->hasMany(Log::class, "grade_id", "id");
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -92,14 +95,14 @@ class Grade extends Model
     */
     public function scopeOwner($query)
     {
-        $grades = DB::table("staff_grade")->where("staff_id",backpack_user()->id)->get();
-        if($grades->count()>0){
-            $query->where("id",$grades->first()->grade_id);
-            foreach ($grades as $grade){
-                $query->orWhere("id",$grade->grade_id);
+        $grades = DB::table("staff_grade")->where("staff_id", backpack_user()->id)->get();
+        if ($grades->count() > 0) {
+            $query->where("id", $grades->first()->grade_id);
+            foreach ($grades as $grade) {
+                $query->orWhere("id", $grade->grade_id);
             }
-        }else{
-            $query->where("id",-1);
+        } else {
+            $query->where("id", -1);
         }
         return $query;
 

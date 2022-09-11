@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->longText("information");
             $table->integer("hour_salary");
             $table->integer("log_salary")->nullable();
-            $table->string("teacher_video")->nullable();
+            $table->longText("teacher_video")->nullable();
             $table->integer("disable")->default(0);
             $table->longText("status")->nullable();
             $table->timestamps();

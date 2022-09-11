@@ -131,7 +131,7 @@ class LogCrudController extends CrudController
 
 
         CRUD::column('lesson')->label("Bài học");
-        CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
+        CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
         CRUD::column('date')->label("Ngày")->type("date");
         CRUD::column('start')->label("Bắt đầu")->type("time");
         CRUD::column('end')->label("Kết thúc")->type("time");
@@ -236,9 +236,8 @@ class LogCrudController extends CrudController
             [
                 'name' => 'teacher_video',
                 'label' => 'Video bài giảng',
-                'type' => 'upload',
-                'upload' => true,
-                'disk' => 'uploads_video',
+                'type' => 'video',
+                'youtube_api_key' => 'AIzaSyDc3MoGdCrqbCHq6XRbulelTPy5oWsLwIE',
             ]);
         CRUD::addField(
             [   // repeatable

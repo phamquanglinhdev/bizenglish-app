@@ -17,20 +17,21 @@
             <a href="{{route("log.index")}}" class="d-print-none font-sm"><i class="la la-angle-double-left"></i> Quay
                 về <span>Nhật ký</span></a>
         </div>
-        @if($log->Grade()->first()->fewDate())
-            <div class="bg-danger p-2 rounded mb-2">Khóa học còn dưới 60 phút học</div>
-        @endif
+
         <div>{{$log->lesson}}</div>
-        <div>Thời gian bắt đầu : {{$log->time}}</div>
+        <div>Thời gian bắt đầu :{{"Từ $log->start đến $log->end ngày $log->date"}}</div>
         <div>Thơi lượng : {{$log->duration}} phút</div>
+        <div class="text-danger">Số phút đã học : {{$log->Grade()->first()->Logs()->sum("duration")}}</div>
+        <div>Tổng số phút học: {{$log->Grade()->first()->minutes}}</div>
         <div class="text-danger">Số buổi đã học : {{$log->Grade()->first()->Logs()->count()}}</div>
         <hr>
         <div class="row pb-5">
-            <div class="col-md-6 col-12">
-                <div class="h2 mt-5">Video bài giảng</div>
-                <video width="100%" controls>
-                    <source src="{{url("/uploads/videos/")."/".$log->teacher_video}}" type="video/mp4">
-                </video>
+            <div class="col-md-12 col-12">
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe class="embed-responsive-item"
+                            src="https://youtube.com/embed/{{$log->getVideo()->id}}"></iframe>
+                </div>
+
                 @if(backpack_user()->type==3)
                     <div class="d-inline">
                         <a class="btn btn-success" href="{{route("exercise.create")}}?log_id={{$log->id}}">Nộp bài
@@ -50,9 +51,9 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="staticBackdropLabel">Trước tiên hãy nhận xét vể buổi học nào
                                     !!</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                {{--                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+                                {{--                                    <span aria-hidden="true">&times;</span>--}}
+                                {{--                                </button>--}}
                             </div>
                             <div class="modal-body">
                                 <form action="{{route("admin.log.accept")}}" method="post">
@@ -82,19 +83,26 @@
                                                   rows="3"></textarea>
                                     </div>
                                     <button type="submit" class="btn btn-success">Gủi phản hồi</button>
-                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Phản hồi sau
-                                        nhé
-                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
+        </div>
+        <div class="row h-100">
             <div class="col-md-6 col-12">
-                <div class="h2 mt-5">Nhận xét</div>
+                <div class="h2 mt-5">Đánh giá của giáo viên</div>
+                <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
+                    {{$log->assessment}}
+                </div>
+                <div class="h2 mt-1">Bài tập về nhà</div>
+                <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
+                    {!! $log->question !!}
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="h2 mt-5">Bình luận</div>
                 @if($log->Comments()->count()>0)
                     @foreach($log->Comments()->get() as $comment)
                         <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
@@ -142,9 +150,11 @@
                 </div>
             </div>
         </div>
-        <hr>
-        <div class="bg-white p-lg-5 p-2">
-            {!! $log->information !!}
+        <div class="">
+            <div class="h2 mt-5">Nội dung bài học</div>
+            <div class="bg-white p-2">
+                {!! $log->information !!}
+            </div>
         </div>
 
 
