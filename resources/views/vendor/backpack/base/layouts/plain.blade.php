@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ config('backpack.base.html_direction') }}">
 <head>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/855/855601.png">
     @include(backpack_view('inc.head'))
 </head>
 <body class="app flex-row align-items-center">

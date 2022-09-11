@@ -4,7 +4,7 @@
 
 <head>
     @include(backpack_view('inc.head'))
-
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/855/855601.png">
 </head>
 
 <body class="{{ config('backpack.base.body_class') }}">
