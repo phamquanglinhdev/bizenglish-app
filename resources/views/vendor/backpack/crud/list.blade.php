@@ -58,7 +58,7 @@
                     {{-- Table columns --}}
                     @foreach ($crud->columns() as $column)
                         <th
-                            data-orderable="{{ var_export($column['orderable'], false ) }}"
+
                             data-priority="{{ $column['priority'] }}"
                             {{--
                             data-visible-in-table => if developer forced field in table with 'visibleInTable => true'
