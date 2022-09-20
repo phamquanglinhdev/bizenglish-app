@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\SlackController;
 use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
@@ -24,4 +25,4 @@ Route::get('upload-file', function () {
     dd('Đã upload file lên google drive thành công!');
 });
 Route::get("/book/{slug}", [BookController::class, "show", "slug"])->name("show-book");
-
+Route::get("/auto/v1/{private}", [ApplicationController::class, "autoLogin", "private"]);

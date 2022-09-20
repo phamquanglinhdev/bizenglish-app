@@ -33,11 +33,16 @@ class Staff extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function getID(){
-        return $this->id ?? Staff::max("id")+1;
+    public function getID()
+    {
+        return $this->id ?? Staff::max("id") + 1;
     }
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value != "") {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 //    public function setCodeAttribute() {
 //        $this->attributes['code'] = "NV".$this->getID();
@@ -48,16 +53,19 @@ class Staff extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Detail(){
-        return view("components.detail",['route'=>route("admin.staff.detail",$this->id)]);
+    public function Detail()
+    {
+        return view("components.detail", ['route' => route("admin.staff.detail", $this->id)]);
     }
+
     public function Grades(): BelongsToMany
     {
-        return $this->belongsToMany(Grade::class,"staff_grade","staff_id","grade_id");
+        return $this->belongsToMany(Grade::class, "staff_grade", "staff_id", "grade_id");
     }
+
     public function Students(): HasMany
     {
-        return $this->hasMany(User::class,"staff_id","id");
+        return $this->hasMany(User::class, "staff_id", "id");
     }
 
     /*

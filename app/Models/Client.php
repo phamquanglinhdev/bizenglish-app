@@ -29,11 +29,16 @@ class Client extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+    public function setPasswordAttribute($value)
+    {
+        if ($value != "") {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
-    public function setCodeAttribute() {
-        $this->attributes['code'] = "DT".$this->id;
+
+    public function setCodeAttribute()
+    {
+        $this->attributes['code'] = "DT" . $this->id;
     }
     /*
     |--------------------------------------------------------------------------

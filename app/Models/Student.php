@@ -30,11 +30,16 @@ class Student extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function getID(){
-        return $this->id ?? Student::max("id")+1;
+    public function getID()
+    {
+        return $this->id ?? Student::max("id") + 1;
     }
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value != "") {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 //     public function setCodeAttribute() {
 //         $this->attributes['code'] = "HS".$this->getID();
@@ -45,14 +50,19 @@ class Student extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Detail(){
-        return view("components.detail",['route'=>route("admin.student.detail",$this->id)]);
+    public function Detail()
+    {
+        return view("components.detail", ['route' => route("admin.student.detail", $this->id)]);
     }
-    public function Grades(){
-        return $this->belongsToMany(Grade::class,"student_grade","student_id","grade_id");
+
+    public function Grades()
+    {
+        return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id");
     }
-    public function Staff(){
-        return $this->belongsTo(User::class,"staff_id","id");
+
+    public function Staff()
+    {
+        return $this->belongsTo(User::class, "staff_id", "id");
     }
 
 

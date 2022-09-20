@@ -30,11 +30,16 @@ class Customer extends Model
         'extra' => 'json',
     ];
 
-    public function getID(){
-        return $this->id ?? Customer::max("id")+1;
+    public function getID()
+    {
+        return $this->id ?? Customer::max("id") + 1;
     }
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value != "") {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 //    public function setCodeAttribute() {
 //        $this->attributes['code'] = "KH".$this->getID();
@@ -54,7 +59,9 @@ class Customer extends Model
     {
         return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id");
     }
-    public function Switch(){
+
+    public function Switch()
+    {
         return view("components.switcher", ['route' => route("admin.customer.switch", $this->id)]);
     }
 }

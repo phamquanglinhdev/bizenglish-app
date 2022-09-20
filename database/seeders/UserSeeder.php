@@ -7,6 +7,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -22,55 +23,58 @@ class UserSeeder extends Seeder
             'email' => "admin@biz.com",
             'password' => Hash::make("password"),
             'type' => -1,
-            'code'=>"AD1",
-            'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
+            'code' => "AD1",
+            'avatar' => "https://bachnienyhoaduong.vn/d/images/bac1.jpg",
+            'private_key' => Str::random(30)
         ]);
         User::create([
             'name' => "Trần Minh Hạ",
             'email' => "tranminhha@biz.com",
             'password' => Hash::make("password"),
             'code' => "NV1",
-            "type"=>0,
-            'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
+            "type" => 0,
+            'avatar' => "https://bachnienyhoaduong.vn/d/images/bac1.jpg",
+            'private_key' => Str::random(30)
         ]);
 
         for ($i = 3; $i < 30; $i++) {
-            $type = rand(1,3);
+            $type = rand(1, 3);
             $data = [
                 'name' => fake()->name(),
                 'email' => fake()->safeEmail(),
                 'password' => Hash::make("password"),
                 'type' => $type,
-                'phone'=>fake()->phoneNumber(),
-                'avatar'=>"https://bachnienyhoaduong.vn/d/images/bac1.jpg"
+                'phone' => fake()->phoneNumber(),
+                'avatar' => "https://bachnienyhoaduong.vn/d/images/bac1.jpg",
+                'private_key' => Str::random(30)
             ];
-            if($type == 1){
-                $data["student_type"]=rand(0,2);
-                $data["student_status"]=rand(0,2);
-                $data["code"] = "GV".$i;
+            if ($type == 1) {
+                $data["student_type"] = rand(0, 2);
+                $data["student_status"] = rand(0, 2);
+                $data["code"] = "GV" . $i;
 
 
             }
-            if($type == 3){
-                $data["student_type"]=rand(0,2);
-                $data["student_status"]=rand(0,2);
-                $data["code"] = "HS".$i;
-                $data["staff_id"] =2;
+            if ($type == 3) {
+                $data["student_type"] = rand(0, 2);
+                $data["student_status"] = rand(0, 2);
+                $data["code"] = "HS" . $i;
+                $data["staff_id"] = 2;
                 $data["student_parent"] = fake()->name();
 
 
             }
-            if($type == 2){
-                $data["client_status"]=rand(0,2);
-                $data["code"] = "DT".$i;
+            if ($type == 2) {
+                $data["client_status"] = rand(0, 2);
+                $data["code"] = "DT" . $i;
 
             }
             User::create($data);
-            if($type==1){
+            if ($type == 1) {
                 DB::table("teacher_skill")->insert(
                     [
-                        'teacher_id'=>$i,
-                        'skill_id'=> rand(1,7),
+                        'teacher_id' => $i,
+                        'skill_id' => rand(1, 7),
                     ]
                 );
             }

@@ -29,29 +29,41 @@ class Teacher extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function Detail(){
-        return view("components.detail",['route'=>route("admin.teacher.detail",$this->id)]);
+    public function Detail()
+    {
+        return view("components.detail", ['route' => route("admin.teacher.detail", $this->id)]);
     }
 
-    public function Grades(){
-        return $this->belongsToMany(Grade::class,"teacher_grade","teacher_id","grade_id");
+    public function Grades()
+    {
+        return $this->belongsToMany(Grade::class, "teacher_grade", "teacher_id", "grade_id");
     }
-    public function Logs(){
-        return $this->hasMany(Log::class,"teacher_id","id");
+
+    public function Logs()
+    {
+        return $this->hasMany(Log::class, "teacher_id", "id");
     }
-    public function Skills(){
-        return $this->belongsToMany(Skill::class,"teacher_skill","teacher_id","skill_id");
+
+    public function Skills()
+    {
+        return $this->belongsToMany(Skill::class, "teacher_skill", "teacher_id", "skill_id");
     }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function getID(){
-        return $this->id ?? Teacher::max("id")+1;
+    public function getID()
+    {
+        return $this->id ?? Teacher::max("id") + 1;
     }
-    public function setPasswordAttribute($value) {
-        $this->attributes['password'] = Hash::make($value);
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value != "") {
+            $this->attributes['password'] = Hash::make($value);
+        }
     }
 //    public function setCodeAttribute() {
 //        $this->attributes['code'] = "GV".$this->getID();
