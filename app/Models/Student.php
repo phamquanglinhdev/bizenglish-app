@@ -72,7 +72,7 @@ class Student extends Model
         if ($staff != null) {
             return $staff;
         } else {
-            return $this->belongsTo(User::class, "staff_id", "id")->first()->name;
+            return "-";
         }
     }
 

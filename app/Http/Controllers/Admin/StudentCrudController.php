@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StudentRequest;
+use App\Models\Staff;
 use App\Models\Student;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -32,7 +33,26 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
-
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'description',
+            'label' => 'Tìm kiếm nhân viên quản lý'
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $query = $this->crud->query;
+                $query = $query->where("id", "=", 9999);
+                $staff = Staff::where("name", "like", "%$value%")->first();
+                $grades = $staff->Grades()->get();
+                foreach ($grades as $grade) {
+                    $students = $grade->Student()->get();
+                    foreach ($students as $student) {
+                        $query = $query->orWhere("id", "=", $student->id);
+                    }
+                }
+                return $query;
+            }
+        );
     }
 
     /**
@@ -54,7 +74,7 @@ class StudentCrudController extends CrudController
 //            'searchLogic' => function ($query, $column, $searchTerm) {
 //                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
 //            }
-            "searchLogic" => "model_function",
+            "searchLogic" => "text",
         ]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh"]);
         CRUD::addColumn(['name' => 'student_parent', 'type' => 'text', 'label' => "Người giám hộ"]);
