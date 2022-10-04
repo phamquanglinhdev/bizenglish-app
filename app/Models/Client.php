@@ -40,6 +40,10 @@ class Client extends Model
     {
         $this->attributes['code'] = "DT" . $this->id;
     }
+    public function Grades()
+    {
+        return $this->belongsToMany(Grade::class, "client_grade", "client_id", "grade_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

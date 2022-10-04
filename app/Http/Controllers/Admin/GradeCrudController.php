@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\GradeRequest;
+use App\Models\Client;
 use App\Models\Grade;
 use App\Models\Log;
+use App\Models\Staff;
+use App\Models\Student;
+use App\Models\Teacher;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -32,6 +36,97 @@ class GradeCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
         $this->crud->denyAccess(["show"]);
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'staff',
+            'label' => 'Nhân viên quản lý'
+        ],
+            false,
+            function ($value) {
+                $query = $this->crud->query;
+                $query = $query->where("id", "=", 9999);
+                $staff = Staff::where("name", "like", "%$value%")->first();
+                $grades = $staff->Grades()->get();
+                foreach ($grades as $grade) {
+                    $query->orWhere("id", "=", $grade->id);
+                }
+                return $query;
+            });
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'student',
+            'label' => 'Học viên'
+        ],
+            false,
+            function ($value) {
+                $query = $this->crud->query;
+                $query = $query->where("id", "=", 9999);
+                $student = Student::where("name", "like", "%$value%")->first();
+                $grades = $student->Grades()->get();
+                foreach ($grades as $grade) {
+                    $query->orWhere("id", "=", $grade->id);
+                }
+                return $query;
+            });
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'teacher',
+            'label' => 'Giáo viên'
+        ],
+            false,
+            function ($value) {
+                $query = $this->crud->query;
+                $query = $query->where("id", "=", 9999);
+                $teacher = Teacher::where("name", "like", "%$value%")->first();
+                $grades = $teacher->Grades()->get();
+                foreach ($grades as $grade) {
+                    $query->orWhere("id", "=", $grade->id);
+                }
+                return $query;
+            });
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'client',
+            'label' => 'Đối tác'
+        ],
+            false,
+            function ($value) {
+                $query = $this->crud->query;
+                $query = $query->where("id", "=", 9999);
+                $client = Client::where("name", "like", "%$value%")->first();
+                $grades = $client->Grades()->get();
+                foreach ($grades as $grade) {
+                    $query->orWhere("id", "=", $grade->id);
+                }
+                return $query;
+            });
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'active',
+            'label' => 'Đang học'
+        ],
+            false,
+            function () { // if the filter is active
+                $this->crud->addClause("where", 'status', "=", 0); // apply the "active" eloquent scope
+            });
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'stop',
+            'label' => 'Đã kết thúc'
+        ],
+            false,
+            function () { // if the filter is active
+                $this->crud->addClause("where", 'status', "=", 1); // apply the "active" eloquent scope
+            });
+        $this->crud->addFilter([
+            'type' => 'simple',
+            'name' => 'saved',
+            'label' => 'Đã bảo lưu'
+        ],
+            false,
+            function () { // if the filter is active
+                $this->crud->addClause("where", 'status', "=", 2); // apply the "active" eloquent scope
+            });
     }
 
     /**
@@ -42,7 +137,7 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         if (backpack_user()->type != -1) {
             $this->crud->addClause("owner");
         }
@@ -95,7 +190,7 @@ class GradeCrudController extends CrudController
                 'type' => 'text',
 //                'upload' => true,
 //                'disk' => 'uploads_document',
-                'prefix'=>"Link drive",
+                'prefix' => "Link drive",
             ]);
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)
@@ -213,13 +308,14 @@ class GradeCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
     public function destroy($id)
     {
-        Log::where("grade_id","=",$id)->update([
-            'disable'=>1,
+        Log::where("grade_id", "=", $id)->update([
+            'disable' => 1,
         ]);
         return Grade::find($id)->update([
-            'disable'=>1,
+            'disable' => 1,
         ]);
     }
 }
