@@ -35,6 +35,8 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-lg-10 col-12">
             <div class="text-center mt-2 h3 text-muted font-italic">
                 {{$data->name}}
             </div>
@@ -62,35 +64,6 @@
                     @endif
                 </div>
             </dìv>
-        </div>
-        <div class="col-lg-10 col-12">
-            <div class="bg-cyan text-white h3 p-2 rounded">Lớp học</div>
-            <div class="bg-white p-2 card">
-                @php
-                    $grades = $data->Grades()->where("disable",0)->get()
-                @endphp
-                @foreach( $grades as $grade)
-                    <div><i class="las la-chalkboard-teacher"></i>
-                        <a href="{{route("log.index")}}?grade_id={{$grade->id}}">
-                            {{$grade->name}}
-                        </a>
-                    </div>
-                    <div><i class="las la-hourglass"></i> {{$grade->getStatus()}}</div>
-                    <div><i class="las la-user-astronaut"></i> Học sinh:
-                        @foreach($grade->Student()->get() as $student)
-                            <span><a
-                                    href="{{route("admin.student.detail",$student->id)}}">{{$student->name}}</a> ,</span>
-                        @endforeach
-                    </div>
-                    <div><i class="las la-user-astronaut"></i> Giáo viên:
-                        @foreach($grade->Teacher()->get() as $teacher)
-                            <span><a
-                                    href="{{route("admin.teacher.detail",$teacher->id)}}">{{$teacher->name}}</a> ,</span>
-                        @endforeach
-                    </div>
-                    <hr>
-                @endforeach
-            </div>
         </div>
     </div>
     <hr>

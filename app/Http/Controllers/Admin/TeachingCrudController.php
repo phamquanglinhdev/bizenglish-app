@@ -42,10 +42,25 @@ class TeachingCrudController extends CrudController
             }
             $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
             $data = Teacher::where("id", "=", $_REQUEST["teacher_id"])->first();
+            $grades = $data->Grades()->get();
             Widget::add([
                 'type' => 'view',
                 'view' => 'teacher-detail',
                 "data" => $data,
+            ]);
+            Widget::add([
+                'type' => 'view',
+                'view' => 'components.sub-table',
+                'data' => [
+                    'columns' => [
+                        "name" => ["label" => "Tên lớp"],
+                        "status" => ["label" => "Trạng thái"],
+                        "student" => ["label" => "Học sinh"],
+                        "teacher" => ["label" => "Giáo viên"],
+                        "client" => ["label" => "Đối tác"],
+                    ],
+                    'grades' => $grades,
+                ]
             ]);
             $this->crud->addFilter([
                 'type' => 'date_range',
