@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class Student extends Model
@@ -60,11 +59,22 @@ class Student extends Model
         return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id");
     }
 
-    public function Staff()
+    public function Staffs()
     {
-        return $this->belongsTo(User::class, "staff_id", "id");
+        $staff = [];
+        $grades = $this->Grades()->get();
+        foreach ($grades as $grade) {
+            if (!in_array($grade->Staff()->first()->name, $staff)) {
+                $staff[] = $grade->Staff()->first()->name;
+            }
+        }
+        $staff = implode(",", $staff);
+        if ($staff != null) {
+            return $staff;
+        } else {
+            return $this->belongsTo(User::class, "staff_id", "id")->first()->name;
+        }
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -82,7 +92,8 @@ class Student extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-    protected $casts = [
+    protected
+        $casts = [
         'email_verified_at' => 'datetime',
         'extra' => 'json',
     ];

@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StudentRequest;
-use App\Http\Requests\UserRequest;
 use App\Models\Student;
-use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Support\Facades\Route;
 
 /**
  * Class StudentCrudController
@@ -49,11 +46,16 @@ class StudentCrudController extends CrudController
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
-        if (backpack_user()->type == 0) {
-            $this->crud->addClause("where", "staff_id", backpack_user()->id);
-        } else {
-            CRUD::addColumn(['name' => 'staff_id', 'type' => 'select', 'attribute' => "name", "entity" => "Staff", "label" => "Nhân viên quản lý"]);
-        }
+        CRUD::addColumn([
+            'name' => "staff",
+            'type' => 'model_function',
+            "function_name" => "staffs",
+            "label" => "Nhân viên quản lý",
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
+//            }
+            "searchLogic" => "model_function",
+        ]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh"]);
         CRUD::addColumn(['name' => 'student_parent', 'type' => 'text', 'label' => "Người giám hộ"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);

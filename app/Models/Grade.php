@@ -78,7 +78,7 @@ class Grade extends Model
         return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
     }
 
-    public function Staff()
+    public function Staff(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
     }
