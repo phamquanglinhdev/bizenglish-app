@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Events\ReportFromStudent;
 use App\Http\Requests\LogRequest;
+use App\Models\Client;
 use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Teacher;
@@ -62,6 +63,26 @@ class LogCrudController extends CrudController
                 $load = 1;
             } else {
                 $logs_id = array_intersect($logs_id, $teachers_id);
+            }
+        }
+        if (isset($_REQUEST["client_filter"])) {
+            $client_id = [];
+            $value = $_REQUEST["client_filter"];
+            $clients = Client::where("name", "like", "%$value%")->get();
+            foreach ($clients as $client) {
+                $grades = $client->Grades()->get();
+                foreach ($grades as $grade) {
+                    $logs = $grade->Logs()->get();
+                    foreach ($logs as $log) {
+                        $client_id[] = $log->id;
+                    }
+                }
+            }
+            if ($load == 0) {
+                $logs_id = $client_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $client_id);
             }
         }
         CRUD::setModel(Log::class);
@@ -128,6 +149,46 @@ class LogCrudController extends CrudController
                 }
             }
         );
+        $this->crud->addFilter([
+            'type' => "text",
+            'name' => 'client_filter',
+            'label' => 'Đối tác',
+        ],
+            false,
+            function ($value) use ($logs_id) {
+                if (!$_SESSION["filtered"]) {
+                    $first = true;
+                    if ($logs_id != []) {
+                        foreach ($logs_id as $id) {
+                            if ($first) {
+                                $this->crud->query->where("id", "=", $id);
+                                $first = false;
+                            } else {
+                                $this->crud->query->orWhere("id", "=", $id);
+                            }
+                        }
+                    } else {
+                        $this->crud->query->where("id", "=", "-9999");
+                    }
+                    $_SESSION["filtered"] = true;
+                }
+            }
+        );
+        // dropdown filter
+        $this->crud->addFilter([
+            'name' => 'status',
+            'type' => 'dropdown',
+            'label' => 'Tình trạng lớp học'
+        ], [
+            0 => 'Học viên và giáo viên vào đúng giờ',
+            1 => 'Học viên vào muộn',
+            2 => 'Giáo viên vào muộn',
+            3 => 'Học viên hủy buổi học',
+            4 => 'Giáo viên hủy buổi học',
+        ], function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'status', "like", "%\"name\":\"$value\"%");
+        });
+
         // daterange filter
         $this->crud->addFilter([
             'type' => 'date_range',
@@ -203,7 +264,7 @@ class LogCrudController extends CrudController
             ],
         ]);
 
-
+        CRUD::column("clients")->label("Đối tác")->type("model_function")->function_name("client");
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
         CRUD::column('date')->label("Ngày")->type("date");

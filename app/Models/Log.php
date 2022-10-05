@@ -37,6 +37,15 @@ class Log extends Model
         return $this->belongsTo(Grade::class, "grade_id", "id");
     }
 
+    public function Client()
+    {
+        $client = "";
+        foreach ($this->Grade()->first()->Client()->get() as $data) {
+            $client .= "$data->name, ";
+        }
+        return $client;
+    }
+
     public function detail()
     {
         return view("components.detail", ['route' => route("admin.log.detail", $this->id)]);
