@@ -36,7 +36,7 @@ class GradeCrudController extends CrudController
         $load = 0;
         $_SESSION["filtered"] = false;
         if (isset($_REQUEST["staff_filter"])) {
-            $load = 1;
+
             $staff_id = [];
             $value = $_REQUEST["staff_filter"];
             $staff = Staff::where("name", "like", "%$value%")->first();
@@ -45,6 +45,7 @@ class GradeCrudController extends CrudController
                 $staff_id[] = $grade->id;
             }
             $grades_id = $staff_id;
+            $load = 1;
         }
         if (isset($_REQUEST["student_filter"])) {
 
@@ -76,6 +77,7 @@ class GradeCrudController extends CrudController
                 $grades_id = array_intersect($grades_id, $teacher_id);
             } else {
                 $grades_id = $teacher_id;
+                $load = 1;
             }
 
 //            print_r($student_id);
@@ -94,6 +96,7 @@ class GradeCrudController extends CrudController
                 $grades_id = array_intersect($grades_id, $client_id);
             } else {
                 $grades_id = $client_id;
+                $load = 1;
             }
 
 //            print_r($student_id);
