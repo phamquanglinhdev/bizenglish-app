@@ -32,73 +32,153 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
+        $grades_id = [];
+        $load = 0;
+        $_SESSION["filtered"] = false;
+        if (isset($_REQUEST["staff_filter"])) {
+            $load = 1;
+            $staff_id = [];
+            $value = $_REQUEST["staff_filter"];
+            $staff = Staff::where("name", "like", "%$value%")->first();
+            $grades = $staff->Grades()->get();
+            foreach ($grades as $grade) {
+                $staff_id[] = $grade->id;
+            }
+            $grades_id = $staff_id;
+        }
+        if (isset($_REQUEST["student_filter"])) {
+
+            $student_id = [];
+            $value = $_REQUEST["student_filter"];
+            $staff = Student::where("name", "like", "%$value%")->first();
+            $grades = $staff->Grades()->get();
+            foreach ($grades as $grade) {
+                $student_id[] = $grade->id;
+            }
+            if ($load == 1) {
+                $grades_id = array_intersect($grades_id, $student_id);
+            } else {
+                $grades_id = $student_id;
+                $load = 1;
+            }
+
+//            print_r($student_id);
+        }
+        if (isset($_REQUEST["teacher_filter"])) {
+            $teacher_id = [];
+            $value = $_REQUEST["teacher_filter"];
+            $staff = Teacher::where("name", "like", "%$value%")->first();
+            $grades = $staff->Grades()->get();
+            foreach ($grades as $grade) {
+                $teacher_id[] = $grade->id;
+            }
+            if ($load == 1) {
+                $grades_id = array_intersect($grades_id, $teacher_id);
+            } else {
+                $grades_id = $teacher_id;
+            }
+
+//            print_r($student_id);
+        }
+        if (isset($_REQUEST["client_filter"])) {
+            $client_id = [];
+            $value = $_REQUEST["client_filter"];
+            $staff = Client::where("name", "like", "%$value%")->first();
+            if ($staff != null) {
+                $grades = $staff->Grades()->get();
+                foreach ($grades as $grade) {
+                    $client_id[] = $grade->id;
+                }
+            }
+            if ($load == 1) {
+                $grades_id = array_intersect($grades_id, $client_id);
+            } else {
+                $grades_id = $client_id;
+            }
+
+//            print_r($student_id);
+        }
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
         $this->crud->denyAccess(["show"]);
         $this->crud->addFilter([
             'type' => 'text',
-            'name' => 'staff',
+            'name' => 'staff_filter',
             'label' => 'Nhân viên quản lý'
         ],
             false,
-            function ($value) {
-                $query = $this->crud->query;
-                $query = $query->where("id", "=", 9999);
-                $staff = Staff::where("name", "like", "%$value%")->first();
-                $grades = $staff->Grades()->get();
-                foreach ($grades as $grade) {
-                    $query->orWhere("id", "=", $grade->id);
+            function ($value) use ($grades_id) {
+                if (!$_SESSION["filtered"]) {
+                    $_SESSION["filtered"] = true;
+                    $query = $this->crud->query;
+                    if ($grades_id != []) {
+                        foreach ($grades_id as $value) {
+                            $query->orWhere("id", "=", $value);
+                        }
+                    } else {
+                        $query->where("id", "=", -9999);
+                    }
                 }
-                return $query;
+
             });
         $this->crud->addFilter([
             'type' => 'text',
-            'name' => 'student',
+            'name' => 'student_filter',
             'label' => 'Học viên'
         ],
             false,
-            function ($value) {
-                $query = $this->crud->query;
-                $query = $query->where("id", "=", 9999);
-                $student = Student::where("name", "like", "%$value%")->first();
-                $grades = $student->Grades()->get();
-                foreach ($grades as $grade) {
-                    $query->orWhere("id", "=", $grade->id);
+            function ($value) use ($grades_id) {
+                if ($_SESSION["filtered"]) {
+                    return;
                 }
-                return $query;
+                $_SESSION["filtered"] = true;
+                $query = $this->crud->query;
+                if ($grades_id != []) {
+                    foreach ($grades_id as $value) {
+                        $query->orWhere("id", "=", $value);
+                    }
+                } else {
+                    $query->where("id", "=", -9999);
+                }
             });
         $this->crud->addFilter([
             'type' => 'text',
-            'name' => 'teacher',
+            'name' => 'teacher_filter',
             'label' => 'Giáo viên'
         ],
             false,
-            function ($value) {
-                $query = $this->crud->query;
-                $query = $query->where("id", "=", 9999);
-                $teacher = Teacher::where("name", "like", "%$value%")->first();
-                $grades = $teacher->Grades()->get();
-                foreach ($grades as $grade) {
-                    $query->orWhere("id", "=", $grade->id);
+            function ($value) use ($grades_id) {
+                if (!$_SESSION["filtered"]) {
+                    $_SESSION["filtered"] = true;
+                    $query = $this->crud->query;
+                    if ($grades_id != []) {
+                        foreach ($grades_id as $value) {
+                            $query->orWhere("id", "=", $value);
+                        }
+                    } else {
+                        $query->where("id", "=", -9999);
+                    }
                 }
-                return $query;
             });
         $this->crud->addFilter([
             'type' => 'text',
-            'name' => 'client',
+            'name' => 'client_filter',
             'label' => 'Đối tác'
         ],
             false,
-            function ($value) {
-                $query = $this->crud->query;
-                $query = $query->where("id", "=", 9999);
-                $client = Client::where("name", "like", "%$value%")->first();
-                $grades = $client->Grades()->get();
-                foreach ($grades as $grade) {
-                    $query->orWhere("id", "=", $grade->id);
+            function ($value) use ($grades_id) {
+                if (!$_SESSION["filtered"]) {
+                    $_SESSION["filtered"] = true;
+                    $query = $this->crud->query;
+                    if ($grades_id != []) {
+                        foreach ($grades_id as $value) {
+                            $query->orWhere("id", "=", $value);
+                        }
+                    } else {
+                        $query->where("id", "=", -9999);
+                    }
                 }
-                return $query;
             });
         $this->crud->addFilter([
             'type' => 'simple',
@@ -137,7 +217,7 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where", "disable", 0);
+        $this->crud->addClause("where", "grades.disable", "=", 0);
         if (backpack_user()->type != -1) {
             $this->crud->addClause("owner");
         }

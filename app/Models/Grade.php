@@ -46,6 +46,10 @@ class Grade extends Model
         $durations = $this->Logs()->sum("duration");
         return $durations / $this->minutes * 100;
     }
+    public function identify()
+    {
+        return $this->name;
+    }
 //    public function setAttachmentAttribute($value)
 //    {
 //        $attribute_name = "attachment";
@@ -62,6 +66,7 @@ class Grade extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
 
     public function Student()
     {

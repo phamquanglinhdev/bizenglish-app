@@ -29,6 +29,7 @@ class Book extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
     public function Copy(){
         return view("components.copy",['slug'=>$this->slug]);
     }
