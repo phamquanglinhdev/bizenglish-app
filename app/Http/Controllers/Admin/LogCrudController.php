@@ -6,15 +6,12 @@ use App\Events\ReportFromStudent;
 use App\Http\Requests\LogRequest;
 use App\Models\Grade;
 use App\Models\Log;
-use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\User;
-use App\Notifications\SlackNotification;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
-use http\Env\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Notification;
 
 /**
  * Class LogCrudController
@@ -36,7 +33,37 @@ class LogCrudController extends CrudController
      */
     public function setup()
     {
-
+        $_SESSION["filtered"] = false;
+        $load = 0;
+        $logs_id = [];
+        if (isset($_REQUEST["grade_filter"])) {
+            $value = $_REQUEST["grade_filter"];
+            $grades = Grade::where("name", "like", "%$value%")->get();
+            foreach ($grades as $grade) {
+                $logs = $grade->Logs()->get();
+                foreach ($logs as $log) {
+                    $logs_id[] = $log->id;
+                }
+            }
+            $load = 1;
+        }
+        if (isset($_REQUEST["teacher_filter"])) {
+            $teachers_id = [];
+            $value = $_REQUEST["teacher_filter"];
+            $teachers = Teacher::where("name", "like", "%$value%")->get();
+            foreach ($teachers as $teacher) {
+                $logs = $teacher->Logs()->get();
+                foreach ($logs as $log) {
+                    $teachers_id[] = $log->id;
+                }
+            }
+            if ($load == 0) {
+                $logs_id = $teachers_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $teachers_id);
+            }
+        }
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
@@ -53,7 +80,54 @@ class LogCrudController extends CrudController
         $this->crud->setResponsiveTable(true);
         $this->crud->setOperationSetting('exportButtons', true);
         $this->crud->setOperationSetting('detailsRow', true);
-
+        $this->crud->addFilter([
+            'type' => "text",
+            'name' => 'grade_filter',
+            'label' => 'Lớp',
+        ],
+            false,
+            function ($value) use ($logs_id) {
+                $first = true;
+                if ($logs_id != []) {
+                    foreach ($logs_id as $id) {
+                        if ($first) {
+                            $this->crud->query->where("id", "=", $id);
+                            $first = false;
+                        } else {
+                            $this->crud->query->orWhere("id", "=", $id);
+                        }
+                    }
+                } else {
+                    $this->crud->query->where("id", "=", "-9999");
+                }
+                $_SESSION["filtered"] = true;
+            }
+        );
+        $this->crud->addFilter([
+            'type' => "text",
+            'name' => 'teacher_filter',
+            'label' => 'Giáo viên',
+        ],
+            false,
+            function ($value) use ($logs_id) {
+                if (!$_SESSION["filtered"]) {
+                    $first = true;
+                    if ($logs_id != []) {
+                        foreach ($logs_id as $id) {
+                            if ($first) {
+                                $this->crud->query->where("id", "=", $id);
+                                $first = false;
+                            } else {
+                                $this->crud->query->orWhere("id", "=", $id);
+                            }
+                        }
+                    } else {
+                        $this->crud->query->where("id", "=", "-9999");
+                    }
+                    $_SESSION["filtered"] = true;
+                }
+            }
+        );
         // daterange filter
         $this->crud->addFilter([
             'type' => 'date_range',

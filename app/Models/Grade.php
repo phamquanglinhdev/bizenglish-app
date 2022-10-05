@@ -88,7 +88,7 @@ class Grade extends Model
         return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
     }
 
-    public function Logs()
+    public function Logs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Log::class, "grade_id", "id");
     }
