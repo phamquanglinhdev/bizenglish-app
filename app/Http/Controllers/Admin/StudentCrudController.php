@@ -176,7 +176,7 @@ class StudentCrudController extends CrudController
         CRUD::addField(
             [   // Password
                 'name' => 'private_key',
-                'type' => 'hidden'
+                'type' => 'hidden',
             ],
         );
 

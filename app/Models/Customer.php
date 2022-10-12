@@ -21,7 +21,7 @@ class Customer extends Model
     protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = [];
+    protected $guarded = ["id"];
     // protected $fillable = [];
 //     protected $hidden = ['password'];
     // protected $dates = [];
@@ -67,6 +67,6 @@ class Customer extends Model
 
     public function setPrivate()
     {
-        $this->attributes['private_key'] = \Illuminate\Support\Str::random(15);
+        $this->attributes['private_key'] = Hash::make($this->name . $this->code);
     }
 }

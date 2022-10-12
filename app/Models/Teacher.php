@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class Teacher extends Model
 {
@@ -19,7 +20,7 @@ class Teacher extends Model
     protected $table = 'users';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = [];
+    protected $guarded = ["id"];
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
@@ -65,6 +66,11 @@ class Teacher extends Model
             $this->attributes['password'] = Hash::make($value);
         }
     }
+
+    public function setPrivate()
+    {
+        $this->attributes['private_key'] = Str::random(20);
+    }
 //    public function setCodeAttribute() {
 //        $this->attributes['code'] = "GV".$this->getID();
 //
@@ -97,8 +103,5 @@ class Teacher extends Model
         'email_verified_at' => 'datetime',
         'extra' => 'json',
     ];
-    public function setPrivate()
-    {
-        $this->attributes['private_key'] = \Illuminate\Support\Str::random(15);
-    }
+
 }
