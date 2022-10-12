@@ -115,6 +115,12 @@ class CustomerCrudController extends CrudController
                 'type' => 'password'
             ],
         );
+        CRUD::addField(
+            [   // Password
+                'name' => 'private_key',
+                'type' => 'hidden'
+            ],
+        );
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

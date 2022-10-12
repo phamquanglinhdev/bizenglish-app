@@ -97,4 +97,8 @@ class Teacher extends Model
         'email_verified_at' => 'datetime',
         'extra' => 'json',
     ];
+    public function setPrivate()
+    {
+        $this->attributes['private_key'] = \Illuminate\Support\Str::random(15);
+    }
 }

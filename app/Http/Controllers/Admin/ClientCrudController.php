@@ -61,7 +61,7 @@ class ClientCrudController extends CrudController
                 if (preg_match("/$searchTerm/i", "Ngừng hợp tác")) {
                     $term[] = 2;
                 }
-                foreach ($term as $item){
+                foreach ($term as $item) {
                     $query->orWhere('client_status', '=', $item);
                 }
 
@@ -122,6 +122,12 @@ class ClientCrudController extends CrudController
                 'name' => 'password',
                 'label' => 'Mật khẩu',
                 'type' => 'password'
+            ],
+        );
+        CRUD::addField(
+            [   // Password
+                'name' => 'private_key',
+                'type' => 'hidden'
             ],
         );
 

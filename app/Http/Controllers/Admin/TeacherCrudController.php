@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TeacherRequest;
-use App\Models\Teacher;
-use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -31,7 +29,7 @@ class TeacherCrudController extends CrudController
         CRUD::setModel(\App\Models\Teacher::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
         CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
-        $this->crud->addButtonFromModelFunction("line","Detail","Detail","line");
+        $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
     }
 
@@ -43,7 +41,7 @@ class TeacherCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "1");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã giáo viên"]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên"]);
@@ -51,20 +49,20 @@ class TeacherCrudController extends CrudController
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([
             'name' => 'skills',
-            'entity'=>'Skills',
-            'model'=>"App\Models\Skill",
-            'label'=>'Tag',
+            'entity' => 'Skills',
+            'model' => "App\Models\Skill",
+            'label' => 'Tag',
             'type' => 'relationship',
-            'attribute'=>'name'
+            'attribute' => 'name'
         ]);
         CRUD::addColumn([
             'name' => 'grades',
-            'entity'=>'Grades',
-            'model'=>"App\Models\Grade",
-            'label'=>'Lớp',
+            'entity' => 'Grades',
+            'model' => "App\Models\Grade",
+            'label' => 'Lớp',
             'type' => 'relationship',
-            'attribute'=>'name',
-            'wrapper'   => [
+            'attribute' => 'name',
+            'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/log?grade_id=$related_key");
@@ -74,7 +72,7 @@ class TeacherCrudController extends CrudController
             ],
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%'.$searchTerm.'%');
+                    $q->where('name', 'like', '%' . $searchTerm . '%');
                 });
             }
         ]);
@@ -100,21 +98,21 @@ class TeacherCrudController extends CrudController
         CRUD::field("address")->label("Địa chỉ");
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
-        if(backpack_user()->type<1){
+        if (backpack_user()->type < 1) {
             CRUD::addField([
-                'name'=>'code',
-                'type'=>'text',
-                "label"=>"Mã giáo viên"
+                'name' => 'code',
+                'type' => 'text',
+                "label" => "Mã giáo viên"
             ]);
         }
         CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addField([
             'name' => 'skills',
-            'entity'=>'Skills',
-            'model'=>"App\Models\Skill",
-            'label'=>'Tag',
+            'entity' => 'Skills',
+            'model' => "App\Models\Skill",
+            'label' => 'Tag',
             'type' => 'relationship',
-            'attribute'=>'name'
+            'attribute' => 'name'
         ]);
         CRUD::addField(
             [
@@ -145,6 +143,12 @@ class TeacherCrudController extends CrudController
                 'type' => 'password'
             ],
         );
+        CRUD::addField(
+            [   // Password
+                'name' => 'private_key',
+                'type' => 'hidden'
+            ],
+        );
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -162,7 +166,9 @@ class TeacherCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
-    protected function detail($id){
+
+    protected function detail($id)
+    {
 //        return view("teacher-detail",['data'=>Teacher::find($id)]);
         return redirect(url("admin/teaching?teacher_id=$id"));
     }

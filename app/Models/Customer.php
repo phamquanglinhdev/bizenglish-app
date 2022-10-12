@@ -64,4 +64,9 @@ class Customer extends Model
     {
         return view("components.switcher", ['route' => route("admin.customer.switch", $this->id)]);
     }
+
+    public function setPrivate()
+    {
+        $this->attributes['private_key'] = \Illuminate\Support\Str::random(15);
+    }
 }
