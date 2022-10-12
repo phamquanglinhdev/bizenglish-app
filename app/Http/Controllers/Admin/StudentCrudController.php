@@ -75,8 +75,18 @@ class StudentCrudController extends CrudController
 //                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
 //            }
             "searchLogic" => "text",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/staff/detail/$entry->id");
+                },
+            ]
         ]);
-        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh"]);
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/student/detail/$entry->id");
+                },
+            ]]);
         CRUD::addColumn(['name' => 'student_parent', 'type' => 'text', 'label' => "Người giám hộ"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([

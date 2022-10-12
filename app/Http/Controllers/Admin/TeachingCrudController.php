@@ -99,7 +99,9 @@ class TeachingCrudController extends CrudController
             ]);
             $this->crud->addClause("where", "grade_id", $grade->id);
         }
-
+        if (backpack_user()->type == 1) {
+            $this->crud->addClause("where", "teacher_id", backpack_user()->id);
+        }
         if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
@@ -161,7 +163,7 @@ class TeachingCrudController extends CrudController
         ]);
 
         CRUD::column('lesson')->label("Bài học");
-        CRUD::column('teacher_video')->label("Video bài giảng")->type("open");
+        CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
         CRUD::column('date')->label("Ngày")->type("date");
         CRUD::column('start')->label("Bắt đầu")->type("time");
         CRUD::column('end')->label("Kết thúc")->type("time");

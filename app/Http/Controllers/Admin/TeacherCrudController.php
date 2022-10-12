@@ -44,7 +44,15 @@ class TeacherCrudController extends CrudController
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "1");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã giáo viên"]);
-        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên"]);
+        CRUD::addColumn([
+            'name' => 'name', 'type' => 'text', 'label' => "Tên giáo viên",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/teacher/detail/$entry->id");
+                },
+            ]
+
+        ]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của giáo viên"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([
@@ -92,7 +100,7 @@ class TeacherCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(TeacherRequest::class);
-        CRUD::field('name')->label("Tên giáo viên");
+        CRUD::field('name')->label("Tên giáo viên")->wrapper([]);
         CRUD::field('email')->label("Email giáo viên");
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
@@ -143,13 +151,7 @@ class TeacherCrudController extends CrudController
                 'type' => 'password'
             ],
         );
-        CRUD::addField(
-            [
-                'name' => 'private_key',
-                'type' => 'hidden',
-                'value' => "vale",
-            ],
-        );
+
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

@@ -25,6 +25,7 @@ class Log extends Model
     // protected $dates = [];
     protected $casts = [
         'status' => 'json',
+        'attachments' => 'json',
     ];
 
     /*

@@ -437,6 +437,37 @@ class LogCrudController extends CrudController
         );
         CRUD::field('assessment')->label("Nhận xét của giáo viên")->type("textarea");
         CRUD::field('question')->label("Bài tập cho học sinh")->type("tinymce");
+        CRUD::addField(
+            [
+                'name' => 'attachments',
+                'label' => 'Đính kèm',
+                'type' => 'repeatable',
+                'fields' => [
+                    [
+                        "name" => "type",
+                        "label" => "Loại đính kèm",
+                        "type" => "select_from_array",
+                        "options" => [
+                            "PDF",
+                            "Video",
+                            "Khác",
+                        ],
+                        "wrapper" => ["class" => "form-group col-md-3"]
+                    ],
+                    [
+                        "name" => "link",
+                        "label" => "Đường dẫn",
+                        "prefix" => "https://",
+                        "type" => "text",
+                        "wrapper" => ["class" => "form-group col-md-8"]
+                    ]
+                ],
+                'new_item_label' => 'Thêm đính kèm', // customize the text of the button
+                'init_rows' => 0, // number of empty rows to be initialized, by default 1
+                'min_rows' => 1, // minimum rows allowed, when reached the "delete" buttons will be hidden
+                'max_rows' => 10, // maximum rows allowed, when reached the "new item" button will be hidden
+            ]
+        );
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

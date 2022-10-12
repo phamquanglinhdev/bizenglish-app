@@ -29,7 +29,7 @@
             <div class="col-md-12 col-12">
                 <div class="embed-responsive embed-responsive-21by9">
                     <iframe class="embed-responsive-item"
-                            src="https://youtube.com/embed/{{$log->getVideo()->id}}"></iframe>
+                            src="https://youtube.com/embed/{{$log->getVideo()->id??""}}"></iframe>
                 </div>
 
                 @if(backpack_user()->type==3)
@@ -99,6 +99,26 @@
                 <div class="h2 mt-1">Bài tập về nhà</div>
                 <div class="bg-white shadow-lg mb-2 p-2 comment rounded">
                     {!! $log->question !!}
+                    @if($log->attachments !=null)
+                        <div>Đính kèm:</div>
+                        @foreach($log->attachments as $file)
+                            <span class="file">
+                                <a href="{{$file["link"]}}" class="btn btn-outline-primary">
+                                    @switch($file["type"])
+                                        @case(0)
+                                        <i class="las la-file-pdf"></i>
+                                        @break
+                                        @case(1)
+                                        <i class="lab la-youtube"></i>
+                                        @break
+                                    @endswitch
+                                    <span class="font-italic">
+                                    Link
+                                </span>
+                                </a>
+                            </span>
+                        @endforeach
+                    @endif
                 </div>
             </div>
             <div class="col-md-6 col-12">

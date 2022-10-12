@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StaffRequest;
 use App\Models\Staff;
-use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class StaffCrudController
@@ -45,7 +43,13 @@ class StaffCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "0");
-        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên nhân viên"]);
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên nhân viên",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/staff/detail/$entry->id");
+                },
+            ]
+        ]);
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của nhân viên"]);
