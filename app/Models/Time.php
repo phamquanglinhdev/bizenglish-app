@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 
-class Teacher extends Model
+class Time extends Model
 {
     use CrudTrait;
 
@@ -16,72 +15,36 @@ class Teacher extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'users';
+    protected $table = 'times';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
-    protected $guarded = [];
-    // protected $fillable = [];
+    protected $guarded = ['id'];
     // protected $hidden = [];
     // protected $dates = [];
-
+    protected $casts = [
+        'data' => 'json'
+    ];
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function Detail()
-    {
-        return view("components.detail", ['route' => route("admin.teacher.detail", $this->id)]);
-    }
-
-    public function Grades()
-    {
-        return $this->belongsToMany(Grade::class, "teacher_grade", "teacher_id", "grade_id");
-    }
-
-    public function Logs()
-    {
-        return $this->hasMany(Log::class, "teacher_id", "id");
-    }
-
-    public function Skills()
-    {
-        return $this->belongsToMany(Skill::class, "teacher_skill", "teacher_id", "skill_id");
-    }
 
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function getID()
+    public function Teacher()
     {
-        return $this->id ?? Teacher::max("id") + 1;
+        return $this->belongsTo(Teacher::class, "teacher_id", "id");
     }
-
-    public function setPasswordAttribute($value)
-    {
-        if ($value != "") {
-            $this->attributes['password'] = Hash::make($value);
-        }
-    }
-//    public function setCodeAttribute() {
-//        $this->attributes['code'] = "GV".$this->getID();
-//
-//    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
-    public function genesis(): bool
-    {
 
-        if (Time::where("teacher_id", "=", $this->id)->count() == 0) {
-            return true;
-        }
-        return false;
-    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
@@ -93,8 +56,4 @@ class Teacher extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'extra' => 'json',
-    ];
 }

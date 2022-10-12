@@ -48,16 +48,25 @@ class LogCrudController extends CrudController
             }
             $load = 1;
         }
-        if (isset($_REQUEST["teacher_filter"])) {
+        if (isset($_REQUEST["teacher_filter"]) || backpack_user()->type == 1) {
             $teachers_id = [];
-            $value = $_REQUEST["teacher_filter"];
+            $value = $_REQUEST["teacher_filter"] ?? "";
             $teachers = Teacher::where("name", "like", "%$value%")->get();
-            foreach ($teachers as $teacher) {
+            if (backpack_user()->type == 1) {
+                $teacher = Teacher::find(backpack_user()->id);
                 $logs = $teacher->Logs()->get();
                 foreach ($logs as $log) {
                     $teachers_id[] = $log->id;
                 }
+            } else {
+                foreach ($teachers as $teacher) {
+                    $logs = $teacher->Logs()->get();
+                    foreach ($logs as $log) {
+                        $teachers_id[] = $log->id;
+                    }
+                }
             }
+
             if ($load == 0) {
                 $logs_id = $teachers_id;
                 $load = 1;
@@ -212,6 +221,9 @@ class LogCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type == 1) {
+            $this->crud->addClause("where", "teacher_id", backpack_user()->id);
+        }
         $this->crud->addClause("where", "disable", 0);
 //        $this->crud->addClause('where', 'date', '>=', '2022-08-23 23:59:59');
         $this->crud->addClause("orderBy", "date", "DESC");
