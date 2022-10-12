@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string("private_key");
+            $table->string("private_key")->nullable();
         });
     }
 

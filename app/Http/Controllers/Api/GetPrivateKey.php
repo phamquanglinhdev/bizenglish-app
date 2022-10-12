@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 
 class GetPrivateKey extends Controller
 {
@@ -27,6 +28,9 @@ class GetPrivateKey extends Controller
             return Response::json([
                 'message' => "Sai mật khẩu"
             ], 404);
+        }
+        if ($user->private_key == null) {
+            $user->update(['private_key' => Str::random(16)]);
         }
         return Response::json([
             'key' => $user->private_key
