@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TeachingRequest;
+use App\Models\Client;
 use App\Models\Grade;
 use App\Models\Teacher;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -31,18 +32,26 @@ class TeachingCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Teaching::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teaching');
-        CRUD::setEntityNameStrings('Giờ dạy', 'Các giờ dạy');
+        CRUD::setEntityNameStrings('Thông Tin', 'Thông tin');
         $this->crud->denyAccess(["create", "show", "delete"]);
-        if (isset($_REQUEST["teacher_id"])) {
+        if (isset($_REQUEST["teacher_id"]) || isset($_REQUEST["client_id"])) {
             $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
             $this->crud->setOperationSetting('exportButtons', true);
             $this->crud->setOperationSetting('detailsRow', true);
-            if ($_REQUEST["teacher_id"] != backpack_user()->id) {
+            if (isset($_REQUEST["teacher_id"])) {
+                if ($_REQUEST["teacher_id"] != backpack_user()->id) {
+                    $this->crud->denyAccess(["update"]);
+                }
+                $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
+                $data = Teacher::where("id", "=", $_REQUEST["teacher_id"])->first();
+                $grades = $data->Grades()->get();
+            } else {
                 $this->crud->denyAccess(["update"]);
+//                $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
+                $data = Client::where("id", "=", $_REQUEST["client_id"])->first();
+                $grades = $data->Grades()->get();
             }
-            $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
-            $data = Teacher::where("id", "=", $_REQUEST["teacher_id"])->first();
-            $grades = $data->Grades()->get();
+
             Widget::add([
                 'type' => 'view',
                 'view' => 'teacher-detail',
@@ -73,7 +82,9 @@ class TeachingCrudController extends CrudController
                     $this->crud->addClause('where', 'date', '>=', $dates->from);
                     $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
                 });
-            $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
+            if (isset($_REQUEST["teacher_id"])) {
+                $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
+            }
         }
 
     }
@@ -86,6 +97,9 @@ class TeachingCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (isset($_REQUEST["client_id"])) {
+            $this->crud->addClause("client");
+        }
         $this->crud->addClause("where", "disable", 0);
 
         $this->crud->addClause("orderBy", "date", "DESC");
@@ -139,6 +153,7 @@ class TeachingCrudController extends CrudController
                 // 'class' => 'some-class',
             ],
         ]);
+        CRUD::column("clients")->label("Đối tác")->type("model_function")->function_name("client");
         CRUD::addColumn([
             'name' => 'Students',
             'type' => 'select',

@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="col-lg-10 col-12">
-            <div class="text-center mt-2 h3 text-muted font-italic">
+            <div class="mt-2 h3 text-muted font-italic">
                 {{$data->name}}
             </div>
             <dìv class="card p-2 rounded">
@@ -68,4 +68,11 @@
     </div>
     <hr>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        $("i.la-eraser").parent().hide()
+    });
+
+</script>

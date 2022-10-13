@@ -63,6 +63,23 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type == 0) {
+            $first = true;
+            $staff = Staff::where("id", "=", backpack_user()->id)->first();
+            $grades = $staff->Grades()->get();
+            foreach ($grades as $grade) {
+                $students = $grade->Student()->get();
+                foreach ($students as $student) {
+                    if ($first) {
+                        $this->crud->addClause("where", "id", "=", $student->id);
+                        $first = false;
+                    } else {
+                        $this->crud->addClause("orWhere", "id", "=", $student->id);
+                    }
+
+                }
+            }
+        }
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);

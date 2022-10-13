@@ -125,6 +125,47 @@ class Teaching extends Model
 
 
     }
+
+    public static function scopeClient($query)
+    {
+        $grades = DB::table("client_grade")->where("client_id", "=", $_REQUEST["client_id"])->get();
+        if ($grades->count() > 0) {
+//            $query->where("grade_id", $grades->first()->grade_id);
+//            foreach ($grades as $grade) {
+//                $query = $query->orWhere("grade_id", $grade->grade_id);
+//            }
+            $first = true;
+            foreach ($grades as $grade) {
+                $logs = Grade::where("id", "=", $grade->grade_id)->first()->Logs()->get();
+                foreach ($logs as $log) {
+                    if ($first) {
+                        $first = false;
+                        $query = $query->where("id", "=", $log->id);
+                    } else {
+                        $query = $query->orWhere("id", "=", $log->id);
+                    }
+                }
+            }
+        } else {
+            $query->where("id", -1);
+        }
+        return $query;
+//            ->join('student','grade.id' , '=' ,'logs.logs_id')
+//            ->join('shop_user','shop_user.shop_id' , '=' ,'logs.id')
+//            ->where('shop_user.user_id',backpack_user()->id)
+//            ->select('logs.*');
+
+
+    }
+
+    public function Client()
+    {
+        $client = "";
+        foreach ($this->Grade()->first()->Client()->get() as $data) {
+            $client .= "$data->name, ";
+        }
+        return $client;
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

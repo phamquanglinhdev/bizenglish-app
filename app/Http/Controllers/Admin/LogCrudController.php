@@ -7,6 +7,7 @@ use App\Http\Requests\LogRequest;
 use App\Models\Client;
 use App\Models\Grade;
 use App\Models\Log;
+use App\Models\Staff;
 use App\Models\Teacher;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -47,6 +48,25 @@ class LogCrudController extends CrudController
                 }
             }
             $load = 1;
+        }
+        if (backpack_user()->type == 0) {
+            $staff_id = [];
+            $staff = Staff::where("id", "=", backpack_user()->id)->first();
+            $grades = $staff->Grades()->get();
+            foreach ($grades as $grade) {
+                $logs = $grade->Logs()->get();
+                foreach ($logs as $log) {
+                    $staff_id[] = $log->id;
+                }
+            }
+
+            if ($load == 0) {
+                $logs_id = $staff_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $staff_id);
+            }
+
         }
         if (isset($_REQUEST["teacher_filter"]) || backpack_user()->type == 1) {
             $teachers_id = [];
@@ -94,6 +114,7 @@ class LogCrudController extends CrudController
                 $logs_id = array_intersect($logs_id, $client_id);
             }
         }
+
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
@@ -133,6 +154,24 @@ class LogCrudController extends CrudController
                 $_SESSION["filtered"] = true;
             }
         );
+        if (backpack_user()->type == 0) {
+            if (!$_SESSION["filtered"]) {
+                $first = true;
+                if ($logs_id != []) {
+                    foreach ($logs_id as $id) {
+                        if ($first) {
+                            $this->crud->query->where("id", "=", $id);
+                            $first = false;
+                        } else {
+                            $this->crud->query->orWhere("id", "=", $id);
+                        }
+                    }
+                } else {
+                    $this->crud->query->where("id", "=", "-9999");
+                }
+                $_SESSION["filtered"] = true;
+            }
+        }
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'teacher_filter',
