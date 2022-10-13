@@ -33,26 +33,28 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'description',
-            'label' => 'Tìm kiếm nhân viên quản lý'
-        ],
-            false,
-            function ($value) { // if the filter is active
-                $query = $this->crud->query;
-                $query = $query->where("id", "=", 9999);
-                $staff = Staff::where("name", "like", "%$value%")->first();
-                $grades = $staff->Grades()->get();
-                foreach ($grades as $grade) {
-                    $students = $grade->Student()->get();
-                    foreach ($students as $student) {
-                        $query = $query->orWhere("id", "=", $student->id);
+        if (backpack_user()->type == -1) {
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'description',
+                'label' => 'Tìm kiếm nhân viên quản lý'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                    $query = $this->crud->query;
+                    $query = $query->where("id", "=", 9999);
+                    $staff = Staff::where("name", "like", "%$value%")->first();
+                    $grades = $staff->Grades()->get();
+                    foreach ($grades as $grade) {
+                        $students = $grade->Student()->get();
+                        foreach ($students as $student) {
+                            $query = $query->orWhere("id", "=", $student->id);
+                        }
                     }
+                    return $query;
                 }
-                return $query;
-            }
-        );
+            );
+        }
     }
 
     /**

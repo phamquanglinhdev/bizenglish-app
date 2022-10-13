@@ -249,7 +249,9 @@ class LogCrudController extends CrudController
                 $this->crud->addClause('where', 'date', '>=', $dates->from);
                 $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
             });
-
+        if (backpack_user()->type == 0) {
+            $this->crud->denyAccess(["create"]);
+        }
     }
 
     /**

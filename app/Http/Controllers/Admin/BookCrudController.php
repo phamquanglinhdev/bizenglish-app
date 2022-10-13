@@ -29,8 +29,11 @@ class BookCrudController extends CrudController
         CRUD::setModel(\App\Models\Book::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/book');
         CRUD::setEntityNameStrings('Bộ sách', 'Các bộ sách');
-        $this->crud->denyAccess(["delete","show"]);
-        $this->crud->addButtonFromModelFunction("line","copy","Copy","line");
+        $this->crud->denyAccess(["delete", "show"]);
+        if (backpack_user()->type != -1) {
+            $this->crud->denyAccess(["create", "update", "delete"]);
+        }
+        $this->crud->addButtonFromModelFunction("line", "copy", "Copy", "line");
     }
 
     /**
@@ -64,7 +67,7 @@ class BookCrudController extends CrudController
 
         CRUD::field('name')->label("Tên sách");
         CRUD::field('slug')->type("hidden");
-        CRUD::field('thumbnail')->label("Ảnh")->type("image")->crop(true)->aspect_ratio(1907/2560);
+        CRUD::field('thumbnail')->label("Ảnh")->type("image")->crop(true)->aspect_ratio(1907 / 2560);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

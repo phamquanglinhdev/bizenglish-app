@@ -31,6 +31,9 @@ class LessonCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lesson');
         CRUD::setEntityNameStrings('Giáo trình', 'Những giáo trình');
         $this->crud->denyAccess(["show"]);
+        if (backpack_user()->type != -1) {
+            $this->crud->denyAccess(["create", "update", "delete"]);
+        }
     }
 
     /**
