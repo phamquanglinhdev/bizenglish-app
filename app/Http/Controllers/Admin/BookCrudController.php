@@ -23,6 +23,7 @@ class BookCrudController extends CrudController
      * Configure the CrudPanel object. Apply settings to all operations.
      *
      * @return void
+     * @throws \Backpack\CRUD\app\Exceptions\BackpackProRequiredException
      */
     public function setup()
     {
@@ -34,6 +35,7 @@ class BookCrudController extends CrudController
             $this->crud->denyAccess(["create", "update", "delete"]);
         }
         $this->crud->addButtonFromModelFunction("line", "copy", "Copy", "line");
+        $this->crud->enableDetailsRow();
     }
 
     /**
@@ -85,6 +87,11 @@ class BookCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function showDetailsRow($id)
+    {
+
     }
 
 }

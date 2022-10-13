@@ -40,6 +40,7 @@ class TimeCrudController extends CrudController
                 ]);
             }
         }
+        $this->crud->setOperationSetting('detailsRow', true);
     }
 
     /**
@@ -151,5 +152,11 @@ class TimeCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function showDetailsRow($id)
+    {
+        $table = Time::find($id)->data;
+        return view("components.time-detail", ["table" => $table]);
     }
 }
