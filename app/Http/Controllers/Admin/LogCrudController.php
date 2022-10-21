@@ -497,9 +497,10 @@ class LogCrudController extends CrudController
                     ],
                     [
                         "name" => "link",
-                        "label" => "Đường dẫn",
-                        "prefix" => "https://",
-                        "type" => "text",
+                        "label" => "Đính kèm",
+                        "type" => "upload",
+                        "disk"=>"uploads_document",
+                        'upload' => true,
                         "wrapper" => ["class" => "form-group col-md-8"]
                     ]
                 ],

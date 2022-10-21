@@ -21,40 +21,27 @@
         <tr>
             <th scope="row">{{$row["time"]}}</th>
             <td>
-                @if($row["monday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["monday"]}}
             </td>
             <td>
-                @if($row["tuesday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["tuesday"]}}
             </td>
             <td>
-                @if($row["wednesday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["wednesday"]}}
             </td>
             <td>
-                @if($row["thursday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["thursday"]}}
             </td>
             <td>
-                @if($row["friday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["friday"]}}
             </td>
             <td>
-                @if($row["saturday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["saturday"]}}
             </td>
             <td>
-                @if($row["sunday"]==1)
-                    <i class="lar la-check-circle"></i>
-                @endif
+                {{$row["sunday"]}}
             </td>
+
         </tr>
     @endforeach
     </tbody>

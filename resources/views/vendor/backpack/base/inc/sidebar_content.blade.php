@@ -1,6 +1,11 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
-
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
+</li>
+@if(backpack_user()->type<=1)
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
+            Lịch trống</a></li>
+@endif
 @if(backpack_user()->type == -1)
     {{--    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('user') }}'><i class='nav-icon la la-user'></i> Tài--}}
     {{--            khoản</a></li>--}}
@@ -46,16 +51,12 @@
         </ul>
     </li>
 @endif
-@if(backpack_user()->type<=1)
-    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
-            Lịch</a></li>
-@endif
+
 {{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('comment') }}'><i class='nav-icon la la-comment'></i>Nhận xét</a></li>--}}
 {{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('exercise') }}'>--}}
 {{--        <i class='nav-icon la la-book'></i> Bài tập</a>--}}
 {{--</li>--}}
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
-</li>
+
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>Thông
         báo</a></li>
 

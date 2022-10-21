@@ -24,11 +24,18 @@ class Time extends Model
     protected $casts = [
         'data' => 'json'
     ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function RedirectToEdit()
+    {
+        $id = Teacher::where("id", "=", backpack_user()->id)->first()->Time()->first()->id;
+
+        return redirect("/admin/time/$id/edit");
+    }
 
     /*
     |--------------------------------------------------------------------------

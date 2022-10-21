@@ -41,6 +41,9 @@ class TimeCrudController extends CrudController
             }
         }
         $this->crud->setOperationSetting('detailsRow', true);
+        if (backpack_user()->type == 1) {
+            $this->crud->addButtonFromModelFunction("top", "editNow", "RedirectToEdit", "top");
+        }
     }
 
     /**
@@ -87,43 +90,43 @@ class TimeCrudController extends CrudController
                     ],
                     [
                         'name' => 'monday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Monday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'tuesday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Tuesday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'wednesday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Wednesday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'thursday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Thursday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'friday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Friday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'saturday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Saturday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],
                     [
                         'name' => 'sunday',
-                        'type' => 'checkbox',
+                        'type' => 'text',
                         'label' => 'Sunday',
                         'wrapper' => ['class' => 'form-group col'],
                     ],

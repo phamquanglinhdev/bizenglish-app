@@ -50,6 +50,11 @@ class Teacher extends Model
         return $this->belongsToMany(Skill::class, "teacher_skill", "teacher_id", "skill_id");
     }
 
+    public function Time()
+    {
+        return $this->hasOne(Time::class, "teacher_id", "id");
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
