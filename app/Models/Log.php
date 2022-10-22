@@ -216,18 +216,6 @@ class Log extends Model
 
         $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
     }
-
-    public function showAttachments()
-    {
-        $data = "";
-        $attachments = $this->attachments;
-        if ($attachments != null) {
-            foreach ($attachments as $attachment) {
-                $data .= "<a href='" . url("/uploads/document/$attachment") . "'><i class='las la-file'></i>File</a><br>";
-            }
-        }
-        return $data;
-    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS

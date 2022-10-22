@@ -250,7 +250,7 @@ class LogCrudController extends CrudController
                 $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
             });
         if (backpack_user()->type == 0) {
-            $this->crud->denyAccess(["create"]);
+            $this->crud->denyAccess(["create","update"]);
         }
     }
 
@@ -352,7 +352,7 @@ class LogCrudController extends CrudController
             "label" => "Đính kèm",
             "type" => "upload_multiple",
             "wrapper" => [
-                'href' => function ($crud, $column, $entry) {
+                'href' => function ($crud) {
                     return url('uploads/document/' . $crud);
                 },
             ]
