@@ -130,7 +130,7 @@ class LogCrudController extends CrudController
         }
         $this->crud->setResponsiveTable(true);
         $this->crud->setOperationSetting('exportButtons', true);
-        $this->crud->setOperationSetting('detailsRow', true);
+//        $this->crud->setOperationSetting('detailsRow', true);
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'grade_filter',
