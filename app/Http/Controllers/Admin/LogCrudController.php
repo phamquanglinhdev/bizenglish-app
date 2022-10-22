@@ -347,7 +347,16 @@ class LogCrudController extends CrudController
         ]);
         CRUD::column('assessment')->label("Nhận xét của giáo viên")->type("textarea");
 //        CRUD::column('attachment')->label("Đính kèm")->type("model_function")->function_name("showAttachments");
-        CRUD::column('attachments')->label("Đính kèm")->type("upload_multiple")->disk("uploads_document");
+        CRUD::addColumn([
+            "name" => "attachments",
+            "label" => "Đính kèm",
+            "type" => "upload_multiple",
+            "wrapper" => [
+                'href' => function ($crud, $column, $entry) {
+                    return url('uploads/document/' . $crud);
+                },
+            ]
+        ]);
         CRUD::addColumn([
 //            'name' => 'StudentAccept',
             'type' => 'model_function',
@@ -482,11 +491,11 @@ class LogCrudController extends CrudController
         CRUD::field('question')->label("Bài tập cho học sinh")->type("tinymce");
         CRUD::addField(
             [   // Upload
-                'name'      => 'attachments',
-                'label'     => 'Đính kèm',
-                'type'      => 'upload_multiple',
-                'upload'    => true,
-                'disk'      => 'uploads_document', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;
+                'name' => 'attachments',
+                'label' => 'Đính kèm',
+                'type' => 'upload_multiple',
+                'upload' => true,
+                'disk' => 'uploads_document', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;
             ],
         );
         /**
