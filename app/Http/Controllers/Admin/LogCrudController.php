@@ -346,6 +346,8 @@ class LogCrudController extends CrudController
             'label' => "Tình trạng lớp học",
         ]);
         CRUD::column('assessment')->label("Nhận xét của giáo viên")->type("textarea");
+//        CRUD::column('attachment')->label("Đính kèm")->type("model_function")->function_name("showAttachments");
+        CRUD::column('attachments')->label("Đính kèm")->type("upload_multiple");
         CRUD::addColumn([
 //            'name' => 'StudentAccept',
             'type' => 'model_function',
@@ -479,36 +481,13 @@ class LogCrudController extends CrudController
         CRUD::field('assessment')->label("Nhận xét của giáo viên")->type("textarea");
         CRUD::field('question')->label("Bài tập cho học sinh")->type("tinymce");
         CRUD::addField(
-            [
-                'name' => 'attachments',
-                'label' => 'Đính kèm',
-                'type' => 'repeatable',
-                'fields' => [
-                    [
-                        "name" => "type",
-                        "label" => "Loại đính kèm",
-                        "type" => "select_from_array",
-                        "options" => [
-                            "PDF",
-                            "Video",
-                            "Khác",
-                        ],
-                        "wrapper" => ["class" => "form-group col-md-3"]
-                    ],
-                    [
-                        "name" => "link",
-                        "label" => "Đính kèm",
-                        "type" => "upload",
-                        "disk"=>"uploads_document",
-                        'upload' => true,
-                        "wrapper" => ["class" => "form-group col-md-8"]
-                    ]
-                ],
-                'new_item_label' => 'Thêm đính kèm', // customize the text of the button
-                'init_rows' => 0, // number of empty rows to be initialized, by default 1
-                'min_rows' => 1, // minimum rows allowed, when reached the "delete" buttons will be hidden
-                'max_rows' => 10, // maximum rows allowed, when reached the "new item" button will be hidden
-            ]
+            [   // Upload
+                'name'      => 'attachments',
+                'label'     => 'Đính kèm',
+                'type'      => 'upload_multiple',
+                'upload'    => true,
+                'disk'      => 'uploads_document', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;
+            ],
         );
         /**
          * Fields can be defined using the fluent syntax or array syntax:

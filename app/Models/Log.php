@@ -207,6 +207,27 @@ class Log extends Model
         return "<div class='text-center'>---</div>";
 
     }
+
+    public function setAttachmentsAttribute($value)
+    {
+        $attribute_name = "attachments";
+        $disk = "uploads_document";
+        $destination_path = "/";
+
+        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
+    }
+
+    public function showAttachments()
+    {
+        $data = "";
+        $attachments = $this->attachments;
+        if ($attachments != null) {
+            foreach ($attachments as $attachment) {
+                $data .= "<a href='" . url("/uploads/document/$attachment") . "'><i class='las la-file'></i>File</a><br>";
+            }
+        }
+        return $data;
+    }
     /*
     |--------------------------------------------------------------------------
     | MUTATORS
