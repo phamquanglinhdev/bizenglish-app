@@ -347,7 +347,7 @@ class LogCrudController extends CrudController
         ]);
         CRUD::column('assessment')->label("Nhận xét của giáo viên")->type("textarea");
 //        CRUD::column('attachment')->label("Đính kèm")->type("model_function")->function_name("showAttachments");
-        CRUD::column('attachments')->label("Đính kèm")->type("upload_multiple");
+        CRUD::column('attachments')->label("Đính kèm")->type("upload_multiple")->disk("uploads_document");
         CRUD::addColumn([
 //            'name' => 'StudentAccept',
             'type' => 'model_function',
