@@ -13,6 +13,10 @@
 
 <span>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_start')
-    <a class="nav-link" href="{{url($column['text'])}}"><i class="las la-eye"></i> Xem giáo trình</a>
+    @if($column["text"]!="")
+        <a class="nav-link" href="{{url($column['text'])}}"><i class="las la-eye"></i> Xem giáo trình</a>
+    @else
+        -
+    @endif
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_end')
 </span>
