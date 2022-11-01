@@ -43,6 +43,8 @@ class StaffCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "0");
+        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);
+
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên nhân viên",
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
@@ -50,9 +52,10 @@ class StaffCrudController extends CrudController
                 },
             ]
         ]);
-        CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);
+        CRUD::addColumn(['name' => 'job', 'type' => 'text', "label" => "Chức vụ"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của nhân viên"]);
+
 //        CRUD::addColumn([
 //            'name' => 'grades',
 //            'entity' => 'Grades',
@@ -92,14 +95,6 @@ class StaffCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(StaffRequest::class);
-
-        CRUD::field('name')->label("Tên nhân viên");
-        CRUD::field('email')->label("Email nhân viên");
-        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
-        CRUD::field('type')->type("hidden")->value(0);
-        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
-        CRUD::field("facebook")->label("Link Facebook");
-        CRUD::field("address")->label("Địa chỉ");
         if (backpack_user()->type < 1) {
             CRUD::addField([
                 'name' => 'code',
@@ -107,6 +102,15 @@ class StaffCrudController extends CrudController
                 'label' => "Mã nhân viên",
             ]);
         }
+        CRUD::field('name')->label("Tên nhân viên");
+        CRUD::field('job')->label("Chức vụ");
+        CRUD::field('email')->label("Email nhân viên");
+        CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
+        CRUD::field('type')->type("hidden")->value(0);
+        CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
+        CRUD::field("facebook")->label("Link Facebook");
+        CRUD::field("address")->label("Địa chỉ");
+
 
         CRUD::addField(
             [    // Select2Multiple = n-n relationship (with pivot table)

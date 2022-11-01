@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\NotificationRequest;
 use App\Models\Notification;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
  * Class NotificationCrudController
  * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
+ * @property-read CrudPanel $crud
  */
 class NotificationCrudController extends CrudController
 {
