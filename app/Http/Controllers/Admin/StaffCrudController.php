@@ -53,27 +53,27 @@ class StaffCrudController extends CrudController
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã nhân viên"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của nhân viên"]);
-        CRUD::addColumn([
-            'name' => 'grades',
-            'entity' => 'Grades',
-            'model' => "App\Models\Grade",
-            'label' => 'Lớp',
-            'type' => 'relationship',
-            'attribute' => 'name',
-            'wrapper' => [
-                // 'element' => 'a', // the element will default to "a" so you can skip it here
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url("/log?grade_id=$related_key");
-                },
-                // 'target' => '_blank',
-                // 'class' => 'some-class',
-            ],
-            'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%' . $searchTerm . '%');
-                });
-            }
-        ]);
+//        CRUD::addColumn([
+//            'name' => 'grades',
+//            'entity' => 'Grades',
+//            'model' => "App\Models\Grade",
+//            'label' => 'Lớp',
+//            'type' => 'relationship',
+//            'attribute' => 'name',
+//            'wrapper' => [
+//                // 'element' => 'a', // the element will default to "a" so you can skip it here
+//                'href' => function ($crud, $column, $entry, $related_key) {
+//                    return backpack_url("/log?grade_id=$related_key");
+//                },
+//                // 'target' => '_blank',
+//                // 'class' => 'some-class',
+//            ],
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
+//                    $q->where('name', 'like', '%' . $searchTerm . '%');
+//                });
+//            }
+//        ]);
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
 
         /**
