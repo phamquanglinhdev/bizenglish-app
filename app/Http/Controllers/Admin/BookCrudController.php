@@ -48,6 +48,7 @@ class BookCrudController extends CrudController
     {
         CRUD::column('name')->label("Tên sách");
         CRUD::column('thumbnail')->label("Ảnh")->type("image");
+        CRUD::column('description')->label("Mô tả")->type("text");
 
 
         /**
@@ -69,6 +70,7 @@ class BookCrudController extends CrudController
 
         CRUD::field('name')->label("Tên sách");
         CRUD::field('slug')->type("hidden");
+        CRUD::field('description')->label("Mô tả");
         CRUD::field('thumbnail')->label("Ảnh")->type("image")->crop(true)->aspect_ratio(1907 / 2560);
 
         /**
