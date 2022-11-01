@@ -65,6 +65,7 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
         if (backpack_user()->type == 0) {
             $first = true;
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
@@ -85,6 +86,13 @@ class StudentCrudController extends CrudController
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
+
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/student/detail/$entry->id");
+                },
+            ]]);
         CRUD::addColumn([
             'name' => "staff",
             'type' => 'model_function',
@@ -100,12 +108,21 @@ class StudentCrudController extends CrudController
                 },
             ]
         ]);
-        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
+        CRUD::addColumn([
+            'name' => "staff",
+            'type' => 'model_function',
+            "function_name" => "staffs",
+            "label" => "Nhân viên quản lý",
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
+//            }
+            "searchLogic" => "text",
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url("/student/detail/$entry->id");
+                    return backpack_url("/staff/detail/$entry->id");
                 },
-            ]]);
+            ]
+        ]);
         CRUD::addColumn(['name' => 'student_parent', 'type' => 'text', 'label' => "Người giám hộ"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
         CRUD::addColumn([
