@@ -35,7 +35,7 @@ class BookCrudController extends CrudController
             $this->crud->denyAccess(["create", "update", "delete"]);
         }
         $this->crud->addButtonFromModelFunction("line", "copy", "Copy", "line");
-        $this->crud->enableDetailsRow();
+//        $this->crud->enableDetailsRow();
     }
 
     /**
