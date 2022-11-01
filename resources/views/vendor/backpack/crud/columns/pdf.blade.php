@@ -8,7 +8,7 @@
     $column['prefix'] = $column['prefix'] ?? '';
     $column['suffix'] = $column['suffix'] ?? '';
     //$column['text'] = $column['prefix'].Str::limit(, $column['limit'], '[...]').$column['suffix'];
-    $column['text'] =$value;
+    $column['text'] =$value ?? "";
 @endphp
 
 <span>

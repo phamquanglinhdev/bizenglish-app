@@ -16,7 +16,7 @@
                             </div>
                         @else
                             <div class="d-flex">
-                                {{$lesson->name}} : <a href="{{url($lesson->link)}}">Link</a>
+                                {{$lesson->name}} : <a href="{{$lesson->link}}">Link</a>
                             </div>
                         @endif
                     @endforeach
