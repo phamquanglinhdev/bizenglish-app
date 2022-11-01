@@ -347,12 +347,14 @@ class LogCrudController extends CrudController
             ],
 
         ]);
-        CRUD::addColumn([
-            'name' => 'students',
-            'type' => 'model_function',
-            'function_name' => 'getStudentList',
-            'searchLogic' => 'text',
-        ]);
+        if (backpack_user()->type != 3) {
+            CRUD::addColumn([
+                'name' => 'Học sinh',
+                'type' => 'model_function',
+                'function_name' => 'getStudentList',
+                'searchLogic' => 'text',
+            ]);
+        }
         CRUD::addColumn([
             'name' => 'teacher_id',
             'type' => 'select',
@@ -370,7 +372,9 @@ class LogCrudController extends CrudController
             ],
         ]);
 
-        CRUD::column("clients")->label("Đối tác")->type("model_function")->function_name("client");
+        if (backpack_user()->type != 3) {
+            CRUD::column("clients")->label("Đối tác")->type("model_function")->function_name("client");
+        }
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
         CRUD::column('date')->label("Ngày")->type("date");
