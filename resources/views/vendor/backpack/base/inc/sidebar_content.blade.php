@@ -1,11 +1,9 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
+            class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
 </li>
-@if(backpack_user()->type<=1)
-    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
-            Lịch trống</a></li>
-@endif
 @if(backpack_user()->type == -1)
     {{--    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('user') }}'><i class='nav-icon la la-user'></i> Tài--}}
     {{--            khoản</a></li>--}}
@@ -27,11 +25,13 @@
                         class='nav-icon la la-user-lock'></i> Đối tác</a></li>
         </ul>
     </li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
-                class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
+
 
 @endif
-<!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
+@if(backpack_user()->type<=1)
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
+            Lịch trống</a></li>
+@endif
 @if(backpack_user()->type<=1)
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-book-reader"></i>Sách</a>
@@ -43,6 +43,12 @@
         </ul>
     </li>
 @endif
+
+
+
+
+<!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
+
 
 {{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('comment') }}'><i class='nav-icon la la-comment'></i>Nhận xét</a></li>--}}
 {{--<li class='nav-item'><a class='nav-link' href='{{ backpack_url('exercise') }}'>--}}
