@@ -132,9 +132,9 @@ class TimeCrudController extends CrudController
                     ],
 
                 ],
-                'init_rows' => 3,
-                'max_rows' => 3,
-                'min_rows' => 3,
+                'init_rows' => 9,
+                'max_rows' => 9,
+                'min_rows' => 9,
                 'new_item_label' => 'Thêm buổi',
             ]
         );

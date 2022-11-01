@@ -250,7 +250,7 @@ class LogCrudController extends CrudController
                 $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
             });
         if (backpack_user()->type == 0) {
-            $this->crud->denyAccess(["create","update"]);
+            $this->crud->denyAccess(["create", "update"]);
         }
     }
 
@@ -299,7 +299,11 @@ class LogCrudController extends CrudController
             ],
 
         ]);
-
+        CRUD::addColumn([
+            'name' => 'students',
+            'type' => 'model_function',
+            'function_name' => 'getStudentList',
+        ]);
         CRUD::addColumn([
             'name' => 'teacher_id',
             'type' => 'select',
@@ -406,6 +410,7 @@ class LogCrudController extends CrudController
                 return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
             })
         ]);
+
         CRUD::addField([
             'name' => 'teacher_id',
             'value' => backpack_user()->id,

@@ -135,6 +135,15 @@ class Log extends Model
         return $this->belongsTo(Teacher::class, "teacher_id", "id");
     }
 
+    public function getStudentList()
+    {
+        $result = [];
+        foreach ($this->belongsTo(Grade::class, "grade_id", "id")->first()->Student()->get() as $item) {
+            $result[] .= $item->name;
+        }
+        return implode(",",$result);
+    }
+
 //    public function setTeacherVideoAttribute($value)
 //    {
 //        $attribute_name = "teacher_video";
