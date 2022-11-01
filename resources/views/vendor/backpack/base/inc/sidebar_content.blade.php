@@ -32,9 +32,6 @@
         <ul class="nav-dropdown-items">
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
                         class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
-                    <i class="nav-icon la la-files-o"></i> <span>Kho lưu trữ</span></a>
-            </li>
         </ul>
     </li>
 
@@ -59,4 +56,8 @@
 
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>Thông
         báo</a></li>
-
+@if(backpack_user()->role<=1)
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
+            <i class="nav-icon la la-files-o"></i> <span>Kho lưu trữ</span></a>
+    </li>
+@endif
