@@ -36,6 +36,10 @@ class LogCrudController extends CrudController
      */
     public function setup()
     {
+        // hide elfinder
+        // hide client
+        //hide student
+        //FOR ROLE : STUDENT
         $_SESSION["filtered"] = false;
         $load = 0;
         $logs_id = [];
@@ -330,6 +334,10 @@ class LogCrudController extends CrudController
         if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
+        CRUD::column('date')->label("Ngày")->type("date");
+        CRUD::column('start')->label("Bắt đầu")->type("time");
+        CRUD::column('end')->label("Kết thúc")->type("time");
+
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',
@@ -347,6 +355,7 @@ class LogCrudController extends CrudController
             ],
 
         ]);
+
         if (backpack_user()->type != 3) {
             CRUD::addColumn([
                 'name' => 'Học sinh',
@@ -377,9 +386,8 @@ class LogCrudController extends CrudController
         }
         CRUD::column('lesson')->label("Bài học");
         CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
-        CRUD::column('date')->label("Ngày")->type("date");
-        CRUD::column('start')->label("Bắt đầu")->type("time");
-        CRUD::column('end')->label("Kết thúc")->type("time");
+
+
         CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
 
         if (backpack_user()->type <= 1) {
