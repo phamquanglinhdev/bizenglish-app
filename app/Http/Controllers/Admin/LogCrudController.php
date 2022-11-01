@@ -8,6 +8,7 @@ use App\Models\Client;
 use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Staff;
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -114,6 +115,26 @@ class LogCrudController extends CrudController
                 $logs_id = array_intersect($logs_id, $client_id);
             }
         }
+        if (isset($_REQUEST["student_filter"])) {
+            $student_id = [];
+            $value = $_REQUEST["student_filter"];
+            $students = Student::where("name", "like", "%$value%")->get();
+            foreach ($students as $student) {
+                $grades = $student->Grades()->get();
+                foreach ($grades as $grade) {
+                    $logs = $grade->Logs()->get();
+                    foreach ($logs as $log) {
+                        $student_id[] = $log->id;
+                    }
+                }
+            }
+            if ($load == 0) {
+                $logs_id = $student_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $student_id);
+            }
+        }
 
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
@@ -174,6 +195,31 @@ class LogCrudController extends CrudController
         }
         $this->crud->addFilter([
             'type' => "text",
+            'name' => 'student_filter',
+            'label' => 'Học sinh',
+        ],
+            false,
+            function ($value) use ($logs_id) {
+                if (!$_SESSION["filtered"]) {
+                    $first = true;
+                    if ($logs_id != []) {
+                        foreach ($logs_id as $id) {
+                            if ($first) {
+                                $this->crud->query->where("id", "=", $id);
+                                $first = false;
+                            } else {
+                                $this->crud->query->orWhere("id", "=", $id);
+                            }
+                        }
+                    } else {
+                        $this->crud->query->where("id", "=", "-9999");
+                    }
+                    $_SESSION["filtered"] = true;
+                }
+            }
+        );
+        $this->crud->addFilter([
+            'type' => "text",
             'name' => 'teacher_filter',
             'label' => 'Giáo viên',
         ],
@@ -197,6 +243,7 @@ class LogCrudController extends CrudController
                 }
             }
         );
+
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'client_filter',
@@ -260,7 +307,8 @@ class LogCrudController extends CrudController
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
-    protected function setupListOperation()
+    protected
+    function setupListOperation()
     {
         if (backpack_user()->type == 1) {
             $this->crud->addClause("where", "teacher_id", backpack_user()->id);
@@ -303,6 +351,7 @@ class LogCrudController extends CrudController
             'name' => 'students',
             'type' => 'model_function',
             'function_name' => 'getStudentList',
+            'searchLogic' => 'text',
         ]);
         CRUD::addColumn([
             'name' => 'teacher_id',
@@ -394,7 +443,8 @@ class LogCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
-    protected function setupCreateOperation()
+    protected
+    function setupCreateOperation()
     {
 
         CRUD::setValidation(LogRequest::class);
@@ -517,12 +567,14 @@ class LogCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected function setupUpdateOperation()
+    protected
+    function setupUpdateOperation()
     {
         $this->setupCreateOperation();
     }
 
-    protected function detail($id)
+    protected
+    function detail($id)
     {
         if (Log::find($id)) {
             return view("log-detail", ['log' => Log::find($id)]);
@@ -530,7 +582,8 @@ class LogCrudController extends CrudController
         return view("errors.404");
     }
 
-    public function acceptByStudent(\Illuminate\Http\Request $request)
+    public
+    function acceptByStudent(\Illuminate\Http\Request $request)
     {
         $id = backpack_user()->id;
         $isExist = DB::table("student_log")->where("log_id", $request->log_id)->where("student_id", $id)->count();
