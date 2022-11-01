@@ -10,9 +10,15 @@
                 <hr>
                 <div>
                     @foreach($book->Lessons()->orderBy("name","ASC")->get() as $lesson)
-                        <div class="d-flex">
-                          {{$lesson->name}} :  <a href="{{url($lesson->pdf)}}">Link</a>
-                        </div>
+                        @if($book->pdf != null)
+                            <div class="d-flex">
+                                {{$lesson->name}} : <a href="{{url($lesson->pdf)}}">Link</a>
+                            </div>
+                        @else
+                            <div class="d-flex">
+                                {{$lesson->name}} : <a href="{{url($lesson->link)}}">Link</a>
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
