@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\TeacherRequest;
+use App\Models\Skill;
+use App\Models\Teacher;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -31,6 +33,38 @@ class TeacherCrudController extends CrudController
         CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
+        $this->crud->addFilter([
+            'name' => 'skills',
+            'type' => 'select2_multiple',
+            'label' => 'Kỹ năng'
+        ], function () {
+            $skills = Skill::all();
+            $skills_arr = [];
+            foreach ($skills as $skill) {
+                $skills_arr[$skill->id] = $skill->name;
+            }
+            return $skills_arr;
+        }, function ($values) {
+            $teacher_id = [];
+            $skills = json_decode($values);
+            $first = true;
+            foreach ($skills as $id) {
+                $teachers = Skill::where("id", $id)->first()->Teachers()->get();
+                foreach ($teachers as $teacher) {
+                    if (!array_search($teacher->id, $teacher_id)) {
+                        $teacher_id[] = $teacher->id;
+                    }
+                }
+            }
+//            foreach ($teacher_id as $id) {
+//                if ($first) {
+//                    $first = false;
+//
+//                }
+//            }
+            // if the filter is active
+            $this->crud->addClause('whereIn', 'id', $teacher_id);
+        });
     }
 
     /**
