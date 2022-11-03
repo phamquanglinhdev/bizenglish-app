@@ -34,6 +34,8 @@ class TeachingCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teaching');
         CRUD::setEntityNameStrings('Thông Tin', 'Thông tin');
         $this->crud->denyAccess(["create", "show", "delete"]);
+        $teacher_id = $_REQUEST["teacher_id"] ?? backpack_user()->id;
+        $daily = Teacher::where("id", $teacher_id)->first()->getOwnTime();
         if (isset($_REQUEST["teacher_id"]) || isset($_REQUEST["client_id"])) {
             $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
             $this->crud->setOperationSetting('exportButtons', true);
@@ -51,26 +53,33 @@ class TeachingCrudController extends CrudController
                 $data = Client::where("id", "=", $_REQUEST["client_id"])->first();
                 $grades = $data->Grades()->get();
             }
-
             Widget::add([
                 'type' => 'view',
                 'view' => 'teacher-detail',
                 "data" => $data,
             ]);
+
             Widget::add([
                 'type' => 'view',
-                'view' => 'components.sub-table',
-                'data' => [
-                    'columns' => [
-                        "name" => ["label" => "Tên lớp"],
-                        "status" => ["label" => "Trạng thái"],
-                        "student" => ["label" => "Học sinh"],
-                        "teacher" => ["label" => "Giáo viên"],
-                        "client" => ["label" => "Đối tác"],
-                    ],
-                    'grades' => $grades,
-                ]
+                'view' => 'teacher-time',
+                'daily' => $daily,
             ]);
+            if (backpack_user()->type <= 1) {
+                Widget::add([
+                    'type' => 'view',
+                    'view' => 'components.sub-table',
+                    'data' => [
+                        'columns' => [
+                            "name" => ["label" => "Tên lớp"],
+                            "status" => ["label" => "Trạng thái"],
+                            "student" => ["label" => "Học sinh"],
+                            "teacher" => ["label" => "Giáo viên"],
+                            "client" => ["label" => "Đối tác"],
+                        ],
+                        'grades' => $grades,
+                    ]
+                ]);
+            }
             $this->crud->addFilter([
                 'type' => 'date_range',
                 'name' => 'from_to',

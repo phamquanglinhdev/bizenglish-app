@@ -23,6 +23,9 @@ class Grade extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $casts = [
+        'time' => 'array'
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -46,6 +49,7 @@ class Grade extends Model
         $durations = $this->Logs()->sum("duration");
         return $durations / $this->minutes * 100;
     }
+
     public function identify()
     {
         return $this->name;

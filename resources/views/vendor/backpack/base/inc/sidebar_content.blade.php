@@ -1,7 +1,9 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
-            class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
+@if(backpack_user()->type!=1)
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
+                class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
+@endif
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
 </li>
 @if(backpack_user()->type == -1)
@@ -25,7 +27,6 @@
                         class='nav-icon la la-user-lock'></i> Đối tác</a></li>
         </ul>
     </li>
-
 
 @endif
 @if(backpack_user()->type<=1)

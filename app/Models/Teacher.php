@@ -55,6 +55,22 @@ class Teacher extends Model
         return $this->hasOne(Time::class, "teacher_id", "id");
     }
 
+    public function getOwnTime()
+    {
+        $daily = [];
+        $grades = $this->Grades()->where("status", 0)->get();
+        foreach ($grades as $grade) {
+            $time = $grade->time;
+            if ($time != null) {
+                foreach ($time as $index => $day) {
+                    $daily[$day["day"]][$index]["value"] = $day["value"];
+                    $daily[$day["day"]][$index]["grade"] = $grade;
+                }
+            }
+        }
+        return $daily;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

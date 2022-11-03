@@ -32,6 +32,9 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
+        if (backpack_user()->type == 1) {
+            $_REQUEST["teacher_filter"] = backpack_user()->name;
+        }
         $grades_id = [];
         $load = 0;
         $_SESSION["filtered"] = false;
@@ -65,9 +68,12 @@ class GradeCrudController extends CrudController
 
 //            print_r($student_id);
         }
-        if (isset($_REQUEST["teacher_filter"])) {
+        if (isset($_REQUEST["teacher_filter"]) || backpack_user()->type == 1) {
             $teacher_id = [];
             $value = $_REQUEST["teacher_filter"];
+            if (backpack_user()->type == 1) {
+                $value = backpack_user()->name;
+            }
             $staff = Teacher::where("name", "like", "%$value%")->first();
             $grades = $staff->Grades()->get();
             foreach ($grades as $grade) {
@@ -145,25 +151,27 @@ class GradeCrudController extends CrudController
                     $query->where("id", "=", -9999);
                 }
             });
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'teacher_filter',
-            'label' => 'Giáo viên'
-        ],
-            false,
-            function ($value) use ($grades_id) {
-                if (!$_SESSION["filtered"]) {
-                    $_SESSION["filtered"] = true;
-                    $query = $this->crud->query;
-                    if ($grades_id != []) {
-                        foreach ($grades_id as $value) {
-                            $query->orWhere("id", "=", $value);
+        if (backpack_user()->type != 1) {
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'teacher_filter',
+                'label' => 'Giáo viên'
+            ],
+                false,
+                function ($value) use ($grades_id) {
+                    if (!$_SESSION["filtered"]) {
+                        $_SESSION["filtered"] = true;
+                        $query = $this->crud->query;
+                        if ($grades_id != []) {
+                            foreach ($grades_id as $value) {
+                                $query->orWhere("id", "=", $value);
+                            }
+                        } else {
+                            $query->where("id", "=", -9999);
                         }
-                    } else {
-                        $query->where("id", "=", -9999);
                     }
-                }
-            });
+                });
+        }
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'client_filter',
@@ -210,6 +218,18 @@ class GradeCrudController extends CrudController
             function () { // if the filter is active
                 $this->crud->addClause("where", 'status', "=", 2); // apply the "active" eloquent scope
             });
+
+        if (backpack_user()->type == 1 && !$_SESSION["filtered"]) {
+            $_SESSION["filtered"] = true;
+            $query = $this->crud->query;
+            if ($grades_id != []) {
+                foreach ($grades_id as $value) {
+                    $query->orWhere("id", "=", $value);
+                }
+            } else {
+                $query->where("id", "=", -9999);
+            }
+        }
     }
 
     /**
@@ -221,7 +241,7 @@ class GradeCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("where", "grades.disable", "=", 0);
-        if (backpack_user()->type != -1) {
+        if (backpack_user()->type == 0) {
             $this->crud->addClause("owner");
         }
         CRUD::column('name')->label("Tên lớp")->wrapper(
@@ -264,6 +284,35 @@ class GradeCrudController extends CrudController
         CRUD::field('name')->label("Tên lớp");
         CRUD::field('pricing')->label("Gói học phí");
         CRUD::field('minutes')->label("Số phút")->type("number");
+        CRUD::addField([
+            'name' => 'time',
+            'type' => 'repeatable',
+            'label' => 'Lịch học',
+            'fields' => [
+                [
+                    'name' => 'day',
+                    'label' => 'Thứ',
+                    'type' => 'select_from_array',
+                    'options' => [
+                        'mon' => 'Thứ 2',
+                        'tue' => 'Thứ 3',
+                        'wed' => 'Thứ 4',
+                        'thu' => 'Thứ 5',
+                        'fri' => 'Thứ 6',
+                        'sat' => 'Thứ 7',
+                        'sun' => 'Chủ nhật',
+                    ]
+                ],
+                [
+                    'name' => 'value',
+                    'label' => 'Khung thời gian',
+                    'attributes' => [
+                        'placeholder' => 'Ví dụ : 8pm-10pm',
+                    ]
+                ]
+            ],
+            'new_item_label' => 'Thêm lịch',
+        ]);
         CRUD::field('information')->label("Thông tin chi tiết")->type("tinymce");
         CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
         CRUD::addField(
