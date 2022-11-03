@@ -178,6 +178,30 @@ class TeacherCrudController extends CrudController
                 ],
             ],
         );
+        if (backpack_user()->type <= 0) {
+            CRUD::addField(
+                [
+                    'name' => 'files',
+                    'label' => 'Văn bản',
+                    'type' => 'repeatable',
+                    'new_item_label' => 'Thêm văn bản', // customize the text of the button
+                    'fields' => [
+                        [
+                            'name' => 'name',
+                            'type' => 'text',
+                            'label' => 'Tên',
+                            'wrapper' => ['class' => 'form-group col-md-6'],
+                        ],
+                        [
+                            'name' => 'link',
+                            'type' => 'browse',
+                            'label' => 'File',
+                            'wrapper' => ['class' => 'form-group col-md-6'],
+                        ],
+                    ],
+                ],
+            );
+        }
         CRUD::addField(
             [   // Password
                 'name' => 'password',
@@ -185,6 +209,7 @@ class TeacherCrudController extends CrudController
                 'type' => 'password'
             ],
         );
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

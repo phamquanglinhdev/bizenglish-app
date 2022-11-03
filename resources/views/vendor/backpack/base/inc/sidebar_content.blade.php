@@ -44,7 +44,11 @@
         </ul>
     </li>
 @endif
-
+@if(backpack_user()->type!=-1 || backpack_user()->type!=0 || backpack_user()->type!=3)
+    <li class="nav-item"><a class="nav-link" href="{{ route("user.file") }}">
+            <i class="nav-icon la la-file"></i> <span>Văn bản</span></a>
+    </li>
+@endif
 
 
 

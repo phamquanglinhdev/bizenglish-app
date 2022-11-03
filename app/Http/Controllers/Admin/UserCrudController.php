@@ -31,7 +31,7 @@ class UserCrudController extends CrudController
         CRUD::setModel(User::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/user');
         CRUD::setEntityNameStrings('Người dùng', 'Những người dùng');
-        $this->crud->denyAccess(['show','create']);
+        $this->crud->denyAccess(['show', 'create']);
     }
 
     /**
@@ -42,7 +42,7 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
+        $this->crud->addClause("where", "disable", 0);
         CRUD::column('name')->label("Tên");
         CRUD::column('email')->label("Email");
         CRUD::column('code')->label("Mã");
@@ -109,6 +109,12 @@ class UserCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    public function file()
+    {
+        $files = backpack_user()->files;
+        return view("file", ['files' => json_decode($files)]);
     }
 
 }

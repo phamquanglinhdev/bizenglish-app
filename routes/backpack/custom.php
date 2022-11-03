@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\LogCrudController;
 use App\Http\Controllers\Admin\StaffCrudController;
 use App\Http\Controllers\Admin\StudentCrudController;
 use App\Http\Controllers\Admin\TeacherCrudController;
+use App\Http\Controllers\Admin\UserCrudController;
 use App\Http\Controllers\Api\SlackController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,7 @@ Route::group([
     Route::crud('log', 'LogCrudController');
     Route::post("slack/send", [SlackController::class, "send"])->name("slack-send");
     Route::get("slack", [SlackController::class, "show"])->name("slack-show");
+    Route::get("/files", [UserCrudController::class, "file"])->name("user.file");
     Route::get('log/detail/{id}', [LogCrudController::class, "detail"])->name("admin.log.detail");
     Route::post('log/exercise/', [LogCrudController::class, "acceptByStudent"])->name("admin.log.accept");
     Route::crud('exercise', 'ExerciseCrudController');
