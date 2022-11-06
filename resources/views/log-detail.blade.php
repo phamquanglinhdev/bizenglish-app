@@ -182,9 +182,9 @@
 
 @endsection
 @section("after_scripts")
-    @if(!$log->reported(backpack_user()->id) && backpack_user()->type==3)
-        <script>
-            $("#accept_btn").click();
-        </script>
-    @endif
+{{--    @if(!$log->reported(backpack_user()->id) && backpack_user()->type==3)--}}
+{{--        <script>--}}
+{{--            $("#accept_btn").click();--}}
+{{--        </script>--}}
+{{--    @endif--}}
 @endsection

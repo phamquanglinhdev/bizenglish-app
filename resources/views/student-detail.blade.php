@@ -140,5 +140,8 @@
         {{--            </div>--}}
         {{--        @endif--}}
     </div>
+    <div class="container-md-fluid">
+        @include("teacher-time",['studentDaily'=>$data->getOwnTime()])
+    </div>
 
 @endsection

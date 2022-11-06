@@ -36,10 +36,6 @@ class LogCrudController extends CrudController
      */
     public function setup()
     {
-        // hide elfinder
-        // hide client
-        //hide student
-        //FOR ROLE : STUDENT
         $_SESSION["filtered"] = false;
         $load = 0;
         $logs_id = [];

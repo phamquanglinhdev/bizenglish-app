@@ -11,6 +11,9 @@
                 {{$teacher->name}},
             @endforeach
         </li>
+        <li class="list-group-item">Link lớp:
+            <a href="{{$grade->zoom}}">{{$grade->zoom}}</a>
+        </li>
         <li class="list-group-item">Học sinh :
             @foreach($students as $student)
                 {{$student->name}},
@@ -35,7 +38,8 @@
         </li>
         <li class="list-group-item">Ngày tạo lớp : {{$grade->created_at}}</li>
     </ul>
-    <a class="nav-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <a class="nav-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+       aria-controls="collapseExample">
         Xem thêm thông tin chi tiết
     </a>
     <div class="collapse" id="collapseExample">

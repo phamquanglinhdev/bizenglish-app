@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ExerciseRequest;
+use App\Models\Exercise;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use http\Env\Request;
@@ -30,7 +31,7 @@ class ExerciseCrudController extends CrudController
         CRUD::setModel(\App\Models\Exercise::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/exercise');
         CRUD::setEntityNameStrings('Bài tập', 'Quản lý bài tập');
-        $this->crud->denyAccess(["delete", "show"]);
+        $this->crud->denyAccess(["delete"]);
     }
 
     /**
@@ -41,8 +42,8 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->crud->addClause("where","disable",0);
-        if(backpack_user()->type == 1){
+        $this->crud->addClause("where", "disable", 0);
+        if (backpack_user()->type == 1) {
             $this->crud->addClause("rep");
         }
         $this->crud->removeButton('create');
@@ -50,12 +51,12 @@ class ExerciseCrudController extends CrudController
             $this->crud->addClause("where", "student_id", "=", backpack_user()->id);
         } else {
             CRUD::addColumn([
-                'label'=>'Học sinh',
+                'label' => 'Học sinh',
                 'name' => 'student_id',
                 'type' => 'select',
-                'model'=>'App\Models\Student',
-                'entity'=>'Student',
-                'attribute'=>'name',
+                'model' => 'App\Models\Student',
+                'entity' => 'Student',
+                'attribute' => 'name',
             ]);
             $this->crud->denyAccess(["update"]);
             $this->crud->allowAccess(["delete"]);
@@ -63,19 +64,19 @@ class ExerciseCrudController extends CrudController
         CRUD::addColumn([
             'name' => 'log_id',
             'type' => 'select',
-            'model'=>"App\Models\Log",
-            'entity'=>"Log",
-            'attribute'=>'lesson',
-            'label'=>'Bài'
+            'model' => "App\Models\Log",
+            'entity' => "Log",
+            'attribute' => 'lesson',
+            'label' => 'Bài'
         ]);
         CRUD::addColumn([
-            'name'=>"grades",
-            'label'=>'Lớp',
-            'type'  => 'model_function',
+            'name' => "grades",
+            'label' => 'Lớp',
+            'type' => 'model_function',
             'function_name' => 'Grade'
         ]);
-        CRUD::column('video')->type("open");
-        CRUD::column('document')->type("read")->label("Tài liệu");
+//        CRUD::column('video')->type("open");
+//        CRUD::column('document')->type("read")->label("Tài liệu");
         CRUD::column('updated_at')->label("Lần cập nhật cuối");
 
         /**
@@ -93,7 +94,7 @@ class ExerciseCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        if(isset($_REQUEST['log_id'])){
+        if (isset($_REQUEST['log_id'])) {
             CRUD::field('log_id')->type("hidden")->value($_REQUEST['log_id']);
         }
         CRUD::setValidation(ExerciseRequest::class);
@@ -108,13 +109,18 @@ class ExerciseCrudController extends CrudController
             ]);
         CRUD::addField(
             [
-                'name'      => 'document',
-                'label'     => 'Nộp tài liệu',
-                'type'      => 'upload',
-                'upload'    => true,
-                'disk'      => 'uploads_document',
+                'name' => 'document',
+                'label' => 'Nộp tài liệu',
+                'type' => 'upload',
+                'upload' => true,
+                'disk' => 'uploads_document',
             ]);
-
+        CRUD::addField(
+            [
+                'name' => 'paragraph',
+                'label' => 'Viết tại đây',
+                'type' => 'tinymce',
+            ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
@@ -131,5 +137,10 @@ class ExerciseCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function show($id)
+    {
+        return view("show-exercises",["data"=>Exercise::where("id",$id)->first()]);
     }
 }

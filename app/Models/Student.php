@@ -49,6 +49,22 @@ class Student extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+    public function getOwnTime()
+    {
+        $daily = [];
+        $grades = $this->Grades()->where("status", 0)->get();
+        foreach ($grades as $grade) {
+            $time = $grade->time;
+            if ($time != null) {
+                foreach ($time as $index => $day) {
+                    $daily[$day["day"]][$index]["value"] = $day["value"];
+                    $daily[$day["day"]][$index]["grade"] = $grade;
+                }
+            }
+        }
+        return $daily;
+    }
+
     public function Detail()
     {
         return view("components.detail", ['route' => route("admin.student.detail", $this->id)]);

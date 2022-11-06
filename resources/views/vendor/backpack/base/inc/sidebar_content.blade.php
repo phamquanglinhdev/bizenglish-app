@@ -1,6 +1,6 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
-@if(backpack_user()->type!=1)
+@if(backpack_user()->type!=1 && backpack_user()->type!=3 && backpack_user()!=2)
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
                 class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
 @endif

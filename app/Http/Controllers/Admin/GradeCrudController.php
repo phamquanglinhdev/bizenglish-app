@@ -253,6 +253,7 @@ class GradeCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ]);
+        CRUD::column('zoom')->type("link")->label("Link lớp");
         CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('student_id')->type("select")->label("Học viên");
         CRUD::column('teacher_id')->type("select")->label("Giáo viên");
@@ -282,6 +283,7 @@ class GradeCrudController extends CrudController
         CRUD::setValidation(GradeRequest::class);
 
         CRUD::field('name')->label("Tên lớp");
+        CRUD::field('zoom')->label("Link lớp");
         CRUD::field('pricing')->label("Gói học phí");
         CRUD::field('minutes')->label("Số phút")->type("number");
         CRUD::addField([

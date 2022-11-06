@@ -1,5 +1,5 @@
-@php
-    $daily = $widget["daily"];
+ @php
+    $daily = $studentDaily??$widget["daily"];
     $week=["mon","tue","wed","thu","fri","sat","sun"];
 @endphp
 <div class="row">
