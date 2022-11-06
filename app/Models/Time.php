@@ -46,6 +46,44 @@ class Time extends Model
     {
         return $this->belongsTo(Teacher::class, "teacher_id", "id");
     }
+
+    public function ArrMorning()
+    {
+        $morning = $this->morning;
+
+    }
+
+    public static function ArrToString($matrix)
+    {
+        $result = [];
+        foreach ($matrix as $row) {
+            $result [] = implode("*", $row);
+        }
+        return implode("@", $result);
+    }
+
+    public static function StringToArr($string)
+    {
+        $result = explode("@", $string);
+        foreach ($result as $index => $item) {
+            $item = explode("*", $item);
+            $result[$index] = $item;
+        }
+        return $result;
+    }
+
+    public function getMorningArr()
+    {
+        return Time::StringToArr($this->morning);
+    }
+    public function getAfternoonArr()
+    {
+        return Time::StringToArr($this->afternoon);
+    }
+    public function getEveningArr()
+    {
+        return Time::StringToArr($this->evening);
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

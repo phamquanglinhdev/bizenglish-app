@@ -7,6 +7,7 @@ use App\Models\Teacher;
 use App\Models\Time;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Http\Request;
 
 /**
  * Class TimeCrudController
@@ -32,14 +33,7 @@ class TimeCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/time');
         CRUD::setEntityNameStrings('Thời gian rảnh', 'Thời gian rảnh');
         $this->crud->denyAccess(["create", "delete"]);
-        $teachers = Teacher::where("type", "=", 1)->get();
-        foreach ($teachers as $teacher) {
-            if ($teacher->genesis()) {
-                Time::create([
-                    "teacher_id" => $teacher->id
-                ]);
-            }
-        }
+
         $this->crud->setOperationSetting('detailsRow', true);
         if (backpack_user()->type == 1) {
             $this->crud->addButtonFromModelFunction("top", "editNow", "RedirectToEdit", "top");
@@ -162,4 +156,16 @@ class TimeCrudController extends CrudController
         $table = Time::find($id)->data;
         return view("components.time-detail", ["table" => $table]);
     }
+
+    protected function showDetail($id)
+    {
+        $time = Time::where("id", $id)->first();
+        return view("time-show", ['time' => $time]);
+    }
+
+    protected function update(Request $request)
+    {
+        return $request;
+    }
+
 }

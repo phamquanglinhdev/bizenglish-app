@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\LogCrudController;
 use App\Http\Controllers\Admin\StaffCrudController;
 use App\Http\Controllers\Admin\StudentCrudController;
 use App\Http\Controllers\Admin\TeacherCrudController;
+use App\Http\Controllers\Admin\TimeCrudController;
 use App\Http\Controllers\Admin\UserCrudController;
 use App\Http\Controllers\Api\SlackController;
 use Illuminate\Support\Facades\Route;
@@ -47,5 +48,7 @@ Route::group([
     Route::crud('book', 'BookCrudController');
     Route::crud('teaching', 'TeachingCrudController');
     Route::crud('notification', 'NotificationCrudController');
-    Route::crud('time', 'TimeCrudController');
+//    Route::crud('time', 'TimeCrudController');
+    Route::get("/time/show/{id}", [TimeCrudController::class, "showDetail", "id"])->name("time-show");
+    Route::post("/time/update/", [TimeCrudController::class, "update"])->name("update-time");
 }); // this should be the absolute last line of this file
