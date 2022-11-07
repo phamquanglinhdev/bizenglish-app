@@ -63,8 +63,9 @@
                     <input hidden name="log_id" value="{{$log->id}}">
                     <div class="comment my-3">
                         <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{backpack_user()->avatar}}"
-                                 class="rounded-circle p-2" style="width: 4em;height: 4em">
+                            <img
+                                src="{{backpack_user()->avatar??"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"}}"
+                                class="rounded-circle p-2" style="width: 4em;height: 4em">
                             <div class="w-100">
                                 <div class="input-group">
                                     <input type="text" name="message" class="form-control" placeholder="Viết bình luận">
