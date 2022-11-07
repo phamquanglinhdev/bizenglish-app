@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TeacherCrudController;
 use App\Http\Controllers\Admin\TimeCrudController;
 use App\Http\Controllers\Admin\UserCrudController;
 use App\Http\Controllers\Api\SlackController;
+use App\Models\Log;
 use Illuminate\Support\Facades\Route;
 
 // --------------------------
@@ -30,6 +31,9 @@ Route::group([
     Route::get("slack", [SlackController::class, "show"])->name("slack-show");
     Route::get("/files", [UserCrudController::class, "file"])->name("user.file");
     Route::get('log/detail/{id}', [LogCrudController::class, "detail"])->name("admin.log.detail");
+    Route::get('log/report/{id}', function ($id) {
+        return view("report", ['log' => Log::find($id)]);
+    })->name("admin.log.report");
     Route::post('log/exercise/', [LogCrudController::class, "acceptByStudent"])->name("admin.log.accept");
     Route::crud('exercise', 'ExerciseCrudController');
     Route::crud('comment', 'CommentCrudController');

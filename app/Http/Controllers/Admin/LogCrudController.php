@@ -585,7 +585,10 @@ class LogCrudController extends CrudController
     function detail($id)
     {
         if (Log::find($id)) {
-            return view("log-detail", ['log' => Log::find($id)]);
+            return view("log", [
+                'log' => Log::find($id),
+                'logs' => Log::find($id)->Grade()->first()->Logs()->get()
+            ]);
         }
         return view("errors.404");
     }
