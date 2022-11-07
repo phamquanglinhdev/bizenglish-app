@@ -157,7 +157,7 @@ class TimeCrudController extends CrudController
         return view("components.time-detail", ["table" => $table]);
     }
 
-    protected function showDetail($id)
+    protected function show($id)
     {
         $time = Time::where("id", $id)->first();
         return view("time-show", ['time' => $time]);
@@ -165,7 +165,23 @@ class TimeCrudController extends CrudController
 
     protected function update(Request $request)
     {
-        return $request;
+        for ($i = 0; $i < 3; $i++) {
+            for ($j = 0; $j < 7; $j++) {
+                $morning[$i][$j] = $request->{"morning-$i-$j"};
+                $evening[$i][$j] = $request->{"evening-$i-$j"};
+                $afternoon[$i][$j] = $request->{"afternoon-$i-$j"};
+            }
+        }
+        print_r($morning);
+        $morning = Time::ArrToString($morning);
+        $evening = Time::ArrToString($evening);
+        $afternoon = Time::ArrToString($afternoon);
+        Time::find($request->id)->update([
+            'morning' => $morning,
+            'afternoon' => $afternoon,
+            'evening' => $evening
+        ]);
+        return redirect("admin/time");
     }
 
 }
