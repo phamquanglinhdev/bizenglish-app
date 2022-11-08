@@ -34,7 +34,7 @@ class Time extends Model
     {
         $id = Teacher::where("id", "=", backpack_user()->id)->first()->Time()->first()->id;
 
-        return redirect("/admin/time/$id/edit");
+        return redirect("/admin/time/$id/show");
     }
 
     /*
