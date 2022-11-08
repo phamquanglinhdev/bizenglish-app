@@ -135,7 +135,36 @@ class LogCrudController extends CrudController
                 $logs_id = array_intersect($logs_id, $student_id);
             }
         }
-
+        if (isset($_REQUEST["status"])) {
+            $status_id = [];
+            $value = $_REQUEST["status"];
+            $logs = Log::where("status", "like", "%\"name\":\"$value\"%")->get();
+            foreach ($logs as $log) {
+                $status_id[] = $log->id;
+            }
+            if ($load == 0) {
+                $logs_id = $status_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $status_id);
+            }
+        }
+        if (isset($_REQUEST["from_to"])) {
+            $day_id = [];
+            $value = $_REQUEST["from_to"];
+            $from = json_decode($value)->from;
+            $to = json_decode($value)->to;
+            $logs = Log::where("date", ">=", $from)->where("date", "<=", $to)->get();
+            foreach ($logs as $log) {
+                $day_id[] = $log->id;
+            }
+            if ($load == 0) {
+                $logs_id = $day_id;
+                $load = 1;
+            } else {
+                $logs_id = array_intersect($logs_id, $day_id);
+            }
+        }
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
@@ -280,8 +309,23 @@ class LogCrudController extends CrudController
             2 => 'Giáo viên vào muộn',
             3 => 'Học viên hủy buổi học',
             4 => 'Giáo viên hủy buổi học',
-        ], function ($value) { // if the filter is active
-            $this->crud->addClause('where', 'status', "like", "%\"name\":\"$value\"%");
+        ], function ($value) use ($logs_id) { // if the filter is active
+            if (!$_SESSION["filtered"]) {
+                $first = true;
+                if ($logs_id != []) {
+                    foreach ($logs_id as $id) {
+                        if ($first) {
+                            $this->crud->query->where("id", "=", $id);
+                            $first = false;
+                        } else {
+                            $this->crud->query->orWhere("id", "=", $id);
+                        }
+                    }
+                } else {
+                    $this->crud->query->where("id", "=", "-9999");
+                }
+                $_SESSION["filtered"] = true;
+            }
         });
 
         // daterange filter
@@ -291,10 +335,26 @@ class LogCrudController extends CrudController
             'label' => 'Lọc theo ngày'
         ],
             false,
-            function ($value) { // if the filter is active, apply these constraints
-                $dates = json_decode($value);
-                $this->crud->addClause('where', 'date', '>=', $dates->from);
-                $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+            function ($value) use ($logs_id) { // if the filter is active, apply these constraints
+//                $dates = json_decode($value);
+//                $this->crud->addClause('where', 'date', '>=', $dates->from);
+//                $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+                if (!$_SESSION["filtered"]) {
+                    $first = true;
+                    if ($logs_id != []) {
+                        foreach ($logs_id as $id) {
+                            if ($first) {
+                                $this->crud->query->where("id", "=", $id);
+                                $first = false;
+                            } else {
+                                $this->crud->query->orWhere("id", "=", $id);
+                            }
+                        }
+                    } else {
+                        $this->crud->query->where("id", "=", "-9999");
+                    }
+                    $_SESSION["filtered"] = true;
+                }
             });
         if (backpack_user()->type == 0) {
             $this->crud->denyAccess(["create", "update"]);
