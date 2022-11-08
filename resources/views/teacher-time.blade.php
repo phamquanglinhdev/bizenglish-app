@@ -1,4 +1,4 @@
- @php
+@php
     $daily = $studentDaily??$widget["daily"];
     $week=["mon","tue","wed","thu","fri","sat","sun"];
 @endphp
@@ -18,6 +18,11 @@
                                 {{$mon["grade"]->name}}
                             </a>
                             <span>: {{$mon["value"]}}</span>
+                            <span>
+                                <a href="{{route("grade.edit",$mon["grade"]->id)}}" class="text-white">
+                                    <i class="la la-edit"></i>
+                                </a>
+                            </span>
                         </div>
                     @endforeach
                 @endif

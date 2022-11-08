@@ -48,7 +48,7 @@
                     Đã kết thúc
                 @endif
                 @if($grade->status==2)
-                    Đã bảo lưu
+                    Đang bảo lưu
                 @endif
             </td>
             <td>
@@ -71,7 +71,13 @@
                     {{$student->name}},
                 @endforeach
             </td>
-            <td></td>
+            <td>
+                <a class="nav-link" href="{{route("grade.edit",$grade->id)}}">
+                   <i class="la la-edit">
+
+                   </i>Sửa lịch
+                </a>
+            </td>
         </tr>
     @endforeach
     </tbody>

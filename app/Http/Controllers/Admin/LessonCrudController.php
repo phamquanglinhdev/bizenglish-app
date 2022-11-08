@@ -46,7 +46,7 @@ class LessonCrudController extends CrudController
     {
         CRUD::column('name')->label("Tên giáo trình");
         CRUD::column('pdf')->label("Đường dẫn PDF")->type("pdf");
-        CRUD::column('link')->label("Đường dẫn Drive")->type("link");
+        CRUD::column('link')->label("Đường dẫn Drive")->type("pdf");
         CRUD::addColumn(
             [
                 'name' => 'book_id',

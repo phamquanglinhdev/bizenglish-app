@@ -50,6 +50,11 @@ class Grade extends Model
         return $durations / $this->minutes * 100;
     }
 
+    public function toIndex()
+    {
+        return redirect("admin");
+    }
+
     public function identify()
     {
         return $this->name;

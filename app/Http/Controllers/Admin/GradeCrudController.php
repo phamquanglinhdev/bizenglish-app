@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Middleware\ModMiddleware;
 use App\Http\Requests\GradeRequest;
 use App\Models\Client;
 use App\Models\Grade;
@@ -25,6 +26,7 @@ class GradeCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -32,6 +34,11 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
+        if (backpack_user()->type >= 1) {
+            $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
+        }else{
+
+        }
         if (backpack_user()->type == 1) {
             $_REQUEST["teacher_filter"] = backpack_user()->name;
         }
@@ -110,15 +117,38 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
-        $this->crud->denyAccess(["show"]);
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'staff_filter',
-            'label' => 'Nhân viên quản lý'
-        ],
-            false,
-            function ($value) use ($grades_id) {
-                if (!$_SESSION["filtered"]) {
+        if (backpack_user()->type <= 0) {
+            $this->crud->denyAccess(["show"]);
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'staff_filter',
+                'label' => 'Nhân viên quản lý'
+            ],
+                false,
+                function ($value) use ($grades_id) {
+                    if (!$_SESSION["filtered"]) {
+                        $_SESSION["filtered"] = true;
+                        $query = $this->crud->query;
+                        if ($grades_id != []) {
+                            foreach ($grades_id as $value) {
+                                $query->orWhere("id", "=", $value);
+                            }
+                        } else {
+                            $query->where("id", "=", -9999);
+                        }
+                    }
+
+                });
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'student_filter',
+                'label' => 'Học viên'
+            ],
+                false,
+                function ($value) use ($grades_id) {
+                    if ($_SESSION["filtered"]) {
+                        return;
+                    }
                     $_SESSION["filtered"] = true;
                     $query = $this->crud->query;
                     if ($grades_id != []) {
@@ -128,34 +158,32 @@ class GradeCrudController extends CrudController
                     } else {
                         $query->where("id", "=", -9999);
                     }
-                }
-
-            });
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'student_filter',
-            'label' => 'Học viên'
-        ],
-            false,
-            function ($value) use ($grades_id) {
-                if ($_SESSION["filtered"]) {
-                    return;
-                }
-                $_SESSION["filtered"] = true;
-                $query = $this->crud->query;
-                if ($grades_id != []) {
-                    foreach ($grades_id as $value) {
-                        $query->orWhere("id", "=", $value);
-                    }
-                } else {
-                    $query->where("id", "=", -9999);
-                }
-            });
-        if (backpack_user()->type != 1) {
+                });
+            if (backpack_user()->type != 1) {
+                $this->crud->addFilter([
+                    'type' => 'text',
+                    'name' => 'teacher_filter',
+                    'label' => 'Giáo viên'
+                ],
+                    false,
+                    function ($value) use ($grades_id) {
+                        if (!$_SESSION["filtered"]) {
+                            $_SESSION["filtered"] = true;
+                            $query = $this->crud->query;
+                            if ($grades_id != []) {
+                                foreach ($grades_id as $value) {
+                                    $query->orWhere("id", "=", $value);
+                                }
+                            } else {
+                                $query->where("id", "=", -9999);
+                            }
+                        }
+                    });
+            }
             $this->crud->addFilter([
                 'type' => 'text',
-                'name' => 'teacher_filter',
-                'label' => 'Giáo viên'
+                'name' => 'client_filter',
+                'label' => 'Đối tác'
             ],
                 false,
                 function ($value) use ($grades_id) {
@@ -171,63 +199,44 @@ class GradeCrudController extends CrudController
                         }
                     }
                 });
-        }
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'client_filter',
-            'label' => 'Đối tác'
-        ],
-            false,
-            function ($value) use ($grades_id) {
-                if (!$_SESSION["filtered"]) {
-                    $_SESSION["filtered"] = true;
-                    $query = $this->crud->query;
-                    if ($grades_id != []) {
-                        foreach ($grades_id as $value) {
-                            $query->orWhere("id", "=", $value);
-                        }
-                    } else {
-                        $query->where("id", "=", -9999);
-                    }
-                }
-            });
-        $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'active',
-            'label' => 'Đang học'
-        ],
-            false,
-            function () { // if the filter is active
-                $this->crud->addClause("where", 'status', "=", 0); // apply the "active" eloquent scope
-            });
-        $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'stop',
-            'label' => 'Đã kết thúc'
-        ],
-            false,
-            function () { // if the filter is active
-                $this->crud->addClause("where", 'status', "=", 1); // apply the "active" eloquent scope
-            });
-        $this->crud->addFilter([
-            'type' => 'simple',
-            'name' => 'saved',
-            'label' => 'Đã bảo lưu'
-        ],
-            false,
-            function () { // if the filter is active
-                $this->crud->addClause("where", 'status', "=", 2); // apply the "active" eloquent scope
-            });
+            $this->crud->addFilter([
+                'type' => 'simple',
+                'name' => 'active',
+                'label' => 'Đang học'
+            ],
+                false,
+                function () { // if the filter is active
+                    $this->crud->addClause("where", 'status', "=", 0); // apply the "active" eloquent scope
+                });
+            $this->crud->addFilter([
+                'type' => 'simple',
+                'name' => 'stop',
+                'label' => 'Đã kết thúc'
+            ],
+                false,
+                function () { // if the filter is active
+                    $this->crud->addClause("where", 'status', "=", 1); // apply the "active" eloquent scope
+                });
+            $this->crud->addFilter([
+                'type' => 'simple',
+                'name' => 'saved',
+                'label' => 'Đang bảo lưu'
+            ],
+                false,
+                function () { // if the filter is active
+                    $this->crud->addClause("where", 'status', "=", 2); // apply the "active" eloquent scope
+                });
 
-        if (backpack_user()->type == 1 && !$_SESSION["filtered"]) {
-            $_SESSION["filtered"] = true;
-            $query = $this->crud->query;
-            if ($grades_id != []) {
-                foreach ($grades_id as $value) {
-                    $query->orWhere("id", "=", $value);
+            if (backpack_user()->type == 1 && !$_SESSION["filtered"]) {
+                $_SESSION["filtered"] = true;
+                $query = $this->crud->query;
+                if ($grades_id != []) {
+                    foreach ($grades_id as $value) {
+                        $query->orWhere("id", "=", $value);
+                    }
+                } else {
+                    $query->where("id", "=", -9999);
                 }
-            } else {
-                $query->where("id", "=", -9999);
             }
         }
     }
@@ -240,6 +249,7 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
         $this->crud->addClause("where", "grades.disable", "=", 0);
         if (backpack_user()->type == 0) {
             $this->crud->addClause("owner");
@@ -253,15 +263,15 @@ class GradeCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ]);
-        CRUD::column('zoom')->type("link")->label("Link lớp");
-        CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('student_id')->type("select")->label("Học viên");
         CRUD::column('teacher_id')->type("select")->label("Giáo viên");
+        CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('client_id')->type("select")->label("Đối tác");
+        CRUD::column('zoom')->type("link")->label("Link lớp");
         CRUD::column('pricing')->label("Gói học phí")->type("number");
         CRUD::column('minutes')->label("Số phút");
         CRUD::column('attachment')->label("Tài liệu")->type("link");
-        CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
+        CRUD::column('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đang bảo lưu"]);
         CRUD::column('created_at')->label("Ngày tạo lớp");
 
 
@@ -282,10 +292,12 @@ class GradeCrudController extends CrudController
     {
         CRUD::setValidation(GradeRequest::class);
 
-        CRUD::field('name')->label("Tên lớp");
-        CRUD::field('zoom')->label("Link lớp");
-        CRUD::field('pricing')->label("Gói học phí");
-        CRUD::field('minutes')->label("Số phút")->type("number");
+        if (backpack_user()->type <= 0) {
+            CRUD::field('name')->label("Tên lớp");
+            CRUD::field('zoom')->label("Link lớp");
+            CRUD::field('pricing')->label("Gói học phí");
+            CRUD::field('minutes')->label("Số phút")->type("number");
+        }
         CRUD::addField([
             'name' => 'time',
             'type' => 'repeatable',
@@ -315,103 +327,26 @@ class GradeCrudController extends CrudController
             ],
             'new_item_label' => 'Thêm lịch',
         ]);
-        CRUD::field('information')->label("Thông tin chi tiết")->type("tinymce");
-        CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
-        CRUD::addField(
-            [
-                'name' => 'attachment',
-                'label' => 'Tài liệu',
-                'type' => 'text',
+        if (backpack_user()->type <= 0) {
+            CRUD::field('information')->label("Thông tin chi tiết")->type("tinymce");
+            CRUD::field('status')->label("Trạng thái")->type("select_from_array")->options(["Đang học", "Đã kết thúc", "Đã bảo lưu"]);
+            CRUD::addField(
+                [
+                    'name' => 'attachment',
+                    'label' => 'Tài liệu',
+                    'type' => 'text',
 //                'upload' => true,
 //                'disk' => 'uploads_document',
-                'prefix' => "Link drive",
-            ]);
-        CRUD::addField(
-            [    // Select2Multiple = n-n relationship (with pivot table)
-                'label' => "Học sinh",
-                'type' => 'select2_multiple',
-                'name' => 'student', // the method that defines the relationship in your Model
-
-                // optional
-                'entity' => 'Student', // the method that defines the relationship in your Model
-                'model' => "App\Models\User", // foreign key model
-                'attribute' => 'name', // foreign key attribute that is shown to user
-                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
-                // 'select_all' => true, // show Select All and Clear buttons?
-
-                // optional
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->where('type', 3)->get();
-                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
-            ],
-        );
-        CRUD::addField(
-            [    // Select2Multiple = n-n relationship (with pivot table)
-                'label' => "Giáo viên",
-                'type' => 'select2_multiple',
-                'name' => 'teacher', // the method that defines the relationship in your Model
-
-                // optional
-                'entity' => 'Teacher', // the method that defines the relationship in your Model
-                'model' => "App\Models\User", // foreign key model
-                'attribute' => 'name', // foreign key attribute that is shown to user
-                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
-                // 'select_all' => true, // show Select All and Clear buttons?
-
-                // optional
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->where('type', 1)->get();
-                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
-            ],
-        );
-        CRUD::addField(
-            [    // Select2Multiple = n-n relationship (with pivot table)
-                'label' => "Đối tác",
-                'type' => 'select2_multiple',
-                'name' => 'client', // the method that defines the relationship in your Model
-
-                // optional
-                'entity' => 'Client', // the method that defines the relationship in your Model
-                'model' => "App\Models\User", // foreign key model
-                'attribute' => 'name', // foreign key attribute that is shown to user
-                'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
-                // 'select_all' => true, // show Select All and Clear buttons?
-
-                // optional
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->where('type', 2)->get();
-                }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
-            ],
-        );
-        if (backpack_user()->type == -1) {
+                    'prefix' => "Link drive",
+                ]);
             CRUD::addField(
                 [    // Select2Multiple = n-n relationship (with pivot table)
-                    'label' => "Nhân viên quản lý",
+                    'label' => "Học sinh",
                     'type' => 'select2_multiple',
-                    'name' => 'staff', // the method that defines the relationship in your Model
+                    'name' => 'student', // the method that defines the relationship in your Model
 
                     // optional
-                    'entity' => 'Staff', // the method that defines the relationship in your Model
-                    'model' => "App\Models\Staff", // foreign key model
-                    'attribute' => 'name', // foreign key attribute that is shown to user
-                    'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
-                    // 'select_all' => true, // show Select All and Clear buttons?
-
-                    // optional
-                    'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->where('type', 0)->get();
-                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
-                ],
-            );
-        } else {
-            CRUD::addField(
-                [    // Select2Multiple = n-n relationship (with pivot table)
-                    'label' => "Nhân viên quản lý",
-                    'type' => 'select2_multiple',
-                    'name' => 'staff', // the method that defines the relationship in your Model
-
-                    // optional
-                    'entity' => 'Staff', // the method that defines the relationship in your Model
+                    'entity' => 'Student', // the method that defines the relationship in your Model
                     'model' => "App\Models\User", // foreign key model
                     'attribute' => 'name', // foreign key attribute that is shown to user
                     'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
@@ -419,10 +354,89 @@ class GradeCrudController extends CrudController
 
                     // optional
                     'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->where('id', backpack_user()->id)->get();
+                        return $query->orderBy('name', 'ASC')->where('type', 3)->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 ],
             );
+            CRUD::addField(
+                [    // Select2Multiple = n-n relationship (with pivot table)
+                    'label' => "Giáo viên",
+                    'type' => 'select2_multiple',
+                    'name' => 'teacher', // the method that defines the relationship in your Model
+
+                    // optional
+                    'entity' => 'Teacher', // the method that defines the relationship in your Model
+                    'model' => "App\Models\User", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                    // 'select_all' => true, // show Select All and Clear buttons?
+
+                    // optional
+                    'options' => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->where('type', 1)->get();
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                ],
+            );
+            CRUD::addField(
+                [    // Select2Multiple = n-n relationship (with pivot table)
+                    'label' => "Đối tác",
+                    'type' => 'select2_multiple',
+                    'name' => 'client', // the method that defines the relationship in your Model
+
+                    // optional
+                    'entity' => 'Client', // the method that defines the relationship in your Model
+                    'model' => "App\Models\User", // foreign key model
+                    'attribute' => 'name', // foreign key attribute that is shown to user
+                    'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                    // 'select_all' => true, // show Select All and Clear buttons?
+
+                    // optional
+                    'options' => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->where('type', 2)->get();
+                    }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                ],
+            );
+            if (backpack_user()->type == -1) {
+                CRUD::addField(
+                    [    // Select2Multiple = n-n relationship (with pivot table)
+                        'label' => "Nhân viên quản lý",
+                        'type' => 'select2_multiple',
+                        'name' => 'staff', // the method that defines the relationship in your Model
+
+                        // optional
+                        'entity' => 'Staff', // the method that defines the relationship in your Model
+                        'model' => "App\Models\Staff", // foreign key model
+                        'attribute' => 'name', // foreign key attribute that is shown to user
+                        'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                        // 'select_all' => true, // show Select All and Clear buttons?
+
+                        // optional
+                        'options' => (function ($query) {
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->get();
+                        }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                    ],
+                );
+            } else {
+                CRUD::addField(
+                    [    // Select2Multiple = n-n relationship (with pivot table)
+                        'label' => "Nhân viên quản lý",
+                        'type' => 'select2_multiple',
+                        'name' => 'staff', // the method that defines the relationship in your Model
+
+                        // optional
+                        'entity' => 'Staff', // the method that defines the relationship in your Model
+                        'model' => "App\Models\User", // foreign key model
+                        'attribute' => 'name', // foreign key attribute that is shown to user
+                        'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                        // 'select_all' => true, // show Select All and Clear buttons?
+
+                        // optional
+                        'options' => (function ($query) {
+                            return $query->orderBy('name', 'ASC')->where('id', backpack_user()->id)->get();
+                        }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                    ],
+                );
+            }
         }
 
         /**
