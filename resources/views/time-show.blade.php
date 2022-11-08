@@ -33,11 +33,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="morning-0-{{$i}}" name="morning-0-{{$i}}" class="form-control"
                                    value="{{$time->getMorningArr()[0][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -49,11 +45,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="morning-1-{{$i}}" name="morning-1-{{$i}}" class="form-control"
                                    value="{{$time->getMorningArr()[1][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -65,11 +57,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="morning-2-{{$i}}" name="morning-2-{{$i}}" class="form-control"
                                    value="{{$time->getMorningArr()[2][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -83,11 +71,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-0-{{$i}}" name="afternoon-0-{{$i}}" class="form-control"
                                    value="{{$time->getAfternoonArr()[0][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -99,11 +83,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-1-{{$i}}" name="afternoon-1-{{$i}}" class="form-control"
                                    value="{{$time->getAfternoonArr()[1][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -115,11 +95,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-2-{{$i}}" name="afternoon-2-{{$i}}" class="form-control"
                                    value="{{$time->getAfternoonArr()[2][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -133,11 +109,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="evening-0-{{$i}}" name="evening-0-{{$i}}" class="form-control"
                                    value="{{$time->getEveningArr()[0][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -149,11 +121,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="evening-1-{{$i}}" name="evening-1-{{$i}}" class="form-control"
                                    value="{{$time->getEveningArr()[1][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
@@ -165,11 +133,7 @@
                         <div class="input-group mb-3">
                             <input type="text" id="evening-2-{{$i}}" name="evening-2-{{$i}}" class="form-control"
                                    value="{{$time->getEveningArr()[2][$i]??"-"}}">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="las la-check-circle"></i>
-                                </button>
-                            </div>
+                            
                         </div>
                     </td>
                 @endfor
