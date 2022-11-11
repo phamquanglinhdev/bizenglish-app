@@ -31,7 +31,9 @@ class ExerciseCrudController extends CrudController
         CRUD::setModel(\App\Models\Exercise::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/exercise');
         CRUD::setEntityNameStrings('Bài tập', 'Quản lý bài tập');
-        $this->crud->denyAccess(["delete"]);
+        if (backpack_user()->type != 3) {
+            $this->crud->denyAccess(["edit", "delete"]);
+        }
     }
 
     /**
@@ -119,7 +121,10 @@ class ExerciseCrudController extends CrudController
             [
                 'name' => 'paragraph',
                 'label' => 'Viết tại đây',
-                'type' => 'tinymce',
+                'type' => 'textarea',
+                'attributes' => [
+                    "rows" => 8
+                ],
             ]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -141,6 +146,19 @@ class ExerciseCrudController extends CrudController
 
     protected function show($id)
     {
-        return view("show-exercises",["data"=>Exercise::where("id",$id)->first()]);
+        return view("show-exercises", ["data" => Exercise::where("id", $id)->first()]);
+    }
+
+    protected function destroy($id)
+    {
+        $exercirse = Exercise::where("id", $id)->first();
+        if (!isset($exercirse->id)) {
+            return redirect("admin");
+        }
+        if ($exercirse->student->id != backpack_user()->id) {
+            return redirect("admin");
+        }
+        Exercise::find($id)->delete();
+        return redirect()->back()->with("success", "Xoá thành công");
     }
 }

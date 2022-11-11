@@ -33,6 +33,11 @@ class Log extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function Exercises()
+    {
+        return $this->hasMany(Exercise::class, "log_id", "id");
+    }
+
     public function Grade()
     {
         return $this->belongsTo(Grade::class, "grade_id", "id");
@@ -141,7 +146,7 @@ class Log extends Model
         foreach ($this->belongsTo(Grade::class, "grade_id", "id")->first()->Student()->get() as $item) {
             $result[] .= $item->name;
         }
-        return implode(",",$result);
+        return implode(",", $result);
     }
 
 //    public function setTeacherVideoAttribute($value)

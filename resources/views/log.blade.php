@@ -42,16 +42,33 @@
                         <i class="las la-clock"></i> {{$log->duration}} phút
                     </span>
                 </div>
-                <div class="my-3 d-flex justify-content-between">
-                    <span class="btn btn-outline-success">Lớp học : {{$log->grade->name}}</span>
-                    <span
-                        class="btn btn-outline-success">Giáo viên: {{$log->teacher->name}}</span>
-                    <span class="btn btn-outline-success">Học sinh: {{$log->getStudentList()}}</span>
-                    <a href="{{route("admin.log.report",$log->id)}}"
-                       class="btn btn-outline-success">Phản
-                        hồi</a>
-                    <a href="{{route("exercise.create",['log_id'=>$log->id])}}"
-                       class=" btn btn-outline-success ">Nộp bài tập</a>
+                <div class="my-3 row m-0">
+
+                    @if(backpack_user()->type!=3)
+                        <a data-toggle="modal" data-target="#exercises"
+                           class="ml-2 btn btn-success text-white">Xem bài tập học viên đã nộp</a>
+
+                    @else
+                        <a href="{{route("admin.log.report",$log->id)}}"
+                           class="btn btn-outline-success btn-success text-white ">Phản
+                            hồi</a>
+                        <a href="{{route("exercise.create",['log_id'=>$log->id])}}"
+                           class="ml-2 btn btn-outline-success btn-success text-white ">Nộp bài tập</a>
+                        <a data-toggle="modal" data-target="#exercises"
+                           class="ml-2 btn btn-outline-success btn-success text-white">Xem bài tập đã nộp</a>
+                    @endif
+                    @include("components.exercise-modal")
+                </div>
+                <div class="bg-white rounded p-2">
+                    <div>
+                        Lớp học : {{$log->grade->name}}
+                    </div>
+                    <div>
+                        Giáo viên: {{$log->teacher->name}}
+                    </div>
+                    <div>
+                        Học sinh: {{$log->getStudentList()}}
+                    </div>
                 </div>
                 <div class="h5 mt-4">Bài tập về nhà:</div>
                 <div class="bg-white rounded p-2">
