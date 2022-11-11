@@ -45,8 +45,13 @@ class TeacherCrudController extends CrudController
             }
             return $skills_arr;
         }, function ($values) {
+
             $teacher_id = [];
-            $skills = json_decode($values);
+            if (is_array($values)) {
+                $skills = $values;
+            } else {
+                $skills = json_decode($values);
+            }
             $first = true;
             foreach ($skills as $id) {
                 $teachers = Skill::where("id", $id)->first()->Teachers()->get();
