@@ -4,9 +4,12 @@
         @csrf
         <input name="id" value="{{$time->id}}" hidden>
         <div class="h2">
-            Lịch trống của {{$time->teacher->name}}
+            <div>{{trans("backpack::crud.empty_time")}} {{$time->teacher->name}}</div>
+            <hr>
             <span class="w-100 pb-2">
-            <button class="btn btn-success">Cập nhật</button>
+            <div>
+                <button class="btn btn-success">{{trans("backpack::crud.save")}}</button>
+            </div>
         </span>
         </div>
         <hr>
@@ -32,8 +35,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="morning-0-{{$i}}" name="morning-0-{{$i}}" class="form-control"
-                                   value="{{$time->getMorningArr()[0][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getMorningArr()[0][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -44,8 +48,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="morning-1-{{$i}}" name="morning-1-{{$i}}" class="form-control"
-                                   value="{{$time->getMorningArr()[1][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getMorningArr()[1][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -56,8 +61,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="morning-2-{{$i}}" name="morning-2-{{$i}}" class="form-control"
-                                   value="{{$time->getMorningArr()[2][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getMorningArr()[2][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -70,8 +76,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-0-{{$i}}" name="afternoon-0-{{$i}}" class="form-control"
-                                   value="{{$time->getAfternoonArr()[0][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getAfternoonArr()[0][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -82,8 +89,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-1-{{$i}}" name="afternoon-1-{{$i}}" class="form-control"
-                                   value="{{$time->getAfternoonArr()[1][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getAfternoonArr()[1][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -94,8 +102,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="afternoon-2-{{$i}}" name="afternoon-2-{{$i}}" class="form-control"
-                                   value="{{$time->getAfternoonArr()[2][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getAfternoonArr()[2][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -108,8 +117,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="evening-0-{{$i}}" name="evening-0-{{$i}}" class="form-control"
-                                   value="{{$time->getEveningArr()[0][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getEveningArr()[0][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -120,8 +130,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="evening-1-{{$i}}" name="evening-1-{{$i}}" class="form-control"
-                                   value="{{$time->getEveningArr()[1][$i]??"-"}}"@if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getEveningArr()[1][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor
@@ -132,8 +143,9 @@
                     <td class="editor-preview">
                         <div class="input-group mb-3">
                             <input type="text" id="evening-2-{{$i}}" name="evening-2-{{$i}}" class="form-control"
-                                   value="{{$time->getEveningArr()[2][$i]??"-"}}" @if(backpack_user()->type!=1) readonly @endif>
-                            
+                                   value="{{$time->getEveningArr()[2][$i]??"-"}}"
+                                   @if(backpack_user()->type!=1) readonly @endif>
+
                         </div>
                     </td>
                 @endfor

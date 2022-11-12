@@ -14,7 +14,9 @@
 <span>
     @includeWhen(!empty($column['wrapper']), 'crud::columns.inc.wrapper_start')
     @if($column["text"]!="")
-        <a class="nav-link" href="{{url($column['text'])}}"><i class="las la-eye"></i> Xem giáo trình</a>
+        <a class="nav-link" href="{{url($column['text'])}}"><i class="las la-eye"></i>
+            {{trans("backpack::crud.view_curriculum")}}
+        </a>
     @else
         -
     @endif

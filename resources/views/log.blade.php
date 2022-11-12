@@ -2,8 +2,8 @@
 @section("content")
     <div class="container-fluid">
         <a href="{{url("admin/log")}}" class="d-print-none"><i
-                class="la la-angle-double-left"></i> Quay
-            về <span>Nhật ký</span>
+                class="la la-angle-double-left"></i> {{trans("backpack::crud.return")}}
+            <span>{{trans("backpack::crud.history")}}</span>
         </a>
     </div>
     <style>
@@ -33,20 +33,22 @@
                             allowfullscreen></iframe>
                 </div>
                 <hr>
-                <div class="h4 my-2 text-capitalize">Buổi học : {{$log->lesson}}</div>
+                <div class="h4 my-2 text-capitalize">{{trans("backpack::crud.lesson_name")}} : {{$log->lesson}}</div>
                 <div class="">
                     <span class="mr-4">
                         <i class="las la-calendar"></i> {{$log->start}} - {{$log->end}} | {{$log->date}}
                     </span>
                     <span>
-                        <i class="las la-clock"></i> {{$log->duration}} phút
+                        <i class="las la-clock"></i> {{$log->duration}} {{trans("backpack::crud.minutes")}}
                     </span>
                 </div>
                 <div class="my-3 row m-0">
 
                     @if(backpack_user()->type!=3)
                         <a data-toggle="modal" data-target="#exercises"
-                           class="ml-2 btn btn-success text-white">Xem bài tập học viên đã nộp</a>
+                           class="ml-2 btn btn-success text-white">
+                            {{trans("backpack::crud.published_homework")}}
+                        </a>
 
                     @else
                         <a href="{{route("admin.log.report",$log->id)}}"
@@ -61,16 +63,16 @@
                 </div>
                 <div class="bg-white rounded p-2">
                     <div>
-                        Lớp học : {{$log->grade->name}}
+                        {{trans("backpack::crud.grade_name")}} : {{$log->grade->name}}
                     </div>
                     <div>
-                        Giáo viên: {{$log->teacher->name}}
+                        {{trans("backpack::crud.teacher_name")}}: {{$log->teacher->name}}
                     </div>
                     <div>
-                        Học sinh: {{$log->getStudentList()}}
+                        {{trans("backpack::crud.student_name")}}: {{$log->getStudentList()}}
                     </div>
                 </div>
-                <div class="h5 mt-4">Bài tập về nhà:</div>
+                <div class="h5 mt-4">{{trans("backpack::crud.homework")}}:</div>
                 <div class="bg-white rounded p-2">
                     {{$log->question}}
                 </div>
@@ -85,7 +87,8 @@
                                 class="rounded-circle p-2" style="width: 4em;height: 4em">
                             <div class="w-100">
                                 <div class="input-group">
-                                    <input type="text" name="message" class="form-control" placeholder="Viết bình luận">
+                                    <input type="text" name="message" class="form-control"
+                                           placeholder="{{trans("backpack::crud.write_comment")}}">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-success" type="submit">
                                             <i class="las la-paper-plane"></i>
@@ -108,7 +111,7 @@
                                     {{$log->teacher->name}}
                                 </span>
                                 <span class="badge badge-warning text-white">
-                                    Nhận xét của giáo viên
+                                    {{trans("backpack::crud.assessment")}}
                                 </span>
                             </div>
                             <div class="font-italic">
@@ -150,12 +153,14 @@
                                 </div>
                             </div>
                             <div class="col-6 pl-0">
-                                <div class="font-weight-bold">Buổi học : {{$log->lesson}}
+                                <div class="font-weight-bold">{{trans("backpack::crud.lesson_name")}} : {{$log->lesson}}
                                 </div>
                                 <div>
                                     <div><i class="las la-chalkboard-teacher"></i> {{$log->teacher->name}}</div>
                                     <div><i class="las la-user-graduate"></i> {{$log->getStudentList()}}</div>
-                                    <div><i class="las la-clock"></i> {{$log->duration}} phút</div>
+                                    <div>
+                                        <i class="las la-clock"></i> {{$log->duration}} {{trans("backpack::crud.minutes")}}
+                                    </div>
                                     <div><i class="las la-calendar"></i> {{$log->start}} - {{$log->end}}
                                         | {{$log->date}}</div>
                                 </div>

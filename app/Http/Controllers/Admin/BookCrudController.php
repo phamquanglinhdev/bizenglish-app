@@ -29,7 +29,7 @@ class BookCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Book::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/book');
-        CRUD::setEntityNameStrings('Bộ sách', 'Các bộ sách');
+        CRUD::setEntityNameStrings(trans("backpack::crud.book"), trans("backpack::crud.books"));
         $this->crud->denyAccess(["delete", "show"]);
         if (backpack_user()->type != -1) {
             $this->crud->denyAccess(["create", "update", "delete"]);
@@ -46,9 +46,9 @@ class BookCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name')->label("Tên sách");
-        CRUD::column('thumbnail')->label("Ảnh")->type("image");
-        CRUD::column('description')->label("Mô tả")->type("text");
+        CRUD::column('name')->label(trans("backpack::crud.book_name"));
+        CRUD::column('thumbnail')->label(trans("backpack::crud.thumbnail"))->type("image");
+        CRUD::column('description')->label(trans("backpack::crud.description"))->type("text");
 
 
         /**

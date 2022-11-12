@@ -49,7 +49,7 @@
                         class="font-italic"><a href="{{$data->facebook??""}}">{{$data->name}}</a></span></div>
                 <div>
                     <i class="las la-info-circle text-success"></i> <span
-                        class="font-italic">Thông tin thêm</span>
+                        class="font-italic">{{trans("backpack::crud.extra")}}</span>
                     <div class="mt-1">
                         @php
                             $extras = (array)$data->extra;
@@ -59,8 +59,9 @@
                         @endforeach
                     </div>
                     @if(backpack_user()->id==$data->id)
-                        <div><a href="{{route("teacher.edit",backpack_user()->id)}}"><i class="las la-edit"></i> Sửa
-                                thông tin</a></div>
+                        <div><a href="{{route("teacher.edit",backpack_user()->id)}}"><i class="las la-edit"></i>
+                                {{trans("backpack::crud.edit")}}
+                            </a></div>
                     @endif
                 </div>
             </dìv>

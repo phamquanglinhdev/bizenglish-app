@@ -47,13 +47,13 @@ $(document).ready(function () {
             case 2:
                 inputs.show()
                 messages.hide()
-                suffix.text("Phút")
+                suffix.text("Phút/Minutes")
                 break;
             case 3:
             case 4:
                 inputs.show()
                 messages.hide()
-                suffix.text("Giờ")
+                suffix.text("Giờ/Hour")
                 break;
             default:
                 inputs.hide()

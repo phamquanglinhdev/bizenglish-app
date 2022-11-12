@@ -3,6 +3,6 @@
     @if(isset($title))
         <i class="la la-check-circle"></i> Xác nhận thông tin
     @else
-        <i class="la la-eye"></i> Xem thông tin
+        <i class="la la-eye"></i> {{trans('backpack::crud.info_button')}}
     @endif
 </a>
