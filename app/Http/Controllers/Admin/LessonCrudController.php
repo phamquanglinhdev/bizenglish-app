@@ -29,7 +29,7 @@ class LessonCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Lesson::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lesson');
-        CRUD::setEntityNameStrings('Giáo trình', 'Những giáo trình');
+        CRUD::setEntityNameStrings(trans("backpack::crud.curriculum"), trans("backpack::crud.curriculums"));
         $this->crud->denyAccess(["show"]);
         if (backpack_user()->type != -1) {
             $this->crud->denyAccess(["create", "update", "delete"]);
@@ -44,19 +44,19 @@ class LessonCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('name')->label("Tên giáo trình");
-        CRUD::column('pdf')->label("Đường dẫn PDF")->type("pdf");
-        CRUD::column('link')->label("Đường dẫn Drive")->type("pdf");
+        CRUD::column('name')->label(trans("backpack::crud.curriculum_name"));
+        CRUD::column('pdf')->label(trans("backpack::crud.drive_link"))->type("pdf");
+        CRUD::column('link')->label(trans("backpack::crud.pdf_link"))->type("pdf");
         CRUD::addColumn(
             [
                 'name' => 'book_id',
-                'label' => 'Bộ sách',
+                'label' => trans("backpack::crud.book"),
                 'type' => 'select',
                 'model' => 'App\Models\Book',
                 'entity' => 'Book',
                 'attribute' => 'name',
             ]);
-        CRUD::column('updated_at')->label("Cập nhật lần cuối");;
+        CRUD::column('updated_at')->label(trans("backpack::crud.updated_at"));;
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

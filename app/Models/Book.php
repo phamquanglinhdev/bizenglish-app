@@ -30,21 +30,26 @@ class Book extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function Copy(){
-        return view("components.copy",['slug'=>$this->slug]);
+    public function Copy()
+    {
+        return view("components.copy", ['slug' => $this->slug]);
     }
-    public function setSlugAttribute(){
-        if($this->slug=="" || $this->slug==null){
+
+    public function setSlugAttribute()
+    {
+        if ($this->slug == "" || $this->slug == null) {
             $this->attributes["slug"] = Str::random(50);
         }
     }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Lessons(){
-        return $this->hasMany(Lesson::class,"book_id","id");
+    public function Lessons()
+    {
+        return $this->hasMany(Lesson::class, "book_id", "id");
     }
     /*
     |--------------------------------------------------------------------------

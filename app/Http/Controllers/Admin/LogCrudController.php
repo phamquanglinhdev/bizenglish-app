@@ -167,7 +167,7 @@ class LogCrudController extends CrudController
         }
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
-        CRUD::setEntityNameStrings("Nhật ký học", "Nhật ký học");
+        CRUD::setEntityNameStrings(trans("backpack::crud.history"), trans("backpack::crud.history"));
         if (backpack_user()->type == 3) {
             $this->crud->addButtonFromModelFunction("line", "setAcceptLog", "setAcceptLog", "line");
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
@@ -184,7 +184,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'grade_filter',
-            'label' => 'Lớp',
+            'label' => trans("backpack::crud.grade_name"),
         ],
             false,
             function ($value) use ($logs_id) {
@@ -225,7 +225,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'student_filter',
-            'label' => 'Học sinh',
+            'label' => trans("backpack::crud.student_name"),
         ],
             false,
             function ($value) use ($logs_id) {
@@ -250,7 +250,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'teacher_filter',
-            'label' => 'Giáo viên',
+            'label' => trans("backpack::crud.teacher_name"),
         ],
             false,
             function ($value) use ($logs_id) {
@@ -276,7 +276,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'type' => "text",
             'name' => 'client_filter',
-            'label' => 'Đối tác',
+            'label' => trans("backpack::crud.client_name"),
         ],
             false,
             function ($value) use ($logs_id) {
@@ -302,7 +302,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'name' => 'status',
             'type' => 'dropdown',
-            'label' => 'Tình trạng lớp học'
+            'label' => trans("backpack::crud.grade_status")
         ], [
             0 => 'Học viên và giáo viên vào đúng giờ',
             1 => 'Học viên vào muộn',
@@ -332,7 +332,7 @@ class LogCrudController extends CrudController
         $this->crud->addFilter([
             'type' => 'date_range',
             'name' => 'from_to',
-            'label' => 'Lọc theo ngày'
+            'label' => trans("backpack::crud.date_filter")
         ],
             false,
             function ($value) use ($logs_id) { // if the filter is active, apply these constraints
@@ -378,7 +378,7 @@ class LogCrudController extends CrudController
         $this->crud->addClause("orderBy", "date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
-            CRUD::setEntityNameStrings("Nhật ký học", "Lớp " . $grade->name);
+            CRUD::setEntityNameStrings(trans('backpack::crud.history'), trans("backpack::crud::grade_name") . $grade->name);
             Widget::add([
                 'type' => 'view',
                 'view' => 'test',
@@ -390,9 +390,9 @@ class LogCrudController extends CrudController
         if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
-        CRUD::column('date')->label("Ngày")->type("date");
-        CRUD::column('start')->label("Bắt đầu")->type("time");
-        CRUD::column('end')->label("Kết thúc")->type("time");
+        CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
+        CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
+        CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
 
         CRUD::addColumn([
             'name' => 'grade_id',
@@ -400,7 +400,7 @@ class LogCrudController extends CrudController
             'entity' => 'Grade',
             'model' => "App\Model\Grade",
             'attribute' => 'name',
-            'label' => "Lớp",
+            'label' => trans("backpack::crud.grade_name"),
             'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
@@ -414,7 +414,7 @@ class LogCrudController extends CrudController
 
         if (backpack_user()->type != 3) {
             CRUD::addColumn([
-                'name' => 'Học sinh',
+                'name' => trans("backpack::crud.student_name"),
                 'type' => 'model_function',
                 'function_name' => 'getStudentList',
                 'searchLogic' => 'text',
@@ -426,7 +426,7 @@ class LogCrudController extends CrudController
             'entity' => 'Teacher',
             'model' => "App\Model\Teacher",
             'attribute' => 'name',
-            'label' => "Giáo viên dạy",
+            'label' => trans("backpack::crud.teacher_name"),
             'wrapper' => [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here
                 'href' => function ($crud, $column, $entry, $related_key) {
@@ -438,24 +438,24 @@ class LogCrudController extends CrudController
         ]);
 
         if (backpack_user()->type != 3) {
-            CRUD::column("clients")->label("Đối tác")->type("model_function")->function_name("client");
+            CRUD::column("clients")->label(trans("backpack::crud.client_name"))->type("model_function")->function_name("client");
         }
-        CRUD::column('lesson')->label("Bài học");
-        CRUD::column('teacher_video')->label("Video bài giảng")->type("video");
+        CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
+        CRUD::column('teacher_video')->label(trans("backpack::crud.teacher_video"))->type("video");
 
 
-        CRUD::column('duration')->label("Thời gian dạy (Phút)")->type("number");
+        CRUD::column('duration')->label(trans("backpack::crud.duration"))->type("number");
 
         if (backpack_user()->type <= 1) {
 //            CRUD::column('hour_salary')->label("Lương theo giờ (đ)")->type("number")->wrapper(["class" => "text-center"]);
 //            CRUD::column('log_salary')->label("Lương của buổi học (đ)")->type("number");
             CRUD::addColumn([
-                'label' => "Lương theo giờ",
+                'label' => trans("backpack::crud.hour_salary"),
                 'type' => 'model_function',
                 'function_name' => 'getHourSalary'
             ]);
             CRUD::addColumn([
-                'label' => "Lương buổi học",
+                'label' => trans("backpack::crud.log_salary"),
                 'type' => 'model_function',
                 'function_name' => 'getLogSalary'
             ]);
@@ -464,13 +464,13 @@ class LogCrudController extends CrudController
 
             'type' => 'model_function',
             'function_name' => 'StatusShow',
-            'label' => "Tình trạng lớp học",
+            'label' => trans("backpack::crud.grade_status"),
         ]);
-        CRUD::column('assessment')->label("Nhận xét của giáo viên")->type("textarea");
-//        CRUD::column('attachment')->label("Đính kèm")->type("model_function")->function_name("showAttachments");
+        CRUD::column('assessment')->label(trans("backpack::crud.assessment"))->type("textarea");
+//        CRUD::column('attachment')->label(trans("backpack::crud.attachment"))->type("model_function")->function_name("showAttachments");
         CRUD::addColumn([
             "name" => "attachments",
-            "label" => "Đính kèm",
+            "label" => trans("backpack::crud.attachment"),
             "type" => "upload_multiple",
             "wrapper" => [
                 'href' => function ($crud) {
@@ -482,7 +482,7 @@ class LogCrudController extends CrudController
 //            'name' => 'StudentAccept',
             'type' => 'model_function',
             'function_name' => 'StudentAccept',
-            'label' => "Học sinh xác nhận",
+            'label' => trans("backpack::crud.accepted_student"),
 //            'wrapper' => [
 //                // 'element' => 'a', // the element will default to "a" so you can skip it here
 //                'href' => function ($crud, $column, $entry, $related_key) {
@@ -523,7 +523,7 @@ class LogCrudController extends CrudController
             'entity' => 'Grade',
             'model' => "App\Models\Grade",
             'attribute' => 'name',
-            'label' => "Lớp",
+            'label' => trans("backpack::crud.grade_name"),
             'options' => (function ($query) {
                 return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
             })
@@ -534,50 +534,51 @@ class LogCrudController extends CrudController
             'value' => backpack_user()->id,
             'type' => 'hidden',
         ]);
-        CRUD::field('date')->label("Ngày")->type("date")->wrapper([
+        CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('start')->label("Bắt đầu")->type("time")->wrapper([
+        CRUD::field('start')->label(trans("backpack::crud.start"))->type("time")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('end')->label("Ksết thúc")->type("time")->wrapper([
+        CRUD::field('end')->label(trans("backpack::crud.end"))->type("time")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('duration')->label("Thời gian dạy thực tế")->suffix("phút")->wrapper([
+        CRUD::field('duration')->label(trans("backpack::crud.duration"))->suffix(trans("backpack::crud.minutes"))->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('hour_salary')->label("Lương theo giờ")->wrapper([
+        CRUD::field('hour_salary')->label(trans("backpack::crud.hour_salary"))->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('log_salary')->attributes(["readonly" => true])->label("Lương của buổi học")->wrapper([
+        CRUD::field('log_salary')->attributes(["readonly" => true])->label(trans("backpack::crud.log_salary"))->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);
-        CRUD::field('lesson')->label("Bài học");
-        CRUD::field('information')->label("Nội dung")->type("tinymce");
+        CRUD::field('lesson')->label(trans("backpack::crud.lesson_name"));
+        CRUD::field('information')->label(trans("backpack::crud.content"))->type("tinymce");
         CRUD::addField(
             [
                 'name' => 'teacher_video',
-                'label' => 'Video bài giảng',
+                'label' => trans("backpack::crud.teacher_video"),
                 'type' => 'video',
                 'youtube_api_key' => 'AIzaSyDc3MoGdCrqbCHq6XRbulelTPy5oWsLwIE',
             ]);
         CRUD::addField(
             [   // repeatable
                 'name' => 'status',
-                'label' => 'Tình trạng lớp học',
+                'label' => trans("backpack::crud.grade_status"),
                 'type' => 'repeatable',
                 'fields' => [ // also works as: "fields"
                     [
+//                        dd($_SERVER),
                         'name' => 'name',
-                        'label' => 'Trạng thái',
+                        'label' => trans("backpack::crud.status"),
                         'type' => "select_from_array",
                         'options' => [
-                            "Học viên và giáo viên vào đúng giờ.",
-                            "Học viên vào muộn ... phút",
-                            "Giáo viên vào muộn ... phút",
-                            "Học viên hủy buổi học trước … giờ",
-                            "Giáo viên hủy buổi học trước … giờ",
-                            "Khác...",
+                            trans("backpack::crud.student") . " " . trans("backpack::crud.and") . " " . trans("backpack::crud.teacher") . " " . trans("backpack::crud.on_time"),
+                            trans("backpack::crud.student") . " " . trans("backpack::crud.late"),
+                            trans("backpack::crud.teacher") . " " . trans("backpack::crud.late"),
+                            trans("backpack::crud.student") . " " . trans("backpack::crud.drop"),
+                            trans("backpack::crud.student") . " " . trans("backpack::crud.drop"),
+                            trans('backpack::crud.other'),
                         ],
                         "value" => 0,
                         "attributes" => ["id" => "status_name"],
@@ -586,8 +587,8 @@ class LogCrudController extends CrudController
                     [
                         'name' => 'time',
                         'type' => 'number',
-                        'label' => 'Thời gian',
-                        'suffix' => "Phút",
+                        'label' => trans("backpack::crud.time"),
+                        'suffix' => trans("backpack::crud.minutes"),
                         'wrapper' => ['class' => 'form-group col-md-6', "id" => "status_time"],
                     ],
                     [
@@ -610,12 +611,12 @@ class LogCrudController extends CrudController
                 // 'reorder' => ['name' => 'order', 'type' => 'number', 'attributes' => ['data-reorder-input' => true]], // show arrows AND add a visible number subfield
             ],
         );
-        CRUD::field('assessment')->label("Nhận xét của giáo viên")->type("textarea");
-        CRUD::field('question')->label("Bài tập cho học sinh")->type("tinymce");
+        CRUD::field('assessment')->label(trans("backpack::crud.assessment"))->type("textarea");
+        CRUD::field('question')->label(trans("backpack::crud.exercise"))->type("tinymce");
         CRUD::addField(
             [   // Upload
                 'name' => 'attachments',
-                'label' => 'Đính kèm',
+                'label' => trans("backpack::crud.attachment"),
                 'type' => 'upload_multiple',
                 'upload' => true,
                 'disk' => 'uploads_document', // if you store files in the /public folder, please omit this; if you store them in /storage or S3, please specify it;

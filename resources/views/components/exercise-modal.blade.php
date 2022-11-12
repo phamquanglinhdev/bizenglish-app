@@ -14,7 +14,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Bài tập đã nộp</h5>
+                <h5 class="modal-title" id="staticBackdropLabel"> {{trans("backpack::crud.published_homework")}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -23,7 +23,9 @@
                 @foreach($log->Exercises()->orderBy("updated_at","DESC")->get() as $exercise)
                     <div class="exercise mb-2">
                         <div class="bg-light p-2">
-                            <span>Ngày nộp : {{$exercise->updated_at}} bởi </span>
+                            <span>{{trans("backpack::crud.date")}} : {{$exercise->updated_at}}
+                                {{trans("backpack::crud.by")}}
+                            </span>
                             <a href="#">{{$exercise->student->name}}</a>
                         </div>
                         <div class="bg-white border p-2">
@@ -32,16 +34,19 @@
                         <div class="bg-light p-2 ">
                             <div class="d-flex">
                                 @if($exercise->video!=null)
-                                    <a target="_blank" href="{{url("/uploads/videos/$exercise->video")}}" class="nav-link"><i
+                                    <a target="_blank" href="{{url("/uploads/videos/$exercise->video")}}"
+                                       class="nav-link"><i
                                             class="las la-file-video"></i> Video</a>
                                 @endif
                                 @if($exercise->document!=null)
                                     <a target="_blank" href="{{url("/uploads/document/$exercise->document")}}"
                                        class="nav-link"><i
-                                            class="las la-file-alt"></i> Tài liệu</a>
+                                            class="las la-file-alt"></i>
+                                        {{trans("backpack::crud.document")}}
+                                    </a>
                                 @endif
                                 @if($exercise->student->id == backpack_user()->id)
-                                    <a  href="{{route("exercise.edit",$exercise->id)}}" class="nav-link"><i
+                                    <a href="{{route("exercise.edit",$exercise->id)}}" class="nav-link"><i
                                             class="las la-pen-nib"></i>
                                         Nộp lại </a>
                                     <form action="{{route("exercise.destroy",$exercise->id)}}" method="post">

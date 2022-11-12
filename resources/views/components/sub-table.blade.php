@@ -42,13 +42,13 @@
             </td>
             <td>
                 @if($grade->status==0)
-                    Đang dạy
+                    {{trans("backpack::crud.teaching")}}
                 @endif
                 @if($grade->status==1)
-                    Đã kết thúc
+                    {{trans("backpack::crud.taught")}}
                 @endif
                 @if($grade->status==2)
-                    Đang bảo lưu
+                    {{trans("backpack::crud.reserved")}}
                 @endif
             </td>
             <td>
@@ -73,9 +73,8 @@
             </td>
             <td>
                 <a class="nav-link" href="{{route("grade.edit",$grade->id)}}">
-                   <i class="la la-edit">
-
-                   </i>Sửa lịch
+                    <i class="la la-edit">a</i>
+                    {{trans("backpack::crud.edit")}}
                 </a>
             </td>
         </tr>

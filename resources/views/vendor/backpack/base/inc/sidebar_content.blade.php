@@ -2,9 +2,12 @@
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 @if(backpack_user()->type!=1 && backpack_user()->type!=3 && backpack_user()->type!=2)
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
-                class='nav-icon la la-graduation-cap'></i> Lớp học</a></li>
+                class='nav-icon la la-graduation-cap'></i>{{trans("backpack::crud.grades")}}</a></li>
 @endif
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>Nhật ký</a>
+<li class='nav-item'>
+    <a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>
+        {{trans("backpack::crud.history")}}
+    </a>
 </li>
 @if(backpack_user()->type == -1)
     {{--    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('user') }}'><i class='nav-icon la la-user'></i> Tài--}}
@@ -31,22 +34,25 @@
 @endif
 @if(backpack_user()->type<=1)
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
-            Lịch trống</a></li>
+            {{trans("backpack::crud.empty_time")}}
+        </a></li>
 @endif
 @if(backpack_user()->type<=1)
     <li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-book-reader"></i>Sách</a>
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-book-reader"></i>
+            {{trans("backpack::crud.book")}}
+        </a>
         <ul class="nav-dropdown-items">
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i
-                        class='nav-icon la la-book-open'></i> Bộ Sách</a></li>
+                        class='nav-icon la la-book-open'></i>{{trans("backpack::crud.book")}}</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lesson') }}'><i
-                        class='nav-icon la la-file-pdf'></i> Giáo trình</a></li>
+                        class='nav-icon la la-file-pdf'></i>{{trans("backpack::crud.curriculum")}}</a></li>
         </ul>
     </li>
 @endif
 @if(backpack_user()->type!=-1 || backpack_user()->type!=0 || backpack_user()->type!=3)
     <li class="nav-item"><a class="nav-link" href="{{ route("user.file") }}">
-            <i class="nav-icon la la-file"></i> <span>Văn bản</span></a>
+            <i class="nav-icon la la-file"></i> <span>{{trans("backpack::crud.file")}}</span></a>
     </li>
 @endif
 
@@ -60,10 +66,25 @@
 {{--        <i class='nav-icon la la-book'></i> Bài tập</a>--}}
 {{--</li>--}}
 
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>Thông
-        báo</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>
+        {{trans("backpack::crud.notification")}}
+    </a></li>
 @if(backpack_user()->role<=1)
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
-            <i class="nav-icon la la-files-o"></i> <span>Kho lưu trữ</span></a>
+            <i class="nav-icon la la-files-o"></i> <span>
+                {{trans("backpack::crud.storage")}}
+            </span></a>
     </li>
+@endif
+@if(backpack_user()->type==1)
+    <hr>
+    @if(isset($_COOKIE["language"]))
+        <li class="nav-item"><a class="nav-link" href="{{route("main-version")}}">
+                <i class="nav-icon la la-language"></i> <span>Vietnam</span></a>
+        </li>
+    @else
+        <li class="nav-item"><a class="nav-link" href="{{route("english-version")}}">
+                <i class="nav-icon la la-language"></i> <span>English</span></a>
+        </li>
+    @endif
 @endif

@@ -26,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (isset($_COOKIE["language"])) {
+            app()->setLocale("en");
+        } else {
+            app()->setLocale("vn");
+        }
         try {
             $teachers = Teacher::where("type", "=", 1)->get();
             foreach ($teachers as $teacher) {

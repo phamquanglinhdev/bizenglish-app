@@ -30,7 +30,7 @@ class NotificationCrudController extends CrudController
     {
         CRUD::setModel(Notification::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/notification');
-        CRUD::setEntityNameStrings('Thông báo', 'Những thông báo');
+        CRUD::setEntityNameStrings(trans("backpack::crud.notification"), trans("backpack::crud.notification"));
         $this->crud->denyAccess(["show", "update", "delete", "create"]);
     }
 
@@ -44,10 +44,10 @@ class NotificationCrudController extends CrudController
     {
         $this->crud->addClause("orderBy", "created_at", "DESC");
         $this->crud->addClause("where", "user_id", backpack_user()->id);
-        CRUD::column('title')->label("Tiêu đề");
-        CRUD::column('message')->label("Nội dung")->limit(250);
-        CRUD::column('read')->label("Đã đọc")->type("check");
-        CRUD::column('created_at')->label("Thời gian");
+        CRUD::column('title')->label(trans("backpack::crud.title"));
+        CRUD::column('message')->label(trans("backpack::crud.message"))->limit(250);
+        CRUD::column('read')->label(trans("backpack::crud.read"))->type("check");
+        CRUD::column('created_at')->label(trans("backpack::crud.time"));
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
