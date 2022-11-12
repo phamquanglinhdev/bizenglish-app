@@ -2,7 +2,7 @@
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 @if(backpack_user()->type!=1 && backpack_user()->type!=3 && backpack_user()->type!=2)
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
-                class='nav-icon la la-graduation-cap'></i>{{trans("backpack::crud.grades")}}</a></li>
+                class='nav-icon la la-graduation-cap'></i>Lớp học</a></li>
 @endif
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>
