@@ -378,7 +378,9 @@ class LogCrudController extends CrudController
         $this->crud->addClause("orderBy", "date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
-            CRUD::setEntityNameStrings(trans('backpack::crud.history'), trans("backpack::crud::grade_name") . $grade->name);
+            $trans = trans('backpack::crud.history');
+            $tran = trans('backpack::crud.history') . ": " . $grade->name;
+            CRUD::setEntityNameStrings($trans, $tran);
             Widget::add([
                 'type' => 'view',
                 'view' => 'test',
