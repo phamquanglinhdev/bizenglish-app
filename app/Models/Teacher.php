@@ -58,16 +58,17 @@ class Teacher extends Model
     public function getOwnTime()
     {
         $daily = [];
-        $grades = $this->Grades()->where("status", 0)->get();
+        $grades = $this->Grades()->where("status", 0)->where("time", "!=", null)->get();
+        $index = 0;
         foreach ($grades as $grade) {
             $time = $grade->time;
-            if ($time != null) {
-                foreach ($time as $index => $day) {
-                    $daily[$day["day"]][$index]["value"] = $day["value"];
-                    $daily[$day["day"]][$index]["grade"] = $grade;
-                }
+            foreach ($time as $day) {
+                $daily[$day["day"]][$index]["value"] = $day["value"];
+                $daily[$day["day"]][$index]["grade"] = $grade;
+                $index++;
             }
         }
+//        dd($daily);
         return $daily;
     }
 

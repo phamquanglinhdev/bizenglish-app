@@ -52,14 +52,14 @@ class Student extends Model
     public function getOwnTime()
     {
         $daily = [];
-        $grades = $this->Grades()->where("status", 0)->get();
+        $grades = $this->Grades()->where("status", 0)->where("time", "!=", null)->get();
+        $index = 0;
         foreach ($grades as $grade) {
             $time = $grade->time;
-            if ($time != null) {
-                foreach ($time as $index => $day) {
-                    $daily[$day["day"]][$index]["value"] = $day["value"];
-                    $daily[$day["day"]][$index]["grade"] = $grade;
-                }
+            foreach ($time as $day) {
+                $daily[$day["day"]][$index]["value"] = $day["value"];
+                $daily[$day["day"]][$index]["grade"] = $grade;
+                $index++;
             }
         }
         return $daily;
@@ -113,6 +113,7 @@ class Student extends Model
         'email_verified_at' => 'datetime',
         'extra' => 'json',
     ];
+
     public function setPrivate()
     {
         $this->attributes['private_key'] = Hash::make($this->name . $this->code);
