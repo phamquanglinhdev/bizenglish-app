@@ -579,7 +579,7 @@ class LogCrudController extends CrudController
                             trans("backpack::crud.student") . " " . trans("backpack::crud.late"),
                             trans("backpack::crud.teacher") . " " . trans("backpack::crud.late"),
                             trans("backpack::crud.student") . " " . trans("backpack::crud.drop"),
-                            trans("backpack::crud.student") . " " . trans("backpack::crud.drop"),
+                            trans("backpack::crud.teacher") . " " . trans("backpack::crud.drop"),
                             trans('backpack::crud.other'),
                         ],
                         "value" => 0,
