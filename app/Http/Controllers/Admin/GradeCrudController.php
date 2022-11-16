@@ -36,8 +36,6 @@ class GradeCrudController extends CrudController
     {
         if (backpack_user()->type >= 1) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
-        }else{
-
         }
         if (backpack_user()->type == 1) {
             $_REQUEST["teacher_filter"] = backpack_user()->name;
@@ -112,6 +110,35 @@ class GradeCrudController extends CrudController
                 $load = 1;
             }
 
+//            print_r($student_id);
+        }
+        //
+        if (isset($_REQUEST["active"]) || isset($_REQUEST["stop"]) || isset($_REQUEST["saved"])) {
+            $status_id = [];
+            if (isset($_REQUEST["active"])) {
+                $grades = Grade::where("status", 0)->get();
+                foreach ($grades as $grade) {
+                    $status_id[] = $grade->id;
+                }
+            }
+            if (isset($_REQUEST["stop"])) {
+                $grades = Grade::where("status", 1)->get();
+                foreach ($grades as $grade) {
+                    $status_id[] = $grade->id;
+                }
+            }
+            if (isset($_REQUEST["saved"])) {
+                $grades = Grade::where("status", 2)->get();
+                foreach ($grades as $grade) {
+                    $status_id[] = $grade->id;
+                }
+            }
+            if ($load == 1) {
+                $grades_id = array_intersect($grades_id, $status_id);
+            } else {
+                $grades_id = $status_id;
+                $load = 1;
+            }
 //            print_r($student_id);
         }
         CRUD::setModel(Grade::class);
@@ -205,8 +232,18 @@ class GradeCrudController extends CrudController
                 'label' => 'Đang học'
             ],
                 false,
-                function () { // if the filter is active
-                    $this->crud->addClause("where", 'status', "=", 0); // apply the "active" eloquent scope
+                function ($value) use ($grades_id) {
+                    if (!$_SESSION["filtered"]) {
+                        $_SESSION["filtered"] = true;
+                        $query = $this->crud->query;
+                        if ($grades_id != []) {
+                            foreach ($grades_id as $value) {
+                                $query->orWhere("id", "=", $value);
+                            }
+                        } else {
+                            $query->where("id", "=", -9999);
+                        }
+                    }
                 });
             $this->crud->addFilter([
                 'type' => 'simple',
@@ -214,8 +251,18 @@ class GradeCrudController extends CrudController
                 'label' => 'Đã kết thúc'
             ],
                 false,
-                function () { // if the filter is active
-                    $this->crud->addClause("where", 'status', "=", 1); // apply the "active" eloquent scope
+                function ($value) use ($grades_id) {
+                    if (!$_SESSION["filtered"]) {
+                        $_SESSION["filtered"] = true;
+                        $query = $this->crud->query;
+                        if ($grades_id != []) {
+                            foreach ($grades_id as $value) {
+                                $query->orWhere("id", "=", $value);
+                            }
+                        } else {
+                            $query->where("id", "=", -9999);
+                        }
+                    }
                 });
             $this->crud->addFilter([
                 'type' => 'simple',
@@ -223,8 +270,18 @@ class GradeCrudController extends CrudController
                 'label' => 'Đang bảo lưu'
             ],
                 false,
-                function () { // if the filter is active
-                    $this->crud->addClause("where", 'status', "=", 2); // apply the "active" eloquent scope
+                function ($value) use ($grades_id) {
+                    if (!$_SESSION["filtered"]) {
+                        $_SESSION["filtered"] = true;
+                        $query = $this->crud->query;
+                        if ($grades_id != []) {
+                            foreach ($grades_id as $value) {
+                                $query->orWhere("id", "=", $value);
+                            }
+                        } else {
+                            $query->where("id", "=", -9999);
+                        }
+                    }
                 });
 
             if (backpack_user()->type == 1 && !$_SESSION["filtered"]) {
