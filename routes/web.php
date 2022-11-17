@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect("admin");
 });
 Route::get('upload-file', function () {
     Storage::disk('google')->put('google-drive.txt', 'AHII');

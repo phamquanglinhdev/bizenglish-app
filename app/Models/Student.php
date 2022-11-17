@@ -29,9 +29,17 @@ class Student extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-    public function getID()
+    public static function getID()
     {
-        return $this->id ?? Student::max("id") + 1;
+        $student = Student::where("type", 3)->orderBy("code", "DESC")->first();
+        $code = str_replace("HV", "", $student->code);
+        $code += 1;
+        if ($code < 100) {
+            $code = "HV0$code";
+        } else {
+            $code = "HV$code";
+        }
+        return $code;
     }
 
     public function setPasswordAttribute($value)
@@ -44,6 +52,7 @@ class Student extends Model
 //         $this->attributes['code'] = "HS".$this->getID();
 //
 //     }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

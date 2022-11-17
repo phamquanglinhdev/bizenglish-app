@@ -164,8 +164,9 @@ class StudentCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
-    protected function setupCreateOperation()
+    protected function setupCreateOperation($edit = false)
     {
+
         CRUD::setValidation(StudentRequest::class);
 
         CRUD::field('name')->label("Tên học sinh");
@@ -182,13 +183,24 @@ class StudentCrudController extends CrudController
             CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         }
         if (backpack_user()->type < 1) {
-            CRUD::addField([
-                'name' => 'code',
-                'type' => 'text',
-                'label' => "Mã học sinh",
+            if ($edit) {
+                CRUD::addField([
+                    'name' => 'code',
+                    'type' => 'text',
+                    'label' => "Mã học sinh",
 
 //            'value'=>'HS'.User::max("id")+1,
-            ]);
+                ]);
+
+            } else {
+                CRUD::addField([
+                    'name' => 'code',
+                    'type' => 'text',
+                    'label' => "Mã học sinh",
+                    'value' => Student::getID()
+                ]);
+            }
+
         }
         CRUD::addField(
             [
@@ -265,7 +277,7 @@ class StudentCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->setupCreateOperation(true);
     }
 
     protected function detail($id)
