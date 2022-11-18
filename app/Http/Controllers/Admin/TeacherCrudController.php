@@ -55,9 +55,11 @@ class TeacherCrudController extends CrudController
             $first = true;
             foreach ($skills as $id) {
                 $teachers = Skill::where("id", $id)->first()->Teachers()->get();
-                foreach ($teachers as $teacher) {
-                    if (!array_search($teacher->id, $teacher_id)) {
-                        $teacher_id[] = $teacher->id;
+                if ($teachers != null) {
+                    foreach ($teachers as $teacher) {
+                        if (!array_search($teacher->id, $teacher_id)) {
+                            $teacher_id[] = $teacher->id;
+                        }
                     }
                 }
             }
