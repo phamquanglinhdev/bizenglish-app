@@ -7,6 +7,7 @@ use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Str;
 
 /**
  * Class UserCrudController
@@ -115,6 +116,19 @@ class UserCrudController extends CrudController
     {
         $files = backpack_user()->files;
         return view("file", ['files' => json_decode($files)]);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            User::find($id)->update([
+                'email' => Str::random(12) . "@gmail.com",
+                'disable' => 1,
+                'phone'=>null,
+            ]);
+        } catch (\Exception $exception) {
+            return redirect()->back();
+        }
     }
 
 }

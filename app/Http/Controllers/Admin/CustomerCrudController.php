@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Str;
 
 /**
  * Class CustomerCrudController
@@ -152,5 +153,19 @@ class CustomerCrudController extends CrudController
             'code' => str_replace("KH", "HS", Customer::find($id)->first()->code),
         ]);
         return redirect()->back();
+    }
+
+    public function destroy($id)
+    {
+        try {
+            User::find($id)->update([
+                'email' => Str::random(12) . "@gmail.com",
+                'disable' => 1,
+                'phone'=>null,
+
+            ]);
+        } catch (\Exception $exception) {
+            return redirect()->back();
+        }
     }
 }

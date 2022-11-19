@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\TeacherRequest;
 use App\Models\Skill;
 use App\Models\Teacher;
+use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Str;
 
 /**
  * Class TeacherCrudController
@@ -241,5 +243,17 @@ class TeacherCrudController extends CrudController
     {
 //        return view("teacher-detail",['data'=>Teacher::find($id)]);
         return redirect(url("admin/teaching?teacher_id=$id"));
+    }
+    public function destroy($id)
+    {
+        try {
+            User::find($id)->update([
+                'email' => Str::random(12) . "@gmail.com",
+                'disable' => 1,
+                'phone'=>null,
+            ]);
+        } catch (\Exception $exception) {
+            return redirect()->back();
+        }
     }
 }
