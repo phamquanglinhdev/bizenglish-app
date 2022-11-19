@@ -31,15 +31,19 @@ class Student extends Model
     */
     public static function getID()
     {
-        $student = Student::where("type", 3)->orderBy("code", "DESC")->first();
-        $code = str_replace("HV", "", $student->code);
-        $code += 1;
-        if ($code < 100) {
-            $code = "HV0$code";
+        if (Student::where("type", 3)->orderBy("code", "DESC")->count != 0) {
+            $student = Student::where("type", 3)->orderBy("code", "DESC")->first();
+            $code = str_replace("HV", "", $student->code);
+            $code += 1;
+            if ($code < 100) {
+                $code = "HV0$code";
+            } else {
+                $code = "HV$code";
+            }
+            return $code;
         } else {
-            $code = "HV$code";
+            return "HV001";
         }
-        return $code;
     }
 
     public function setPasswordAttribute($value)
