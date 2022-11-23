@@ -97,6 +97,8 @@ class Student extends Model
                 if (!in_array($grade->Staff()->first()->name, $staff)) {
                     $staff[] = $grade->Staff()->first()->name;
                 }
+            } catch (\Exception $exception) {
+
             }
         }
         $staff = implode(",", $staff);
