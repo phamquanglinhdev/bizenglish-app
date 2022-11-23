@@ -71,9 +71,10 @@ class StudentCrudController extends CrudController
         if (backpack_user()->type == 0) {
             $first = true;
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
-            $grades = $staff->Grades()->get();
+            $grades = $staff->Grades()->where("disable", 0)->get();
+
             foreach ($grades as $grade) {
-                $students = $grade->Student()->where("disable", 0)->get();
+                $students = $grade->Student()->where("disable", 0)->where("type", 3)->get();
                 foreach ($students as $student) {
                     if ($first) {
                         $this->crud->addClause("where", "id", "=", $student->id);
@@ -84,7 +85,8 @@ class StudentCrudController extends CrudController
 
                 }
             }
-            $originStudents = $staff->Students()->get();
+
+            $originStudents = $staff->Students()->where("disable", 0)->where("type", 3)->get();
             foreach ($originStudents as $student) {
                 if ($first) {
                     $this->crud->addClause("where", "id", "=", $student->id);
@@ -93,9 +95,13 @@ class StudentCrudController extends CrudController
                     $this->crud->addClause("orWhere", "id", "=", $student->id);
                 }
             }
+            if ($grades->count() == 0 && $originStudents->count() == 0) {
+                $this->crud->addClause("where", "id", "=", -1);
+            };
+        } else {
+            $this->crud->addClause("where", "disable", "=", 0);
+            $this->crud->addClause("where", "type", "=", 3);
         }
-        $this->crud->addClause("where", "disable", 0);
-        $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
 
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
@@ -115,9 +121,9 @@ class StudentCrudController extends CrudController
             "searchLogic" => "text",
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
-                    if (backpack_user()->type < 0) {
-                        return backpack_url("/staff/detail/$entry->id");
-                    }
+//                    if (backpack_user()->type < 0) {
+//                        return backpack_url("/staff/detail/$entry->id");
+//                    }
                 },
             ]
         ]);

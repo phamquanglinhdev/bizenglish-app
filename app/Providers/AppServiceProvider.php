@@ -6,6 +6,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Time;
 use Illuminate\Database\Schema\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -58,21 +59,16 @@ class AppServiceProvider extends ServiceProvider
 
         }
 
-        try {
-            $freedomStudents = Student::where("staff_id", "=", null)->get();
-            foreach ($freedomStudents as $student) {
-                $grade = $student->Grade()->first();
-                if (isset($grade->Staff()->first()->id)) {
-                    $student->update(
-                        ['staff_id' => $grade->Staff()->first()->id]
-                    );
-                } else {
-                    $student->destroy();
-                }
-            }
-        } catch (\Exception $exception) {
-
-        }
+//        try {
+//            $pivots = DB::table("student_grade")->get();
+//            foreach ($pivots as $pivot) {
+//                if (Student::find($pivot->student_id) == null) {
+//                    DB::table("student_grade")->where("student_id", "=", $pivot->student_id)->delete();
+//                }
+//            }
+//        } catch (\Exception $exception) {
+//
+//        }
         Builder::defaultStringLength(191);
     }
 }
