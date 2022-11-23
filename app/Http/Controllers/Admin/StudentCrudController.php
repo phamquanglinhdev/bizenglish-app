@@ -35,8 +35,7 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
-        $this->crud->addClause("where", "phone", "!=", null);
-        $this->crud->addClause("where", "phone", "!=", "");
+        $this->crud->addClause("where", "phone", "==", null);
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
