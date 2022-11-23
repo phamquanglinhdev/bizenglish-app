@@ -86,7 +86,7 @@ class StudentCrudController extends CrudController
             }
         }
         $this->crud->addClause("where", "disable", 0);
-//        $this->crud->addClause("where", "type", "3");
+        $this->crud->addClause("where", "type", "3");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
 
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
