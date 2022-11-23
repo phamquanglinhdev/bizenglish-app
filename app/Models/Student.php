@@ -110,7 +110,7 @@ class Student extends Model
         if ($staff != null) {
             return $staff;
         } else {
-            return "-";
+            return $this->originStaff();
         }
     }
 
