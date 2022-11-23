@@ -66,6 +66,8 @@ class AppServiceProvider extends ServiceProvider
                     $student->update(
                         ['staff_id' => $grade->Staff()->first()->id]
                     );
+                } else {
+                    $student->destroy();
                 }
             }
         } catch (\Exception $exception) {
