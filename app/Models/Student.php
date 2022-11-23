@@ -65,7 +65,7 @@ class Student extends Model
     public function getOwnTime()
     {
         $daily = [];
-        $grades = $this->Grades()->where("status", 0)->where("time", "!=", null)->get();
+        $grades = $this->Grades()->where("disable", 0)->where("status", 0)->where("time", "!=", null)->get();
         $index = 0;
         foreach ($grades as $grade) {
             $time = $grade->time;

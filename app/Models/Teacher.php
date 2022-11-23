@@ -68,7 +68,6 @@ class Teacher extends Model
                 $index++;
             }
         }
-//        dd($daily);
         return $daily;
     }
 

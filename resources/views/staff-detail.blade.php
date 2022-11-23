@@ -67,13 +67,13 @@
                     <div class="bg-cyan text-white h3 p-2 rounded">Lớp học đang quản lý</div>
                     <div class="bg-white p-2 card">
                         @php
-                            $grades = $data->Grades()->get()
+                            $grades = $data->Grades()->where("disable",0)->get()
                         @endphp
                         @foreach( $grades as $grade)
                             <div><i class="las la-chalkboard-teacher"></i> {{$grade->name}}</div>
                             <div><i class="las la-hourglass"></i> {{$grade->getStatus()}}</div>
                             <div><i class="las la-user-astronaut"></i> Học sinh:
-                                @foreach($grade->Student()->get() as $student)
+                                @foreach($grade->Student()->where("disable",0)->get() as $student)
                                     <span><a
                                             href="{{route("admin.student.detail",$student->id)}}">{{$student->name}}</a> ,</span>
                                 @endforeach
