@@ -51,6 +51,7 @@ class TimeCrudController extends CrudController
         if (backpack_user()->type > 0) {
             $this->crud->addClause("where", "teacher_id", backpack_user()->id);
         }
+        $this->crud->addClause("where","phone","!=",null);
         CRUD::column('teacher_id')->label("Tên giáo viên");
         CRUD::column('comment')->label("Comment");
 
