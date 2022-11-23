@@ -88,6 +88,11 @@ class Student extends Model
         return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id");
     }
 
+    public function originStaff()
+    {
+        return $this->belongsTo(Staff::class, "staff_id", "id");
+    }
+
     public function Staffs()
     {
         $staff = [];

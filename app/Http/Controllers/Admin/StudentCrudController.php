@@ -185,6 +185,13 @@ class StudentCrudController extends CrudController
             CRUD::field("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         }
         if (backpack_user()->type < 1) {
+            CRUD::addField([
+                'name' => 'staff_id',
+                'type' => 'select2',
+                'entity' => "originStaff",
+                'model' => "App\Models\Staff",
+                'attribute' => 'name',
+            ]);
             if ($edit) {
                 CRUD::addField([
                     'name' => 'code',
@@ -201,6 +208,13 @@ class StudentCrudController extends CrudController
                     'label' => "Mã học sinh",
                     'value' => Student::getID()
                 ]);
+                if (backpack_user()->type == 0) {
+                    CRUD::addField([
+                        'name' => 'staff_id',
+                        'type' => 'hidden',
+                        'value' => backpack_user()->id,
+                    ]);
+                }
             }
 
         }
