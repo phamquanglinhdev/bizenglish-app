@@ -115,7 +115,9 @@ class StudentCrudController extends CrudController
             "searchLogic" => "text",
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url("/staff/detail/$entry->id");
+                    if (backpack_user()->type < 0) {
+                        return backpack_url("/staff/detail/$entry->id");
+                    }
                 },
             ]
         ]);
