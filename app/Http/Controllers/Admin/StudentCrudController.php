@@ -35,6 +35,7 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
+        $this->crud->query->where("phone", "!=", null);
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
@@ -287,13 +288,14 @@ class StudentCrudController extends CrudController
 
         return view("student-detail", ['data' => Student::find($id)]);
     }
+
     public function destroy($id)
     {
         try {
             User::find($id)->update([
                 'email' => Str::random(12) . "@gmail.com",
                 'disable' => 1,
-                'phone'=>null,
+                'phone' => null,
             ]);
         } catch (\Exception $exception) {
             return redirect()->back();
