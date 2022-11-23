@@ -93,8 +93,10 @@ class Student extends Model
         $staff = [];
         $grades = $this->Grades()->get();
         foreach ($grades as $grade) {
-            if (!in_array($grade->Staff()->first()->name, $staff)) {
-                $staff[] = $grade->Staff()->first()->name;
+            try {
+                if (!in_array($grade->Staff()->first()->name, $staff)) {
+                    $staff[] = $grade->Staff()->first()->name;
+                }
             }
         }
         $staff = implode(",", $staff);
