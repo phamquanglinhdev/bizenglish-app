@@ -73,7 +73,7 @@ class StudentCrudController extends CrudController
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
             $grades = $staff->Grades()->get();
             foreach ($grades as $grade) {
-                $students = $grade->Student()->get();
+                $students = $grade->Student()->where("disable", 0)->get();
                 foreach ($students as $student) {
                     if ($first) {
                         $this->crud->addClause("where", "id", "=", $student->id);
