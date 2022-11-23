@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Time;
 use Illuminate\Database\Schema\Builder;
@@ -51,6 +52,20 @@ class AppServiceProvider extends ServiceProvider
                         "afternoon" => $afternoon,
                         "evening" => $evening,
                     ]);
+                }
+            }
+        } catch (\Exception $exception) {
+
+        }
+
+        try {
+            $freedomStudents = Student::where("staff_id", "=", null)->get();
+            foreach ($freedomStudents as $student) {
+                $grade = $student->Grade()->first();
+                if (isset($grade->Staff()->first()->id)) {
+                    $student->update(
+                        ['staff_id' => $grade->Staff()->first()->id]
+                    );
                 }
             }
         } catch (\Exception $exception) {
