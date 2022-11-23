@@ -30,6 +30,7 @@ class StudentCrudController extends CrudController
      */
     public function setup()
     {
+//        dd($this->crud->delete(38));
         CRUD::setModel(Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
@@ -327,6 +328,7 @@ class StudentCrudController extends CrudController
                 'disable' => 1,
                 'phone' => null,
             ]);
+            return "1";
         } catch (\Exception $exception) {
             return redirect()->back();
         }

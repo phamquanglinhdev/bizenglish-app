@@ -9,6 +9,7 @@ use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Str;
+use function MongoDB\BSON\toJSON;
 
 /**
  * Class CustomerCrudController
@@ -161,9 +162,9 @@ class CustomerCrudController extends CrudController
             User::find($id)->update([
                 'email' => Str::random(12) . "@gmail.com",
                 'disable' => 1,
-                'phone'=>null,
-
+                'phone' => null,
             ]);
+            return 1;
         } catch (\Exception $exception) {
             return redirect()->back();
         }
