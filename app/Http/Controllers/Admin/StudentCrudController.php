@@ -84,6 +84,15 @@ class StudentCrudController extends CrudController
 
                 }
             }
+            $originStudents = $staff->Students()->get();
+            foreach ($originStudents as $student) {
+                if ($first) {
+                    $this->crud->addClause("where", "id", "=", $student->id);
+                    $first = false;
+                } else {
+                    $this->crud->addClause("orWhere", "id", "=", $student->id);
+                }
+            }
         }
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "3");
