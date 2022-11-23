@@ -35,7 +35,6 @@ class StudentCrudController extends CrudController
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
-        $this->crud->addClause("where", "phone", "==", null);
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
@@ -68,7 +67,7 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->crud->addClause("where", "phone", "!=", null);
         if (backpack_user()->type == 0) {
             $first = true;
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
