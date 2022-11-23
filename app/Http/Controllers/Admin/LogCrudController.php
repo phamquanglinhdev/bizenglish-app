@@ -53,7 +53,7 @@ class LogCrudController extends CrudController
         if (backpack_user()->type == 0) {
             $staff_id = [];
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
-            $grades = $staff->Grades()->get();
+            $grades = $staff->Grades()->where("disable",0)->get();
             foreach ($grades as $grade) {
                 $logs = $grade->Logs()->get();
                 foreach ($logs as $log) {
@@ -100,7 +100,7 @@ class LogCrudController extends CrudController
             $value = $_REQUEST["client_filter"];
             $clients = Client::where("name", "like", "%$value%")->get();
             foreach ($clients as $client) {
-                $grades = $client->Grades()->get();
+                $grades = $client->Grades()->where("disable",0)->get();
                 foreach ($grades as $grade) {
                     $logs = $grade->Logs()->get();
                     foreach ($logs as $log) {
@@ -120,7 +120,7 @@ class LogCrudController extends CrudController
             $value = $_REQUEST["student_filter"];
             $students = Student::where("name", "like", "%$value%")->get();
             foreach ($students as $student) {
-                $grades = $student->Grades()->get();
+                $grades = $student->Grades()->where("disable",0)->get();
                 foreach ($grades as $grade) {
                     $logs = $grade->Logs()->get();
                     foreach ($logs as $log) {
