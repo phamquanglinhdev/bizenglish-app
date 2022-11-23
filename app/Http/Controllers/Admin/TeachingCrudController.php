@@ -46,12 +46,12 @@ class TeachingCrudController extends CrudController
                 }
                 $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
                 $data = Teacher::where("id", "=", $_REQUEST["teacher_id"])->first();
-                $grades = $data->Grades()->get();
+                $grades = $data->Grades()->where("disable", "=", 0)->get();
             } else {
                 $this->crud->denyAccess(["update"]);
 //                $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
                 $data = Client::where("id", "=", $_REQUEST["client_id"])->first();
-                $grades = $data->Grades()->where("disable", 0)->get();
+                $grades = $data->Grades()->where("disable", "=", 0)->get();
             }
             Widget::add([
                 'type' => 'view',
