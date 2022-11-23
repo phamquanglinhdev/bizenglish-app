@@ -180,7 +180,7 @@ return [
     'information' => 'Thông tin',
     'extra' => 'Thông tin thêm',
     'grade_name' => 'Lớp',
-    'status' => 'Tình trangh',
+    'status' => 'Tình trạng',
     'student_name' => 'Học viên',
     'teacher_name' => 'Giáo viên',
     'client_name' => 'Đối tác',
