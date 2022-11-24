@@ -41,16 +41,22 @@ class GradeCrudController extends CrudController
             $_REQUEST["teacher_filter"] = backpack_user()->name;
         }
         $grades_id = [];
-        $load = 0;
         $_SESSION["filtered"] = false;
+        $load = 0;
         if (isset($_REQUEST["staff_filter"])) {
 
             $staff_id = [];
             $value = $_REQUEST["staff_filter"];
-            $staff = Staff::where("name", "like", "%$value%")->first();
-            $grades = $staff->Grades()->get();
-            foreach ($grades as $grade) {
-                $staff_id[] = $grade->id;
+            $staffs = Staff::where("name", "like", "%$value%", "or", "$value%")->get();
+            if ($staffs->count() != 0) {
+                foreach ($staffs as $staff) {
+                    $grades = $staff->Grades()->get();
+                    foreach ($grades as $grade) {
+                        if ($grade->disable == 0)
+                            $staff_id[] = $grade->id;
+                    }
+
+                }
             }
             $grades_id = $staff_id;
             $load = 1;
@@ -59,10 +65,15 @@ class GradeCrudController extends CrudController
 
             $student_id = [];
             $value = $_REQUEST["student_filter"];
-            $staff = Student::where("name", "like", "%$value%")->first();
-            $grades = $staff->Grades()->get();
-            foreach ($grades as $grade) {
-                $student_id[] = $grade->id;
+            $staffs = Student::where("name", "like", "%$value%")->get();
+            if ($staffs->count() != 0) {
+                foreach ($staffs as $staff) {
+                    $grades = $staff->Grades()->get();
+                    foreach ($grades as $grade) {
+                        if ($grade->disable == 0)
+                            $student_id[] = $grade->id;
+                    }
+                }
             }
             if ($load == 1) {
                 $grades_id = array_intersect($grades_id, $student_id);
@@ -79,10 +90,15 @@ class GradeCrudController extends CrudController
             if (backpack_user()->type == 1) {
                 $value = backpack_user()->name;
             }
-            $staff = Teacher::where("name", "like", "%$value%")->first();
-            $grades = $staff->Grades()->get();
-            foreach ($grades as $grade) {
-                $teacher_id[] = $grade->id;
+            $staffs = Teacher::where("name", "like", "%$value%")->get();
+            if ($staffs->count() != 0) {
+                foreach ($staffs as $staff) {
+                    $grades = $staff->Grades()->get();
+                    foreach ($grades as $grade) {
+                        if ($grade->disable == 0)
+                            $teacher_id[] = $grade->id;
+                    }
+                }
             }
             if ($load == 1) {
                 $grades_id = array_intersect($grades_id, $teacher_id);
@@ -100,7 +116,8 @@ class GradeCrudController extends CrudController
             if ($staff != null) {
                 $grades = $staff->Grades()->get();
                 foreach ($grades as $grade) {
-                    $client_id[] = $grade->id;
+                    if ($grade->disable == 0)
+                        $client_id[] = $grade->id;
                 }
             }
             if ($load == 1) {
@@ -118,19 +135,22 @@ class GradeCrudController extends CrudController
             if (isset($_REQUEST["active"])) {
                 $grades = Grade::where("status", 0)->get();
                 foreach ($grades as $grade) {
-                    $status_id[] = $grade->id;
+                    if ($grade->disable == 0)
+                        $status_id[] = $grade->id;
                 }
             }
             if (isset($_REQUEST["stop"])) {
                 $grades = Grade::where("status", 1)->get();
                 foreach ($grades as $grade) {
-                    $status_id[] = $grade->id;
+                    if ($grade->disable == 0)
+                        $status_id[] = $grade->id;
                 }
             }
             if (isset($_REQUEST["saved"])) {
                 $grades = Grade::where("status", 2)->get();
                 foreach ($grades as $grade) {
-                    $status_id[] = $grade->id;
+                    if ($grade->disable == 0)
+                        $status_id[] = $grade->id;
                 }
             }
             if ($load == 1) {
@@ -411,7 +431,7 @@ class GradeCrudController extends CrudController
 
                     // optional
                     'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->where('type', 3)->get();
+                        return $query->orderBy('name', 'ASC')->where('type', 3)->where("disable", 0)->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 ],
             );
@@ -430,7 +450,7 @@ class GradeCrudController extends CrudController
 
                     // optional
                     'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->where('type', 1)->get();
+                        return $query->orderBy('name', 'ASC')->where('type', 1)->where("disable", 0)->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 ],
             );
@@ -449,7 +469,7 @@ class GradeCrudController extends CrudController
 
                     // optional
                     'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->where('type', 2)->get();
+                        return $query->orderBy('name', 'ASC')->where('type', 2)->where("disable", 0)->get();
                     }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                 ],
             );

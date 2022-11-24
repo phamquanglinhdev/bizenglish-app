@@ -79,7 +79,7 @@ class Grade extends Model
 
     public function Student()
     {
-        return $this->belongsToMany(User::class, "student_grade", "grade_id", "student_id");
+        return $this->belongsToMany(User::class, "student_grade", "grade_id", "student_id")->where("disable", 0);
     }
 
     public function Teacher()
