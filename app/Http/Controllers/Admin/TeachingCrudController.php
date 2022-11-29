@@ -75,6 +75,7 @@ class TeachingCrudController extends CrudController
                             "student" => ["label" => trans("backpack::crud.student_name")],
                             "teacher" => ["label" => trans("backpack::crud.teacher_name")],
                             "client" => ["label" => trans("backpack::crud.client_name")],
+                            "timeRS" => ["label" => trans("backpack::crud.has_time")],
                         ],
                         'grades' => $grades,
                     ]

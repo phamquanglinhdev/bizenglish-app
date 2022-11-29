@@ -243,4 +243,5 @@ return [
     'by' => 'bỏi',
     'document' => 'Tài liệu',
     'lesson_name' => 'Bài học',
+    'has_time' => 'Số phút còn lại',
 ];

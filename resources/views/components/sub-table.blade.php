@@ -72,8 +72,11 @@
                 @endforeach
             </td>
             <td>
+                {{ $grade->getRs() }}
+            </td>
+            <td>
                 <a class="nav-link" href="{{route("grade.edit",$grade->id)}}">
-                    <i class="la la-edit">a</i>
+                    <i class="la la-edit"></i>
                     {{trans("backpack::crud.edit")}}
                 </a>
             </td>

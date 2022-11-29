@@ -245,5 +245,6 @@ return [
     'return' => 'Return',
     'published_homework' => 'Published Homework',
     'by' => 'by',
-    'document' => 'Document'
+    'document' => 'Document',
+    'has_time' => 'Minutes remaining',
 ];
