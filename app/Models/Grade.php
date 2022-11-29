@@ -44,6 +44,12 @@ class Grade extends Model
         return ($this->minutes) - $durations > 60;
     }
 
+    public function getRs()
+    {
+        $durations = $this->Logs()->sum("duration");
+        return ($this->minutes) - $durations;
+    }
+
     public function percentCount(): float|int
     {
         $durations = $this->Logs()->sum("duration");

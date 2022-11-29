@@ -71,50 +71,53 @@
                     @endphp
                     <div class="row justify-content-start">
                         @foreach( $grades as $grade)
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="card border-0 text-white {{$grade->fewDates()?"bg-cyan":"bg-danger"}}">
-                                    <div class="card-body">
-                                        <div class="text-value">
-                                            <a class="text-white" href="{{route("log.index")}}?grade_id={{$grade->id}}">
-                                                <i class="las la-chalkboard-teacher"></i> {{$grade->name}}
-                                            </a>
-                                        </div>
+                            @if($grade->disable==0)
+                                <div class="col-sm-6 col-lg-3">
+                                    <div class="card border-0 text-white {{$grade->fewDates()?"bg-cyan":"bg-danger"}}">
+                                        <div class="card-body">
+                                            <div class="text-value">
+                                                <a class="text-white"
+                                                   href="{{route("log.index")}}?grade_id={{$grade->id}}">
+                                                    <i class="las la-chalkboard-teacher"></i> {{$grade->name}}
+                                                </a>
+                                            </div>
 
-                                        <div>
-                                            <span>{{$grade->minutes}} phút học -</span>
-                                            <i class="las la-hourglass"></i> {{$grade->getStatus()}}
-                                        </div>
+                                            <div>
+                                                <span>{{$grade->minutes}} phút học -</span>
+                                                <i class="las la-hourglass"></i> {{$grade->getStatus()}}
+                                            </div>
 
-                                        <div class="progress progress-white progress-xs my-2">
-                                            <div class="progress-bar" role="progressbar"
-                                                 style="width: {{$grade->percentCount()}}%"
-                                                 aria-valuenow="30"
-                                                 aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        <small>Còn {{$grade->minutes - $grade->Logs()->sum("duration")}} phút
-                                            học.</small>
-                                        <br>
-                                        <small class="text">
-                                            <i class="las la-user-astronaut"></i> Học sinh:
-                                            @foreach($grade->Student()->get() as $student)
-                                                <span>
+                                            <div class="progress progress-white progress-xs my-2">
+                                                <div class="progress-bar" role="progressbar"
+                                                     style="width: {{$grade->percentCount()}}%"
+                                                     aria-valuenow="30"
+                                                     aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <small>Còn {{$grade->minutes - $grade->Logs()->sum("duration")}} phút
+                                                học.</small>
+                                            <br>
+                                            <small class="text">
+                                                <i class="las la-user-astronaut"></i> Học sinh:
+                                                @foreach($grade->Student()->get() as $student)
+                                                    <span>
                                                     <a class="text-white"
                                                        href="{{route("admin.student.detail",$student->id)}}">{{$student->name}}</a> ,
                                                 </span>
-                                            @endforeach
-                                        </small>
-                                        <br>
-                                        <small>
-                                            <i class="las la-user-astronaut"></i> Giáo viên:
-                                            @foreach($grade->Teacher()->get() as $teacher)
-                                                <span><a class="text-white"
-                                                         href="{{route("admin.teacher.detail",$teacher->id)}}">{{$teacher->name}}</a> ,</span>
-                                            @endforeach
-                                        </small>
-                                    </div>
+                                                @endforeach
+                                            </small>
+                                            <br>
+                                            <small>
+                                                <i class="las la-user-astronaut"></i> Giáo viên:
+                                                @foreach($grade->Teacher()->get() as $teacher)
+                                                    <span><a class="text-white"
+                                                             href="{{route("admin.teacher.detail",$teacher->id)}}">{{$teacher->name}}</a> ,</span>
+                                                @endforeach
+                                            </small>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
