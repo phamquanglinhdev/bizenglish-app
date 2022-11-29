@@ -31,8 +31,8 @@ class Student extends Model
     */
     public static function getID()
     {
-        if (Student::where("type", 3)->orderBy("code", "DESC")->count() != 0) {
-            $student = Student::where("type", 3)->orderBy("code", "DESC")->first();
+        if (Student::where("type", 3)->where("disable",0)->orderBy("code", "DESC")->count() != 0) {
+            $student = Student::where("type", 3)->where("disable",0)->orderBy("code", "DESC")->first();
             $code = str_replace("HV", "", $student->code);
             $code += 1;
             if ($code < 100) {
