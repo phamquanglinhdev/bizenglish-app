@@ -56,7 +56,7 @@ class TeacherCrudController extends CrudController
             }
             $first = true;
             foreach ($skills as $id) {
-                if(Skill::where("id", $id)->first() !== null) {
+                if (Skill::where("id", $id)->first() !== null) {
                     $teachers = Skill::where("id", $id)->first()->Teachers()->get();
                     foreach ($teachers as $teacher) {
                         if (!array_search($teacher->id, $teacher_id)) {
@@ -107,6 +107,7 @@ class TeacherCrudController extends CrudController
             'type' => 'relationship',
             'attribute' => 'name'
         ]);
+        CRUD::column("video")->type("video")->label("Video");
         CRUD::addColumn([
             'name' => 'grades',
             'entity' => 'Grades',
@@ -150,6 +151,7 @@ class TeacherCrudController extends CrudController
         CRUD::field("address")->label("Địa chỉ");
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
+        CRUD::field("video")->type("video")->label("Video");
         if (backpack_user()->type < 1) {
             CRUD::addField([
                 'name' => 'code',
@@ -244,13 +246,14 @@ class TeacherCrudController extends CrudController
 //        return view("teacher-detail",['data'=>Teacher::find($id)]);
         return redirect(url("admin/teaching?teacher_id=$id"));
     }
+
     public function destroy($id)
     {
         try {
             User::find($id)->update([
                 'email' => Str::random(12) . "@gmail.com",
                 'disable' => 1,
-                'phone'=>null,
+                'phone' => null,
             ]);
         } catch (\Exception $exception) {
             return redirect()->back();
