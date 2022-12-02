@@ -108,6 +108,7 @@ class TeacherCrudController extends CrudController
             'attribute' => 'name'
         ]);
         CRUD::column("video")->type("link_youtube")->label("Video");
+        CRUD::column("cv")->type("link")->label("Hồ sơ giáo viên");
         CRUD::addColumn([
             'name' => 'grades',
             'entity' => 'Grades',
@@ -152,6 +153,7 @@ class TeacherCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field('type')->type("hidden")->value(1);
         CRUD::field("video")->type("text")->label("Video")->prefix("https://");
+        CRUD::field("cv")->type("text")->label("Hồ sơ giáo viên")->prefix("https://");
         if (backpack_user()->type < 1) {
             CRUD::addField([
                 'name' => 'code',
