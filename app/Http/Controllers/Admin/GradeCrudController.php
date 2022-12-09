@@ -345,7 +345,9 @@ class GradeCrudController extends CrudController
         CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('client_id')->type("select")->label("Đối tác");
         CRUD::column('zoom')->type("link")->label("Link lớp");
-        CRUD::column('pricing')->label("Gói học phí")->type("number");
+        if (backpack_user()->type != 1) {
+            CRUD::column('pricing')->label("Gói học phí")->type("number");
+        }
         CRUD::column('minutes')->label("Số phút");
         CRUD::column('')->label("Số phút còn lại")->type("model_function")->function_name("getRs");
         CRUD::column('attachment')->label("Tài liệu")->type("link");
