@@ -53,7 +53,7 @@ class LogCrudController extends CrudController
         if (backpack_user()->type == 0) {
             $staff_id = [];
             $staff = Staff::where("id", "=", backpack_user()->id)->first();
-            $grades = $staff->Grades()->where("disable",0)->get();
+            $grades = $staff->Grades()->where("disable", 0)->get();
             foreach ($grades as $grade) {
                 $logs = $grade->Logs()->get();
                 foreach ($logs as $log) {
@@ -100,7 +100,7 @@ class LogCrudController extends CrudController
             $value = $_REQUEST["client_filter"];
             $clients = Client::where("name", "like", "%$value%")->get();
             foreach ($clients as $client) {
-                $grades = $client->Grades()->where("disable",0)->get();
+                $grades = $client->Grades()->where("disable", 0)->get();
                 foreach ($grades as $grade) {
                     $logs = $grade->Logs()->get();
                     foreach ($logs as $log) {
@@ -120,7 +120,7 @@ class LogCrudController extends CrudController
             $value = $_REQUEST["student_filter"];
             $students = Student::where("name", "like", "%$value%")->get();
             foreach ($students as $student) {
-                $grades = $student->Grades()->where("disable",0)->get();
+                $grades = $student->Grades()->where("disable", 0)->get();
                 foreach ($grades as $grade) {
                     $logs = $grade->Logs()->get();
                     foreach ($logs as $log) {
@@ -356,9 +356,9 @@ class LogCrudController extends CrudController
                     $_SESSION["filtered"] = true;
                 }
             });
-        if (backpack_user()->type == 0) {
-            $this->crud->denyAccess(["create", "update"]);
-        }
+//        if (backpack_user()->type == 0) {
+//            $this->crud->denyAccess(["create", "update"]);
+//        }
     }
 
     /**
@@ -519,17 +519,32 @@ class LogCrudController extends CrudController
 
         CRUD::setValidation(LogRequest::class);
 
-        CRUD::addField([
-            'name' => 'grade_id',
-            'type' => 'select2',
-            'entity' => 'Grade',
-            'model' => "App\Models\Grade",
-            'attribute' => 'name',
-            'label' => trans("backpack::crud.grade_name"),
-            'options' => (function ($query) {
-                return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
-            })
-        ]);
+       if(backpack_user()->type==1){
+           CRUD::addField([
+               'name' => 'grade_id',
+               'type' => 'select2',
+               'entity' => 'Grade',
+               'model' => "App\Models\Grade",
+               'attribute' => 'name',
+               'label' => trans("backpack::crud.grade_name"),
+               'options' => (function ($query) {
+                   return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
+               })
+           ]);
+       }
+       if(backpack_user()->type==0){
+           CRUD::addField([
+               'name' => 'grade_id',
+               'type' => 'select2',
+               'entity' => 'Grade',
+               'model' => "App\Models\Grade",
+               'attribute' => 'name',
+               'label' => trans("backpack::crud.grade_name"),
+               'options' => (function ($query) {
+                   return $query->orderBy('name', 'ASC')->leftJoin("staff_grade", "staff_grade.grade_id", "=", "grades.id")->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)->get();
+               })
+           ]);
+       }
 
         CRUD::addField([
             'name' => 'teacher_id',
