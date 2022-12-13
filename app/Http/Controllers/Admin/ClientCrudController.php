@@ -49,7 +49,7 @@ class ClientCrudController extends CrudController
             'name' => 'client_status',
             'type' => 'select_from_array',
             'label' => 'Tình trạng hợp tác',
-            'options' => ["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"],
+            'options' => ["Đang hợp tác", "Hợp tác ít", "Ngừng hợp tác"],
             'searchLogic' => function ($query, $column, $searchTerm) {
                 $term = [];
                 if (preg_match("/$searchTerm/i", "Đang hợp tác")) {
@@ -93,7 +93,7 @@ class ClientCrudController extends CrudController
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
         if (backpack_user()->type <= 0) {
-            CRUD::field("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang họp tác", "Hợp tác ít", "Ngừng hợp tác"]);
+            CRUD::field("client_status")->label("Tình trạng đối tác")->type("select_from_array")->options(["Đang hợp tác", "Hợp tác ít", "Ngừng hợp tác"]);
         }
         CRUD::addField(
             [

@@ -36,10 +36,10 @@ class Client extends Model
         }
     }
 
-    public function setCodeAttribute()
-    {
-        $this->attributes['code'] = "DT" . $this->id;
-    }
+//    public function setCodeAttribute()
+//    {
+//        $this->attributes['code'] = "DT" . $this->id;
+//    }
 
     public function Grades()
     {
