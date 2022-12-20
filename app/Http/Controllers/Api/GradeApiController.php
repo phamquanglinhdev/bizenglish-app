@@ -3,19 +3,34 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class GradeApiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index(Request $request): Response
+    public function index(Request $request)
     {
-        //
+        $grades = Grade::where("disable", 0)->get();
+        $data = [];
+        foreach ($grades as $grade) {
+            $item = new \stdClass();
+            $item->name = $grade->name;
+            $item->students = $grade->Student()->where("disable", 0)->get(["name", "id"]);
+            $item->teachers = $grade->Teacher()->where("disable", 0)->get(["name", "id"]);
+            $item->staffs = $grade->Staff()->where("disable", 0)->get(["name", "id"]);
+            $item->clients = $grade->Clients()->where("disable", 0)->get(["name", "id"]);
+            $item->zoom = $grade->zoom;
+            $item->pricing = $grade->pricing;
+            $item->minutes = $grade->minutes;
+            $item->remaining = $grade->getRs();
+            $item->attachment = $grade->attachment;
+            $item->status = $grade->getStatus();
+            $item->created = $grade->created_at;
+            $data[] = $item;
+        }
+        return $data;
+//        return \response()->json($data, 200);
     }
 
     /**
