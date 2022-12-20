@@ -28,7 +28,7 @@ class GradeApiController extends Controller
             $item->remaining = $grade->getRs();
             $item->attachment = $grade->attachment;
             $item->status = $grade->getStatus();
-            $item->created = Carbon::make($grade->created_at)->format("D-M-Y H:m:s");
+            $item->created = Carbon::make($grade->created_at)->format("d-m-Y H:m:s");
             $data[] = $item;
         }
         return $data;
