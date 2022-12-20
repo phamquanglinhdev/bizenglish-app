@@ -15,6 +15,7 @@ class GradeApiController extends Controller
         $data = [];
         foreach ($grades as $grade) {
             $item = new \stdClass();
+            $item->id = $grade->id;
             $item->name = $grade->name;
             $item->students = $grade->Student()->where("disable", 0)->get(["name", "id"]);
             $item->teachers = $grade->Teacher()->where("disable", 0)->get(["name", "id"]);
