@@ -89,7 +89,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 });
-Route::get("/app/login", [LoginController::class, "login"]);
+Route::post("/login", [LoginController::class, "login"]);
 
 
 

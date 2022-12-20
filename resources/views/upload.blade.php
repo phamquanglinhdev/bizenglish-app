@@ -24,10 +24,10 @@
             <div class="pick">
                 <input type="file" class="form-control-file p-5" id="attachments" name="attachments[]">
             </div>
-            <button class="btn btn-primary mt-2 w-100">
-            <span id="loading">
-                Tải tệp lên
-            </span>
+            <button class="btn btn-primary mt-2 w-100" onclick="sw()">
+                <img id="loading" class="d-none"
+                     src="https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif"/>
+                <span id="static">TẢI TỆP LÊN</span>
             </button>
         </div>
     </form>
@@ -36,6 +36,12 @@
     .pick {
         border: 3px dashed #0a53be;
     }
+
+    img {
+        width: 40px;
+        height: 40px;
+    }
+
     ::file-selector-button {
         display: none;
     }
@@ -45,5 +51,11 @@
 <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function sw() {
+        $("#loading").removeClass("d-none")
+        $("#static").addClass("d-none")
+    }
+</script>
 </body>
 </html>
