@@ -16,7 +16,7 @@ class LoginController extends Controller
         }
         $user = User::where("email", $request->email)->first();
         if (!Hash::check($request->password, $user->password)) {
-            return response()->json(null, 400);
+            return response()->json(null, 401);
         }
         $token = $user->createToken("Bearer");
         return response()->json(
