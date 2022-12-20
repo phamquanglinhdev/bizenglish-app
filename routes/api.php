@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\NotificationApiController;
 use App\Http\Controllers\Api\StaffApiController;
 use App\Http\Controllers\Api\StudentApiController;
 use App\Http\Controllers\Api\TeacherApiController;
+use App\Http\Controllers\PushNotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -90,6 +91,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 Route::post("/login", [LoginController::class, "login"]);
-
+Route::get("/testNotification", [PushNotificationController::class, "index"]);
 
 
