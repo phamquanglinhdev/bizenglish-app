@@ -22,7 +22,7 @@ class GradeApiController extends Controller
             $item->staffs = $grade->Staff()->where("disable", 0)->get(["name", "id"]);
             $item->clients = $grade->Client()->where("disable", 0)->get(["name", "id"]);
             $item->zoom = $grade->zoom;
-            $item->pricing = $grade->pricing;
+            $item->pricing = number_format($grade->pricing);
             $item->minutes = $grade->minutes;
             $item->remaining = $grade->getRs();
             $item->attachment = $grade->attachment;
