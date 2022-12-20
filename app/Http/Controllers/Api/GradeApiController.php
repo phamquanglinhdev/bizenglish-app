@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -27,7 +28,7 @@ class GradeApiController extends Controller
             $item->remaining = $grade->getRs();
             $item->attachment = $grade->attachment;
             $item->status = $grade->getStatus();
-            $item->created = $grade->created_at;
+            $item->created = Carbon::make($grade->created_at);
             $data[] = $item;
         }
         return $data;
