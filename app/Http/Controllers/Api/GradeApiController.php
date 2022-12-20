@@ -19,7 +19,7 @@ class GradeApiController extends Controller
             $item->students = $grade->Student()->where("disable", 0)->get(["name", "id"]);
             $item->teachers = $grade->Teacher()->where("disable", 0)->get(["name", "id"]);
             $item->staffs = $grade->Staff()->where("disable", 0)->get(["name", "id"]);
-            $item->clients = $grade->Clients()->where("disable", 0)->get(["name", "id"]);
+            $item->clients = $grade->Client()->where("disable", 0)->get(["name", "id"]);
             $item->zoom = $grade->zoom;
             $item->pricing = $grade->pricing;
             $item->minutes = $grade->minutes;
