@@ -42,7 +42,30 @@ class GradeApiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+        $data = [
+            'name' => $request->name ?? function () {
+                    return $this->loss("tên lớp");
+                },
+            'pricing' => $request->pricing ?? function () {
+                    return $this->loss("gói học phí");
+                },
+            'information' => $request->information ?? null,
+            'attachment' => $request->attachment ?? null,
+            'status' => $request->status ?? 0,
+            'disable' => 0,
+            'minutes' => $request->minutes ?? null,
+            'time' => $request->time ?? null,
+            'zoom' => $request->zoom ?? null
+        ];
+        $grade = Grade::create($data);
+        return \response()->json(["message" => "Thành công"], 200);
+
+    }
+
+    public function loss($value)
+    {
+        return \response()->json(["message" => "Thiếu " . $value]);
     }
 
     /**
