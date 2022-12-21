@@ -52,7 +52,7 @@ class Log extends Model
         }
         $client = $grade->Client()->get();
         foreach ($client as $data) {
-            $client[] .= $data->name;
+            $client[] = $data->name;
         }
         return implode(",", $client);
     }
