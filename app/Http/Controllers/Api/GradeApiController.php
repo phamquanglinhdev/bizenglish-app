@@ -58,8 +58,9 @@ class GradeApiController extends Controller
             'time' => $request->time ?? null,
             'zoom' => $request->zoom ?? null
         ];
-        $grade = Grade::create($data);
-        return \response()->json(["message" => "Thành công"], 200);
+        return $data;
+//        $grade = Grade::create($data);
+//        return \response()->json(["message" => "Thành công"], 200);
 
     }
 
