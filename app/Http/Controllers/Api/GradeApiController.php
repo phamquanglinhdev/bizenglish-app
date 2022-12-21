@@ -82,6 +82,24 @@ class GradeApiController extends Controller
                 'grade_id' => $grade->id,
             ]);
         }
+        $clients = $request->clients ?? null;
+        foreach ($clients as $client) {
+            DB::table("client_grade")->insert([
+                'client_id' => $client,
+                'grade_id' => $grade->id,
+            ]);
+        }
+        $students = $request->students ?? null;
+        foreach ($students as $student) {
+            DB::table("student_grade")->insert([
+                'student_id' => $student,
+                'grade_id' => $grade->id,
+            ]);
+        }
+        DB::table("staff_grade")->insert([
+            'staff_id' => $user->id,
+            'grade_id' => $grade->id,
+        ]);
 //        return $grade;
         return \response()->json(["message" => "Thành công"], 200);
     }
