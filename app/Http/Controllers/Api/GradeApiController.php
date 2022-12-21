@@ -241,7 +241,7 @@ class GradeApiController extends Controller
     public function destroy(Request $request)
     {
         $id = $request->id ?? null;
-        if (Grade::find($id)->update(["disable", 1])) {
+        if (Grade::find($id)->update(["disable" => 1])) {
             return \response()->json(["message", "Thành công"], 200);
         }
         return \response()->json(null, 404);
