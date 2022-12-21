@@ -143,10 +143,14 @@ class Log extends Model
     public function getStudentList()
     {
         $result = [];
-        foreach ($this->belongsTo(Grade::class, "grade_id", "id")->first()->Student()->get() as $item) {
-            $result[] .= $item->name;
+        try {
+            foreach ($this->belongsTo(Grade::class, "grade_id", "id")->first()->Student()->get() as $item) {
+                $result[] .= $item->name;
+            }
+            return implode(",", $result);
+        } catch (\Exception $exception) {
+            return "-";
         }
-        return implode(",", $result);
     }
 
 //    public function setTeacherVideoAttribute($value)
