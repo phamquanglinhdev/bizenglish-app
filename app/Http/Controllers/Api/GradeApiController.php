@@ -161,7 +161,58 @@ class GradeApiController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        $id = $request->id ?? null;
+        if ($id == null) {
+            return \response()->json(null, 404);
+        }
+        $user = $request->user();
+        $data = [
+            'name' => $request->name ?? function () {
+                    return $this->loss("tên lớp");
+                },
+            'pricing' => $request->pricing ?? function () {
+                    return $this->loss("gói học phí");
+                },
+            'information' => $request->information ?? null,
+            'attachment' => $request->attachment ?? null,
+            'status' => $request->status ?? 0,
+            'disable' => 0,
+            'minutes' => $request->minutes ?? null,
+            'time' => $request->time ?? null,
+            'zoom' => $request->zoom ?? null
+        ];
+        return $data;
+        Grade::find($id)->update($data);
+        $teachers = $request->teachers ?? null;
+        DB::table("teacher_grade")->where("grade_id", $id)->delete();
+        DB::table("client_grade")->where("grade_id", $id)->delete();
+        DB::table("student_grade")->where("grade_id", $id)->delete();
+        foreach ($teachers as $teacher) {
+            DB::table("teacher_grade")->insert([
+                'teacher_id' => $teacher,
+                'grade_id' => $id,
+            ]);
+        }
+        $clients = $request->clients ?? null;
+        foreach ($clients as $client) {
+            DB::table("client_grade")->insert([
+                'client_id' => $client,
+                'grade_id' => $id,
+            ]);
+        }
+        $students = $request->students ?? null;
+        foreach ($students as $student) {
+            DB::table("student_grade")->insert([
+                'student_id' => $student,
+                'grade_id' => $id,
+            ]);
+        }
+//        DB::table("staff_grade")->insert([
+//            'staff_id' => $user->id,
+//            'grade_id' => $id,
+//        ]);
+//        return $grade;
+        return \response()->json(["message" => "Thành công"], 200);
     }
 
     /**
