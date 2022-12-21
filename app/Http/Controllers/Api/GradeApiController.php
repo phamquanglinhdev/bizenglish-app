@@ -60,9 +60,8 @@ class GradeApiController extends Controller
         ];
 
         $grade = Grade::create($data);
-        Grade::find($grade->id)->update(['attachment' => $request->attachment]);
-        return $grade;
-//        return \response()->json(["message" => "Thành công"], 200);
+//        return $grade;
+        return \response()->json(["message" => "Thành công"], 200);
 
     }
 
