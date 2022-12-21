@@ -50,7 +50,21 @@ class Client extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getOwnTime()
+    {
+        $daily = [];
+        $grades = $this->Grades()->where("disable", 0)->where("status", 0)->where("time", "!=", null)->get();
+        $index = 0;
+        foreach ($grades as $grade) {
+            $time = $grade->time;
+            foreach ($time as $day) {
+                $daily[$day["day"]][$index]["value"] = $day["value"];
+                $daily[$day["day"]][$index]["grade"] = $grade;
+                $index++;
+            }
+        }
+        return $daily;
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

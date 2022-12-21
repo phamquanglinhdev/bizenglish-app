@@ -35,12 +35,14 @@ class TeachingCrudController extends CrudController
         CRUD::setEntityNameStrings(trans("backpack::crud.information"), trans("backpack::crud.information"));
         $this->crud->denyAccess(["create", "show", "delete"]);
         $teacher_id = $_REQUEST["teacher_id"] ?? backpack_user()->id;
-        $daily = Teacher::where("id", $teacher_id)->first()->getOwnTime();
+        $daily = null;
         if (isset($_REQUEST["teacher_id"]) || isset($_REQUEST["client_id"])) {
+
             $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
             $this->crud->setOperationSetting('exportButtons', true);
             $this->crud->setOperationSetting('detailsRow', true);
             if (isset($_REQUEST["teacher_id"])) {
+                $daily=Teacher::where("id", $teacher_id)->first()->getOwnTime();
                 if ($_REQUEST["teacher_id"] != backpack_user()->id) {
                     $this->crud->denyAccess(["update"]);
                 }
@@ -52,6 +54,7 @@ class TeachingCrudController extends CrudController
 //                $this->crud->addClause("where", "teacher_id", $_REQUEST["teacher_id"]);
                 $data = Client::where("id", "=", $_REQUEST["client_id"])->first();
                 $grades = $data->Grades()->where("disable", "=", 0)->get();
+                $daily=Client::where("id", $_REQUEST["client_id"])->first()->getOwnTime();
             }
             Widget::add([
                 'type' => 'view',
