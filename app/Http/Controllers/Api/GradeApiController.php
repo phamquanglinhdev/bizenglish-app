@@ -132,7 +132,7 @@ class GradeApiController extends Controller
             $data->attachment = $grade->attachment;
             $data->students = $grade->Student()->get(["id"]);
             $data->teachers = $grade->Teacher()->get(["id"]);
-            $data->client = $grade->Client()->get(["id"]);
+            $data->clients = $grade->Client()->get(["id"]);
             return $data;
         }
         return \response()->json(null, 404);
