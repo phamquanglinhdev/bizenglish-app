@@ -67,7 +67,7 @@ class TeachingCrudController extends CrudController
                 'view' => 'teacher-time',
                 'daily' => $daily,
             ]);
-            if (backpack_user()->type <= 1) {
+            if (backpack_user()->type <= 2) {
                 Widget::add([
                     'type' => 'view',
                     'view' => 'components.sub-table',
