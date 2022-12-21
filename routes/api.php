@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix("/")->group(function () {
         Route::post("/grades", [GradeApiController::class, "index"]);
         Route::post("/grade/people", [GradeApiController::class, "people"]);
+        Route::post("/grade/edit", [GradeApiController::class, "edit"]);
         Route::post("/grade/show", [GradeApiController::class, "show"]);
         Route::post("/grade/store", [GradeApiController::class, "store"]);
         Route::post("/grade/update", [GradeApiController::class, "update"]);

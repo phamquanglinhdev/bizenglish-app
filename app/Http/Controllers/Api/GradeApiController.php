@@ -113,8 +113,31 @@ class GradeApiController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return Response
+     * @return \stdClass
      */
+    public function edit(Request $request): \stdClass
+    {
+        $user = $request->user();
+        $id = $request->id ?? null;
+        $grade = Grade::where("id", $id)->first();
+        if (isset($grade->name)) {
+            $data = new \stdClass();
+            $data->name = $grade->name;
+            $data->zoom = $grade->zoom;
+            $data->pricing = $grade->pricing;
+            $data->minutes = $grade->minutes;
+            $data->time = $grade->time;
+            $data->information = $grade->information;
+            $data->status = $grade->status;
+            $data->attachment = $grade->attachment;
+            $data->students = $grade->Student()->get(["id"]);
+            $data->teachers = $grade->Teacher()->get(["id"]);
+            $data->client = $grade->Client()->get(["id"]);
+            return $data;
+        }
+        return \response()->json(null, 404);
+    }
+
     public function show(Request $request): Response
     {
         //
