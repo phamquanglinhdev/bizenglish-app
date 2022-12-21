@@ -181,7 +181,6 @@ class GradeApiController extends Controller
             'time' => $request->time ?? null,
             'zoom' => $request->zoom ?? null
         ];
-        return $data;
         Grade::find($id)->update($data);
         $teachers = $request->teachers ?? null;
         DB::table("teacher_grade")->where("grade_id", $id)->delete();
