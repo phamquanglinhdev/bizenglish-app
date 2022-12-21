@@ -130,9 +130,18 @@ class GradeApiController extends Controller
             $data->information = $grade->information;
             $data->status = $grade->status;
             $data->attachment = $grade->attachment;
-            $data->students = $grade->Student()->get(["id"]);
-            $data->teachers = $grade->Teacher()->get(["id"]);
-            $data->clients = $grade->Client()->get(["id"]);
+            $data->students = [];
+            foreach ($grade->Student()->get() as $student) {
+                $data->students[] = $student->id;
+            }
+            $data->teachers = [];
+            foreach ($grade->Teacher()->get() as $teacher) {
+                $data->teachers[] = $teacher->id;
+            }
+            $data->clients = [];
+            foreach ($grade->Client()->get() as $client) {
+                $data->clients[] = $client->id;
+            }
             return $data;
         }
         return \response()->json(null, 404);
