@@ -60,7 +60,7 @@ class GradeApiController extends Controller
         ];
 
         $grade = Grade::create($data);
-        return $data;
+        return $grade;
 //        return \response()->json(["message" => "Thành công"], 200);
 
     }
