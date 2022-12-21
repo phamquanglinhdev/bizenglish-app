@@ -147,9 +147,27 @@ class GradeApiController extends Controller
         return \response()->json(null, 404);
     }
 
-    public function show(Request $request): Response
+    public function show(Request $request)
     {
-        //
+        $grade = Grade::where("id", $request->id)->first();
+        if (isset($grade->name)) {
+            $item = new \stdClass();
+            $item->id = $grade->id;
+            $item->name = $grade->name;
+            $item->students = $grade->Student()->where("disable", 0)->get(["name", "id"]);
+            $item->teachers = $grade->Teacher()->where("disable", 0)->get(["name", "id"]);
+            $item->staffs = $grade->Staff()->where("disable", 0)->get(["name", "id"]);
+            $item->clients = $grade->Client()->where("disable", 0)->get(["name", "id"]);
+            $item->zoom = $grade->zoom;
+            $item->pricing = number_format($grade->pricing);
+            $item->minutes = $grade->minutes;
+            $item->remaining = $grade->getRs();
+            $item->attachment = $grade->attachment;
+            $item->status = $grade->getStatus();
+            $item->created = Carbon::make($grade->created_at)->format("d-m-Y H:m:s");
+            return $item;
+        }
+        return \response()->json(null, 404);
     }
 
 
