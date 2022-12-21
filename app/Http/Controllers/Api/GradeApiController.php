@@ -16,7 +16,7 @@ class GradeApiController extends Controller
 {
     public function index(Request $request)
     {
-        $grades = Grade::where("disable", 0)->get();
+        $grades = Grade::where("disable", 0)->orderBy("updated_at", "DESC")->get();
         $data = [];
         foreach ($grades as $grade) {
             $item = new \stdClass();
