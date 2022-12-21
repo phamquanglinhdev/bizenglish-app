@@ -44,7 +44,7 @@ class GradeApiController extends Controller
      *
      * @return Response
      */
-    public function create(Request $request)
+    public function people(Request $request)
     {
         $students = Student::where("type", 3)->where("disable", 0)->get(["id", "name"]);
         $teachers = Teacher::where("type", 1)->where("disable", 0)->get(["id", "name"]);
