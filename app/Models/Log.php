@@ -45,11 +45,16 @@ class Log extends Model
 
     public function Client()
     {
-        $client = "";
-        foreach ($this->Grade()->first()->Client()->get() as $data) {
-            $client .= "$data->name, ";
+        $client = [];
+        $grade = $this->Grade()->first();
+        if (!isset($grade->name)) {
+            return "-";
         }
-        return $client;
+        $client = $grade->Client()->get();
+        foreach ($client as $data) {
+            $client[] .= $data->name;
+        }
+        return implode(",", $client);
     }
 
     public function detail()
