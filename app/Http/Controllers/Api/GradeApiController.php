@@ -74,15 +74,13 @@ class GradeApiController extends Controller
             'time' => $request->time ?? null,
             'zoom' => $request->zoom ?? null
         ];
-
         $grade = Grade::create($data);
-        if ($request->teachers->count() != 0) {
-            foreach ($request->teachers as $teacher) {
-                DB::table("teacher_grade")->insert([
-                    'teacher_id' => $teacher,
-                    'grade_id' => $grade->id,
-                ]);
-            }
+        $teachers = $request->teachers ?? null;
+        foreach ($teachers as $teacher) {
+            DB::table("teacher_grade")->insert([
+                'teacher_id' => $teacher,
+                'grade_id' => $grade->id,
+            ]);
         }
 //        return $grade;
         return \response()->json(["message" => "Thành công"], 200);
