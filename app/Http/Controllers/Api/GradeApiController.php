@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Grade;
+use App\Models\Student;
+use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class GradeApiController extends Controller
 {
@@ -40,6 +44,18 @@ class GradeApiController extends Controller
      *
      * @return Response
      */
+    public function create(Request $request)
+    {
+        $students = Student::where("type", 3)->where("disable", 0)->get(["id", "name"]);
+        $teachers = Teacher::where("type", 1)->where("disable", 0)->get(["id", "name"]);
+        $clients = Client::where("type", 2)->where("disable", 0)->get(["id", "name"]);
+        $data = new \stdClass();
+        $data->students = $students;
+        $data->teachers = $teachers;
+        $data->clients = $clients;
+        return \response()->json($data, 200);
+    }
+
     public function store(Request $request)
     {
         $user = $request->user();
@@ -60,9 +76,16 @@ class GradeApiController extends Controller
         ];
 
         $grade = Grade::create($data);
+        if ($request->teachers->count() != 0) {
+            foreach ($request->teachers as $teacher) {
+                DB::table("teacher_grade")->insert([
+                    'teacher_id' => $teacher,
+                    'grade_id' => $grade->id,
+                ]);
+            }
+        }
 //        return $grade;
         return \response()->json(["message" => "Thành công"], 200);
-
     }
 
     public function loss($value)
