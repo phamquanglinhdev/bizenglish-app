@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ClientApiController;
 use App\Http\Controllers\Api\CustomerApiController;
+use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\FileApiController;
 use App\Http\Controllers\Api\GradeApiController;
 use App\Http\Controllers\Api\LogApiController;
@@ -89,10 +90,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix("/")->group(function () {
         Route::post("/notifications", [NotificationApiController::class, "index"]);
         Route::post("/notification/show", [NotificationApiController::class, "show"]);
+        Route::post("/checkin", [DeviceController::class, "register"]);
     });
 
 });
 Route::post("/login", [LoginController::class, "login"]);
 Route::get("/testNotification", [PushNotificationController::class, "index"]);
+
 
 

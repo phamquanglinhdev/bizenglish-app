@@ -88,3 +88,5 @@
         </li>
     @endif
 @endif
+
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('device') }}"><i class="nav-icon la la-question"></i> Devices</a></li>

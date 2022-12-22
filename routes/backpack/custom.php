@@ -55,4 +55,5 @@ Route::group([
     Route::crud('time', 'TimeCrudController');
     Route::get("/time/show/{id}", [TimeCrudController::class, "showDetail", "id"])->name("time-show");
     Route::post("/time/update/", [TimeCrudController::class, "update"])->name("update-time");
+    Route::crud('device', 'DeviceCrudController');
 }); // this should be the absolute last line of this file
