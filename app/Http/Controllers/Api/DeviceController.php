@@ -14,7 +14,7 @@ class DeviceController extends Controller
         $token = $request->token ?? null;
         $platform = $request->platform ?? "android";
         if ($token == null) {
-            return response()->json(null, 404);
+            return response()->json(null, 400);
         }
         $data = [
             'user_id' => $user->id,
