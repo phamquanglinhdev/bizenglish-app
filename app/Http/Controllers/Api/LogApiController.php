@@ -50,7 +50,8 @@ class LogApiController extends Controller
     public function create()
     {
         $grades = Grade::where("disable", 0)->get(["id", "name"]);
-        return \response()->json(["grades" => $grades], 200);
+        $teachers = Teacher::where("disable", 0)->where("type", 1)->get(["id", "name"]);
+        return \response()->json(["grades" => $grades, "teachers" => $teachers], 200);
     }
 
     public function show(Request $request)
