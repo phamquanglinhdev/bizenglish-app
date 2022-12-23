@@ -8,7 +8,6 @@ use App\Models\Teacher;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class LogApiController extends Controller
@@ -23,7 +22,7 @@ class LogApiController extends Controller
         $page = $request->page ?? 1;
         $data = [];
         $user = $request->user();
-        $logs = DB::table("logs")->where("disable", 0)->orderBy("created_at", "DESC")->skip(($page - 1) * 10 + 1)->take($page * 10)->get();
+        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->skip(($page - 1) * 10 + 1)->take($page * 10)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
             $item->id = $log->id;
