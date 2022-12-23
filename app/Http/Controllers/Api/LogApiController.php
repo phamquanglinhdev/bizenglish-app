@@ -39,7 +39,7 @@ class LogApiController extends Controller
             $item->logSalary = $log->log_salary;
             $item->hourSalary = $log->hour_salary;
             $item->status = $log->StatusShow();
-            $item->assessement = $log->assessement;
+            $item->assessment = $log->assessment;
             $item->attachments = $log->attachments;
             $data[] = $item;
         }
