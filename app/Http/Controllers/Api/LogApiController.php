@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Log;
+use App\Models\Teacher;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,9 +19,10 @@ class LogApiController extends Controller
      */
     public function index(Request $request)
     {
+        $start = $request->start ?? 30;
         $data = [];
         $user = $request->user();
-        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->get();
+        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->between(1, 30)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
             $item->date = $log->date;
@@ -28,7 +30,7 @@ class LogApiController extends Controller
             $item->end = $log->end;
             $item->grade = $log->Grade()->first(["id", "name"]);
             $item->students = $log->Grade()->first()->Student()->get(["id", "name"]);
-            $item->teachers = $log->Grade()->first()->Teacher()->get(["id", "name"]);
+            $item->teachers = Teacher::where("id", $log->teacher_id)->first(["id", "name"]);
             $item->clients = $log->Grade()->first()->Client()->get(["id", "name"]);
             $item->lesson = $log->lesson;
             $item->video = $log->teacher_video;
