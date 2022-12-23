@@ -91,8 +91,13 @@ class LogApiController extends Controller
             'assessment' => $request->assessment ?? null,
             'attachments' => $request->attachments ?? null,
         ];
-        Teacher::create($data);
-        return \response()->json(["message" => "Thành công"], 200);
+        try {
+            Log::create($data);
+            return \response()->json(["message" => "Thành công"], 200);
+        } catch (\Exception $exception) {
+            return $exception;
+        }
+
     }
 
     public function update(Request $request)
