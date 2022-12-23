@@ -19,10 +19,10 @@ class LogApiController extends Controller
      */
     public function index(Request $request)
     {
-        $start = $request->start ?? 30;
+        $limit = $request->limit ?? 30;
         $data = [];
         $user = $request->user();
-        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->get();
+        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->limit($limit)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
             $item->date = $log->date;
