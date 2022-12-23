@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Log;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,11 +14,33 @@ class LogApiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
-        //
+        $data = [];
+        $user = $request->user();
+        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->get();
+        foreach ($logs as $log) {
+            $item = new \stdClass();
+            $item->date = $log->date;
+            $item->start = $log->start;
+            $item->end = $log->end;
+            $item->grade = $log->Grade()->first(["id", "name"]);
+            $item->students = $log->Grade()->first()->Student()->get(["id", "name"]);
+            $item->teachers = $log->Grade()->first()->Teacher()->get(["id", "name"]);
+            $item->clients = $log->Grade()->first()->Client()->get(["id", "name"]);
+            $item->lesson = $log->lesson;
+            $item->video = $log->teacher_video;
+            $item->duration = $log->duration;
+            $item->logSalary = $log->log_salary;
+            $item->hourSalary = $log->hour_salary;
+            $item->status = $log->StatusShow();
+            $item->assessement = $log->assessement;
+            $item->attachments = $log->attachments;
+            $data[] = $item;
+        }
+        return \response()->json($data, 200);
     }
 
     public function show(Request $request)
