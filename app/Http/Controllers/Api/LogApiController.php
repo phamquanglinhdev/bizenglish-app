@@ -22,7 +22,7 @@ class LogApiController extends Controller
         $start = $request->start ?? 30;
         $data = [];
         $user = $request->user();
-        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->between(1, 30)->get();
+        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->paginate(30)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
             $item->date = $log->date;
