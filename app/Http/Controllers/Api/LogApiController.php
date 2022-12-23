@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Teacher;
+use Carbon\Carbon;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -78,7 +79,7 @@ class LogApiController extends Controller
         $data = [
             'grade_id' => $request->grade ?? null,
             'teacher_id' => $request->teacher ?? null,
-            'date' => $request->date ?? null,
+            'date' => Carbon::make($request->date) ?? null,
             'start' => $request->start ?? null,
             'end' => $request->end ?? null,
             'duration' => $request->duration ?? null,
