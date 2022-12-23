@@ -49,8 +49,8 @@ class LogApiController extends Controller
 
     public function create()
     {
-        $grades = Grade::where("disable", 0)->orderBy("name","ASC")->get(["id", "name"]);
-        $teachers = Teacher::where("disable", 0)->where("type", 1)->orderBy("name","ASC")->get(["id", "name"]);
+        $grades = Grade::where("disable", 0)->orderBy("name", "ASC")->get(["id", "name"]);
+        $teachers = Teacher::where("disable", 0)->where("type", 1)->orderBy("name", "ASC")->get(["id", "name"]);
         return \response()->json(["grades" => $grades, "teachers" => $teachers], 200);
     }
 
@@ -58,10 +58,41 @@ class LogApiController extends Controller
     {
         //
     }
-
+//grade: grade,
+//teacher: teacher,
+//date: date,
+//start: start,
+//end: end,
+//duration: duration,
+//hourSalary: hourSalary,
+//logSalary: logSalary,
+//lesson: lesson,
+//information: information,
+//video: video,
+//status: status,
+//assessment: assessment,
+//question: question,
+//attachments: attachments,
     public function store(Request $request)
     {
-        //
+        $data = [
+            'grade_id' => $request->grade ?? null,
+            'teacher_id' => $request->teacher ?? null,
+            'date' => $request->date ?? null,
+            'start' => $request->start ?? null,
+            'end' => $request->end ?? null,
+            'duration' => $request->duration ?? null,
+            'hour_salary' => $request->hourSalary ?? null,
+            'log_salary' => $request->logSalary ?? null,
+            'lesson' => $request->lesson ?? null,
+            'information' => $request->information ?? null,
+            'teacher_video' => $request->video ?? null,
+            'status' => $request->status ?? null,
+            'assessment' => $request->assessment ?? null,
+            'attachments' => $request->attachments ?? null,
+        ];
+        Teacher::create($data);
+        return \response()->json(["message" => "Thành công"], 200);
     }
 
     public function update(Request $request)
