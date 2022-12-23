@@ -25,6 +25,7 @@ class LogApiController extends Controller
         $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->limit($limit)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
+            $item->id = $log->id;
             $item->date = $log->date;
             $item->start = $log->start;
             $item->end = $log->end;
