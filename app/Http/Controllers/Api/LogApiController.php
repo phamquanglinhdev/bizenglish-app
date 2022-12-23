@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Grade;
 use App\Models\Log;
 use App\Models\Teacher;
 use Illuminate\Http\File;
@@ -44,6 +45,12 @@ class LogApiController extends Controller
             $data[] = $item;
         }
         return \response()->json($data, 200);
+    }
+
+    public function create()
+    {
+        $grades = Grade::where("disable", 0)->get(["id", "name"]);
+        return \response()->json(["grades" => $grades], 200);
     }
 
     public function show(Request $request)

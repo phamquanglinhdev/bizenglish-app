@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix("/")->group(function () {
         Route::post("/logs", [LogApiController::class, "index"]);
 
+        Route::post("/log/create", [LogApiController::class, "create"]);
         Route::post("/log/show", [LogApiController::class, "show"]);
         Route::post("/log/store", [LogApiController::class, "store"]);
         Route::post("/log/update", [LogApiController::class, "update"]);
