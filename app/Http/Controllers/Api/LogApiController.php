@@ -97,8 +97,8 @@ class LogApiController extends Controller
         $data->video = $log->teacher_video;
         $data->status = $log->status;
         $data->grade = $log->Grade()->first(["id", "name"]);
-        $data->teachers = $log->Teacher()->first(["id", "name"]);
-        $data->students = $log->Students()->get(["id", "name"]);
+        $data->students = $log->Grade()->first()->Student()->get(["id", "name"]);
+        $data->teachers = Teacher::where("id", $log->teacher_id)->first(["id", "name"]);
         return \response()->json($data, 200);
     }
 //grade: grade,
