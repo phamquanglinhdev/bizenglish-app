@@ -91,7 +91,7 @@ class LogApiController extends Controller
             'log_salary' => $request->logSalary ?? null,
             'lesson' => $request->lesson ?? null,
             'information' => $request->information ?? null,
-            'teacher_video' => json_encode($request->video) ?? null,
+//            'teacher_video' => json_encode($request->video) ?? null,
             'status' => $request->status ?? null,
             'assessment' => $request->assessment ?? null,
 //            'attachments' => $request->attachments ?? null,
