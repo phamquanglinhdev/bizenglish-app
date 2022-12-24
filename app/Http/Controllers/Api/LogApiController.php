@@ -148,7 +148,7 @@ class LogApiController extends Controller
             'question' => $requset->homework ?? null,
         ];
         try {
-            return $request;
+            return $request->homework;
 //            return var_dump($data["attachments"]);
 //            DB::table('logs')->where("id", $id)->update($data);
 //            return \response()->json(["message" => "Thành công"], 200);
