@@ -67,6 +67,9 @@ class LogApiController extends Controller
         $data->date = $log->date;
         $data->start = $log->start;
         $data->end = $log->end;
+        $data->duration = $log->duration;
+        $data->logSalary = $log->log_salary;
+        $data->hourSalary = $log->hour_salary;
         $data->lesson = $log->lesson;
         $data->information = $log->information;
         $data->question = $log->question;
@@ -74,7 +77,7 @@ class LogApiController extends Controller
         $data->attachments = $log->attachments;
         $data->video = $log->teacher_video;
         $data->status = $log->status;
-        return \response()->json($data,200);
+        return \response()->json($data, 200);
     }
 
     public function show(Request $request)
