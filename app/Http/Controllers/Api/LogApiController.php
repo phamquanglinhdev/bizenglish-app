@@ -145,13 +145,13 @@ class LogApiController extends Controller
             'status' => json_encode($request->status) ?? null,
             'assessment' => $request->assessment ?? null,
             'attachments' => json_encode($request->attachments) ?? null,
-            'question' => $requset->homework ?? null,
+            'question' => $request->homework ?? null,
         ];
         try {
-            return $request->homework;
+//            return $request->homework;
 //            return var_dump($data["attachments"]);
-//            DB::table('logs')->where("id", $id)->update($data);
-//            return \response()->json(["message" => "Thành công"], 200);
+            DB::table('logs')->where("id", $id)->update($data);
+            return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return $exception->getMessage() . " ||| " . $exception->getLine();
         }
