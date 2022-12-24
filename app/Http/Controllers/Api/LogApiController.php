@@ -82,7 +82,24 @@ class LogApiController extends Controller
 
     public function show(Request $request)
     {
-        //
+        $id = $request->id;
+        $log = Log::where("id", $id)->first();
+        $data = new \stdClass();
+        $data->date = $log->start . "-" . $log->end . "|" . $log->date;
+        $data->duration = $log->duration;
+        $data->logSalary = $log->log_salary;
+        $data->hourSalary = $log->hour_salary;
+        $data->lesson = $log->lesson;
+        $data->information = $log->information;
+        $data->homework = $log->question;
+        $data->assessment = $log->assessment;
+        $data->attachments = $log->attachments;
+        $data->video = $log->teacher_video;
+        $data->status = $log->status;
+        $data->grade = $log->Grade()->first(["id", "name"]);
+        $data->teachers = $log->Teacher()->first(["id", "name"]);
+        $data->students = $log->Students()->get(["id", "name"]);
+        return \response()->json($data, 200);
     }
 //grade: grade,
 //teacher: teacher,
@@ -145,7 +162,7 @@ class LogApiController extends Controller
             'status' => json_encode($request->status) ?? null,
             'assessment' => $request->assessment ?? null,
             'attachments' => json_encode($request->attachments) ?? null,
-            'question' => $request->homework ,
+            'question' => $request->homework,
         ];
         try {
 //            return $request->homework;
