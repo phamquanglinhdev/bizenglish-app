@@ -66,6 +66,7 @@ class LogApiController extends Controller
         $data = new \stdClass();
         $data->date = $log->date;
         $data->start = $log->start;
+        $data->end = $log->end;
         $data->lesson = $log->lesson;
         $data->information = $log->information;
         $data->question = $log->question;
