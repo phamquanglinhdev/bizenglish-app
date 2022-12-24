@@ -72,7 +72,7 @@ class LogApiController extends Controller
         $data->hourSalary = $log->hour_salary;
         $data->lesson = $log->lesson;
         $data->information = $log->information;
-        $data->question = $log->question;
+        $data->homework = $log->question;
         $data->assessment = $log->assessment;
         $data->attachments = $log->attachments;
         $data->video = $log->teacher_video;
