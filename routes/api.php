@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/log/create", [LogApiController::class, "create"]);
         Route::post("/log/show", [LogApiController::class, "show"]);
         Route::post("/log/store", [LogApiController::class, "store"]);
+        Route::post("/log/edit", [LogApiController::class, "edit"]);
         Route::post("/log/update", [LogApiController::class, "update"]);
         Route::post("/log/destroy", [LogApiController::class, "destroy"]);
     });

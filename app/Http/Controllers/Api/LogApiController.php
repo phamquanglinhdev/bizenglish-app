@@ -59,6 +59,23 @@ class LogApiController extends Controller
         return \response()->json(["grades" => $grades], 200);
     }
 
+    public function edit(Request $request)
+    {
+        $id = $request->id;
+        $log = Log::where("id", $id)->first();
+        $data = new \stdClass();
+        $data->date = $log->date;
+        $data->start = $log->start;
+        $data->lesson = $log->lesson;
+        $data->information = $log->information;
+        $data->question = $log->question;
+        $data->assessment = $log->assessment;
+        $data->attachments = $log->attachments;
+        $data->video = $log->teacher_video;
+        $data->status = $log->status;
+        return \response()->json($data,200);
+    }
+
     public function show(Request $request)
     {
         //
