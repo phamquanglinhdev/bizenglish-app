@@ -102,7 +102,7 @@ class LogApiController extends Controller
             DB::table('logs')->insert($data);
             return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
-            return $exception;
+            return $exception->getMessage() . " ||| " . $exception->getLine();
         }
 
     }
