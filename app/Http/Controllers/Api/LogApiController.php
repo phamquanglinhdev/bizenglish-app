@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class LogApiController extends Controller
@@ -97,7 +98,7 @@ class LogApiController extends Controller
         ];
         try {
 //            return var_dump($data["attachments"]);
-            Log::create($data);
+            DB::table("logs")->insert($data);
             return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return $exception;
