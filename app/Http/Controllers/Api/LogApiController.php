@@ -95,6 +95,7 @@ class LogApiController extends Controller
             'status' => json_encode($request->status) ?? null,
             'assessment' => $request->assessment ?? null,
             'attachments' => json_encode($request->attachments) ?? null,
+            'question' => $requset->question ?? null,
         ];
         try {
 //            return $data;
