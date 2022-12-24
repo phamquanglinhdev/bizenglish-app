@@ -97,9 +97,10 @@ class LogApiController extends Controller
             'attachments' => json_encode($request->attachments) ?? null,
         ];
         try {
+            return $data;
 //            return var_dump($data["attachments"]);
-            DB::table("logs")->insert($data);
-            return \response()->json(["message" => "Thành công"], 200);
+//            DB::table('logs')->insert($data);
+//            return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return $exception;
         }
