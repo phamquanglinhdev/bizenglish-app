@@ -150,7 +150,7 @@ class LogApiController extends Controller
         try {
 //            return $data;
 //            return var_dump($data["attachments"]);
-            DB::table('logs')->update($data);
+            DB::table('logs')->where("id", $id)->update($data);
             return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return $exception->getMessage() . " ||| " . $exception->getLine();
