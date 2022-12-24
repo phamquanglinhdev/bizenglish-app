@@ -131,7 +131,30 @@ class LogApiController extends Controller
 
     public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $data = [
+            'date' => Carbon::make($request->date) ?? null,
+            'start' => $request->start ?? null,
+            'end' => $request->end ?? null,
+            'duration' => $request->duration ?? null,
+            'hour_salary' => $request->hourSalary ?? null,
+            'log_salary' => $request->logSalary ?? null,
+            'lesson' => $request->lesson ?? null,
+            'information' => $request->information ?? null,
+            'teacher_video' => json_encode($request->video) ?? null,
+            'status' => json_encode($request->status) ?? null,
+            'assessment' => $request->assessment ?? null,
+            'attachments' => json_encode($request->attachments) ?? null,
+            'question' => $requset->question ?? null,
+        ];
+        try {
+//            return $data;
+//            return var_dump($data["attachments"]);
+            DB::table('logs')->update($data);
+            return \response()->json(["message" => "Thành công"], 200);
+        } catch (\Exception $exception) {
+            return $exception->getMessage() . " ||| " . $exception->getLine();
+        }
     }
 
     public function destroy(Request $request)
