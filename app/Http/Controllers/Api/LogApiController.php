@@ -72,7 +72,7 @@ class LogApiController extends Controller
         $data->hourSalary = $log->hour_salary;
         $data->lesson = $log->lesson;
         $data->information = $log->information;
-        $data->homework = $log->{"question"};
+        $data->homework = $log->question;
         $data->assessment = $log->assessment;
         $data->attachments = $log->attachments;
         $data->video = $log->teacher_video;
@@ -148,10 +148,10 @@ class LogApiController extends Controller
             'question' => $requset->question ?? null,
         ];
         try {
-//            return $data;
+            return $data;
 //            return var_dump($data["attachments"]);
-            DB::table('logs')->where("id", $id)->update($data);
-            return \response()->json(["message" => "Thành công"], 200);
+//            DB::table('logs')->where("id", $id)->update($data);
+//            return \response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return $exception->getMessage() . " ||| " . $exception->getLine();
         }
