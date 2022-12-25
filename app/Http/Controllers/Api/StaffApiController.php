@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class StaffApiController extends Controller
@@ -20,7 +21,7 @@ class StaffApiController extends Controller
 
     public function student(Request $request)
     {
-        return Student::where("disable", 0)->where("type",3)->get(["id", "name"]);
+        return Student::where("disable", 0)->where("type", 3)->get(["id", "name"]);
     }
 
     public function show(Request $request)
@@ -44,7 +45,10 @@ class StaffApiController extends Controller
         ];
         try {
             $staff = Staff::create($data);
-
+            foreach ($request->students as $student) {
+                Student::find($student->id)->update(["staff_id" => $staff]);
+            }
+            return response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
         }
     }
