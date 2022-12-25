@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TeacherCrudController;
 use App\Http\Controllers\Admin\TimeCrudController;
 use App\Http\Controllers\Admin\UserCrudController;
 use App\Http\Controllers\Api\SlackController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +57,6 @@ Route::group([
     Route::get("/time/show/{id}", [TimeCrudController::class, "showDetail", "id"])->name("time-show");
     Route::post("/time/update/", [TimeCrudController::class, "update"])->name("update-time");
     Route::crud('device', 'DeviceCrudController');
+    Route::get("/manager/send-notification", [NotificationController::class, "index"]);
+    Route::post("/manager/send-notification", [NotificationController::class, "send"])->name("manager.send");
 }); // this should be the absolute last line of this file

@@ -47,4 +47,9 @@ class User extends Authenticatable
     {
         $this->attributes['private_key'] = Hash::make($this->name . $this->code);
     }
+
+    public function Devices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Device::class, "user_id", "id");
+    }
 }
