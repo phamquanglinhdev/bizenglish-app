@@ -44,7 +44,7 @@ class StaffApiController extends Controller
             'name' => $request->name ?? null,
         ];
         try {
-            return $data["extras"];
+            return var_dump($data["extras"]);
 //            $staff = Staff::create($data);
 //            foreach ($request->students as $student) {
 //                Student::find($student["id"])->update(["staff_id" => $staff->id]);
