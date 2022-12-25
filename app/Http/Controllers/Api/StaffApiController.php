@@ -16,7 +16,7 @@ class StaffApiController extends Controller
         $page = $request->page ?? 1;
         $start = ($page - 1) * 10 + 1;
         $staff = Staff::where("disable", 0)->where("type", 0)->orderBy("code", "ASC")->skip($start)->take(10)->get(["id", "code", "name", "job", "phone", "email"]);
-        return response()->json(['staffs' => $staff]);
+        return response()->json($staff);
     }
 
     public function student(Request $request)
