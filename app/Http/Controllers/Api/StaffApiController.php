@@ -50,6 +50,7 @@ class StaffApiController extends Controller
             }
             return response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
+            return response()->json(["message" => "Thành công"], 400);
         }
     }
 
