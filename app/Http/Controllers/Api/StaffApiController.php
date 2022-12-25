@@ -46,7 +46,7 @@ class StaffApiController extends Controller
         try {
             $staff = Staff::create($data);
             foreach ($request->students as $student) {
-                Student::find($student->id)->update(["staff_id" => $staff]);
+                Student::find($student->id)->update(["staff_id" => $staff->id]);
             }
             return response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
