@@ -33,6 +33,7 @@ class StaffApiController extends Controller
         }
         $staff = Staff::where("id", $id)->first();
         $data = new \stdClass();
+        $data->code = $staff->code;
         $data->avatar = $staff->avatar;
         $data->name = $staff->name;
         $data->job = $staff->job;
