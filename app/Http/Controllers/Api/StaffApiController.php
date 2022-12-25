@@ -47,7 +47,7 @@ class StaffApiController extends Controller
 //            return $request->students;
 //            $staff = Staff::create($data);
             foreach ($request->students as $student) {
-                return Student::find($student->id);
+                return $student;
 //               ->update(["staff_id" => $staff->id]);
             }
 //            return response()->json(["message" => "Thành công"], 200);
