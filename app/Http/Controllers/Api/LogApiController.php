@@ -176,7 +176,8 @@ class LogApiController extends Controller
 
     public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        Log::find($request->id)->update(["disable" => 1]);
     }
 
     public function upload(Request $request)
