@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class StaffApiController extends Controller
 {
@@ -130,6 +131,9 @@ class StaffApiController extends Controller
 
     public function destroy(Request $request)
     {
-        //
+        $id = $request->id;
+        Staff::find($id)->update(["disable" => 1, "email" => Str::random(10) . "@disable.com"]);
+        Student::where("staff_id", "id")->update(["staff_id" => null]);
+        return response()->json(["message" => "Xoá thành công"], 200);
     }
 }
