@@ -88,5 +88,7 @@
         </li>
     @endif
 @endif
-
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('device') }}"><i class="nav-icon la la-question"></i> Devices</a></li>
+@if(backpack_user()->type==-1)
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('device') }}"><i class="nav-icon la la-mobile"></i>Thiết bị</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{route("manager.camp")}}"><i class="nav-icon la la-bullhorn"></i>Truyền thông</a></li>
+@endif

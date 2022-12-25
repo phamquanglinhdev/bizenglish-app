@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\Http;
 
 class PushNotificationController extends Controller
 {
-    public function index()
+    public static function ExpoPushNotification($to, $title, $body, $data)
     {
         $body = json_encode([
-            "to" => "ExponentPushToken[KC0ZyDPvakuukHkKOCKfK4]",
-            "title" => "Thông báo mới",
-            "body" => "Đến giờ ngủ rồi",
+            "to" => $to,
+            "title" => $title,
+            "body" => $body,
             "channelId" => 'default',
+            'data' => json_encode($data),
         ]);
         $response = Http::withBody($body, 'application/json')->post('https://exp.host/--/api/v2/push/send');
     }

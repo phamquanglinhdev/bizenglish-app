@@ -57,6 +57,6 @@ Route::group([
     Route::get("/time/show/{id}", [TimeCrudController::class, "showDetail", "id"])->name("time-show");
     Route::post("/time/update/", [TimeCrudController::class, "update"])->name("update-time");
     Route::crud('device', 'DeviceCrudController');
-    Route::get("/manager/send-notification", [NotificationController::class, "index"]);
+    Route::get("/manager/send-notification", [NotificationController::class, "index"])->name("manager.camp");
     Route::post("/manager/send-notification", [NotificationController::class, "send"])->name("manager.send");
 }); // this should be the absolute last line of this file

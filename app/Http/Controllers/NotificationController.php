@@ -19,6 +19,8 @@ class NotificationController extends Controller
 
     public function send(Request $request)
     {
+        $title = $request->title ?? "";
+        $description = $request->description ?? "";
         $target = [];
         $people = $request->people ?? [];
         if (in_array("everyone", $people)) {
@@ -80,13 +82,16 @@ class NotificationController extends Controller
                 $target = array_merge($target, [(int)$person]);
             }
         }
+        $data = new \stdClass();
+        $data->type = "link";
+        $data->link = $request->link??null;
         foreach ($target as $value) {
             $user = User::find($value);
             $devices = $user->Devices()->get();
             foreach ($devices as $device) {
-                echo "Token: $device->token";
+                echo "Token: $device->token <br>";
+                PushNotificationController::ExpoPushNotification($device->token, $title, $description, $data);
             }
         }
-
     }
 }

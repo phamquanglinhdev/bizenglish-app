@@ -6,7 +6,7 @@
                 <form action="{{route("manager.send")}}" method="post">
                     @csrf
                     <div class="mb-2">
-                        <label>Người tới:</label>
+                        <label>Gửi tới:</label>
                         <br>
                         <select class="js-example-basic-single form-control" name="people[]" multiple>
                             <option value="everyone">@Tất cả</option>
@@ -21,16 +21,17 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Tiêu đề :</label>
-                        <input type="text" class="form-control">
+                        <input type="text" name="title" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Nội dung ngắn:</label>
-                        <textarea class="form-control" maxlength="100" id="exampleFormControlTextarea1"
+                        <textarea class="form-control" name="description" maxlength="100"
+                                  id="exampleFormControlTextarea1"
                                   rows="1"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Nội dung thông báo :</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <label for="exampleFormControlTextarea1">Link tới bài thông báo :</label>
+                            <input type="text" name="link" class="form-control">
                     </div>
                     <button class="btn btn-success">Gửi</button>
                 </form>
