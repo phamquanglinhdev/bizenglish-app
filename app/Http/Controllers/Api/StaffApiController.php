@@ -48,7 +48,23 @@ class StaffApiController extends Controller
 
     public function show(Request $request)
     {
-        //
+        $id = $request->id ?? null;
+        if ($id == null) {
+            return response()->json(null, 404);
+        }
+        $staff = Staff::where("id", $id)->first();
+        $data = new \stdClass();
+        $data->code = $staff->code;
+        $data->avatar = $staff->avatar;
+        $data->name = $staff->name;
+        $data->job = $staff->job;
+        $data->email = $staff->email;
+        $data->phone = $staff->phone;
+        $data->extras = $staff->extras;
+        $data->facebook = $staff->facebook;
+        $data->students = $staff->Students()->get(["id", "name"]);
+        $data->address = $staff->address;
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)
