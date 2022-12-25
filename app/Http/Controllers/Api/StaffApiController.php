@@ -80,7 +80,29 @@ class StaffApiController extends Controller
 
     public function update(Request $request)
     {
-        //
+        $data = [
+            'code' => $request->code ?? null,
+            'avatar' => $request->avatar ?? null,
+            'job' => $request->job ?? null,
+            'phone' => $request->phone ?? null,
+            'email' => $request->email ?? null,
+            'extra' => $request->extras ?? null,
+            'address' => $request->address ?? null,
+            'type' => 0,
+            'name' => $request->name ?? null,
+            'facebook' => $request->facebook ?? null,
+        ];
+        try {
+            $staff = Staff::where("id", $request->id)->update($data);
+            Student::where("staff_id", $request->id)->update(["staff_id" => null]);
+            foreach ($request->students as $student) {
+                Student::find($student["id"])->update(["staff_id" => $staff->id]);
+            }
+            return response()->json(["message" => "Thành công"], 200);
+        } catch (\Exception $exception) {
+            Log::alert($exception);
+            return response()->json(["message" => "Thành công"], 400);
+        }
     }
 
     public function destroy(Request $request)
