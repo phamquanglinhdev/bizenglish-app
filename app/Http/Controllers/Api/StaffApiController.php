@@ -95,6 +95,12 @@ class StaffApiController extends Controller
         ];
         try {
             $staff = Staff::where("id", $request->id)->update($data);
+            $password = $request->password ?? null;
+            if ($password != null) {
+                $staff = Staff::where("id", $request->id)->update([
+                    'password' => Hash::make($password)
+                ]);
+            }
             Student::where("staff_id", $request->id)->update(["staff_id" => null]);
             foreach ($request->students as $student) {
                 Student::where("id", $student["id"])->update(["staff_id" => $request->id]);
