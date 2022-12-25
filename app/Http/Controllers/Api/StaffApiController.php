@@ -95,11 +95,9 @@ class StaffApiController extends Controller
         ];
         try {
             $staff = Staff::where("id", $request->id)->update($data);
-
             Student::where("staff_id", $request->id)->update(["staff_id" => null]);
-            return var_dump($request->students);
             foreach ($request->students as $student) {
-
+                return var_dump($student["id"]);
                 Student::find($student->id)->update(["staff_id" => $staff->id]);
             }
             return response()->json(["message" => "Thành công"], 200);
