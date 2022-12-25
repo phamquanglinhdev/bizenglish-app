@@ -25,6 +25,26 @@ class StaffApiController extends Controller
         return Student::where("disable", 0)->where("type", 3)->get(["id", "name"]);
     }
 
+    public function edit(Request $request)
+    {
+        $id = $request->id ?? null;
+        if ($id == null) {
+            return response()->json(null, 404);
+        }
+        $staff = Staff::where("id", $id)->first();
+        $data = new \stdClass();
+        $data->avatar = $staff->avatar;
+        $data->name = $staff->name;
+        $data->job = $staff->job;
+        $data->email = $staff->email;
+        $data->phone = $staff->phone;
+        $data->extras = $staff->extras;
+        $data->facebook = $staff->facebook;
+        $data->students = $staff->Students()->get(["id", "name"]);
+        $data->address = $staff->address;
+        return response()->json([$data,], 200);
+    }
+
     public function show(Request $request)
     {
         //
@@ -43,6 +63,7 @@ class StaffApiController extends Controller
             'password' => Hash::make($request->password),
             'type' => 0,
             'name' => $request->name ?? null,
+            'facebook' => $request->facebook ?? null,
         ];
         try {
 //            return var_dump($data["extras"]);
