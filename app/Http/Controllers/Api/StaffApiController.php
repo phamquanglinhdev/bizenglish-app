@@ -42,7 +42,7 @@ class StaffApiController extends Controller
         $data->facebook = $staff->facebook;
         $data->students = $staff->Students()->get(["id", "name"]);
         $data->address = $staff->address;
-        return response()->json([$data,], 200);
+        return response()->json([$data], 200);
     }
 
     public function show(Request $request)
