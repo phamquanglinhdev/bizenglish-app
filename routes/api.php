@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post("/staff/student", [StaffApiController::class, "student"]);
         Route::post("/staff/show", [StaffApiController::class, "show"]);
         Route::post("/staff/store", [StaffApiController::class, "store"]);
+        Route::post("/staff/edit", [StaffApiController::class, "edit"]);
         Route::post("/staff/update", [StaffApiController::class, "update"]);
         Route::post("/staff/destroy", [StaffApiController::class, "destroy"]);
     });
