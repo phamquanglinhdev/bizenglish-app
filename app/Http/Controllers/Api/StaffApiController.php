@@ -44,11 +44,12 @@ class StaffApiController extends Controller
             'name' => $request->name ?? null,
         ];
         try {
-            $staff = Staff::create($data);
-            foreach ($request->students as $student) {
-                Student::find($student->id)->update(["staff_id" => $staff->id]);
-            }
-            return response()->json(["message" => "Thành công"], 200);
+            return $request->students;
+//            $staff = Staff::create($data);
+//            foreach ($request->students as $student) {
+//                Student::find($student->id)->update(["staff_id" => $staff->id]);
+//            }
+//            return response()->json(["message" => "Thành công"], 200);
         } catch (\Exception $exception) {
             return response()->json(["message" => "Thành công"], 400);
         }
