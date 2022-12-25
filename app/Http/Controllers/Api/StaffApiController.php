@@ -37,7 +37,7 @@ class StaffApiController extends Controller
             'job' => $request->job ?? null,
             'phone' => $request->phone ?? null,
             'email' => $request->email ?? null,
-            'extras' => json_encode($request->extras ?? null),
+            'extras' => json_encode($request->extras),
             'address' => $request->address ?? null,
             'password' => Hash::make($request->password ?? null),
             'type' => 0,
