@@ -25,7 +25,7 @@ class LogApiController extends Controller
         $page = $request->page ?? 1;
         $data = [];
         $user = $request->user();
-        $logs = Log::where("disable", 0)->orderBy("created_at", "DESC")->skip(($page - 1) * 20 + 1)->take(20)->get();
+        $logs = Log::where("disable", 0)->orderBy("date", "DESC")->skip(($page - 1) * 20 + 1)->take(20)->get();
         foreach ($logs as $log) {
             $item = new \stdClass();
             $item->id = $log->id;
