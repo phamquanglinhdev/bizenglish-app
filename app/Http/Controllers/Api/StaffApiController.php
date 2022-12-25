@@ -20,7 +20,7 @@ class StaffApiController extends Controller
 
     public function student(Request $request)
     {
-        return Student::where("disable", 0)->get(["id", "name"]);
+        return Student::where("disable", 0)->where("type",3)->get(["id", "name"]);
     }
 
     public function show(Request $request)
