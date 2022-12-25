@@ -97,7 +97,7 @@ class StaffApiController extends Controller
             $staff = Staff::where("id", $request->id)->update($data);
 
             Student::where("staff_id", $request->id)->update(["staff_id" => null]);
-            return $request->students;
+            return var_dump($request->students);
             foreach ($request->students as $student) {
 
                 Student::find($student->id)->update(["staff_id" => $staff->id]);
