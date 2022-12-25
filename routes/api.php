@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     Route::prefix("/")->group(function () {
         Route::post("/staffs", [StaffApiController::class, "index"]);
+        Route::post("/staff/student", [StaffApiController::class, "student"]);
         Route::post("/staff/show", [StaffApiController::class, "show"]);
         Route::post("/staff/store", [StaffApiController::class, "store"]);
         Route::post("/staff/update", [StaffApiController::class, "update"]);

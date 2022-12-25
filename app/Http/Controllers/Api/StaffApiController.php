@@ -15,13 +15,12 @@ class StaffApiController extends Controller
         $page = $request->page ?? 1;
         $start = ($page - 1) * 10 + 1;
         $staff = Staff::where("disable", 0)->where("type", 0)->orderBy("code", "ASC")->skip($start)->take(10)->get(["id", "code", "name", "job", "phone", "email"]);
-        return response()->json(['staffs' => $staff, 'students' => $this->studentList()]);
+        return response()->json(['staffs' => $staff]);
     }
 
-    public function studentList()
+    public function student(Request $request)
     {
-        $students = Student::where("disable", 0)->get(["id", "name"]);
-        return $students;
+        return Student::where("disable", 0)->get(["id", "name"]);
     }
 
     public function show(Request $request)
