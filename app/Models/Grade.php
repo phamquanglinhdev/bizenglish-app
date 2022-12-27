@@ -103,6 +103,11 @@ class Grade extends Model
         return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
     }
 
+    public function Supporter(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(User::class, "supporter_grade", "grade_id", "supporter_id");
+    }
+
     public function Logs(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Log::class, "grade_id", "id");
@@ -128,6 +133,7 @@ class Grade extends Model
 
 
     }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

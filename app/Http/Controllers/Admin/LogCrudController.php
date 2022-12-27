@@ -569,16 +569,48 @@ class LogCrudController extends CrudController
                 'attribute' => 'name',
                 'label' => trans("backpack::crud.grade_name"),
                 'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->leftJoin("staff_grade", "staff_grade.grade_id", "=", "grades.id")->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)->get();
+                    return $query->orderBy('name', 'ASC')->
+                    leftJoin("staff_grade", "staff_grade.grade_id", "=", "grades.id")
+                        ->leftJoin("supporter_grade", "supporter_grade.grade_id", "=", "grades.id")
+                        ->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)
+                        ->orWhere("supporter_grade.supporter_id", backpack_user()->id)
+                        ->where("disable", 0)->get();
+                })
+            ]);
+        }
+        if (backpack_user()->type == -1) {
+            CRUD::addField([
+                'name' => 'grade_id',
+                'type' => 'select2',
+                'entity' => 'Grade',
+                'model' => "App\Models\Grade",
+                'attribute' => 'fullName',
+                'label' => trans("backpack::crud.grade_name"),
+                'options' => (function ($query) {
+                    return $query->where("disable", 0)->get();
                 })
             ]);
         }
 
-        CRUD::addField([
-            'name' => 'teacher_id',
-            'value' => backpack_user()->id,
-            'type' => 'hidden',
-        ]);
+        if (backpack_user()->type != 1) {
+            CRUD::addField([
+                'name' => 'teacher_id',
+                'label' => 'Điểm danh hộ giáo viên',
+                'type' => 'select2',
+                'attribute' => 'fullName',
+                'options' => (function ($query) {
+                    return $query->where("type", 1)->where("disable", 0)->get();
+                })
+            ]);
+        } else {
+            if (backpack_user()->type == 1) {
+                CRUD::addField([
+                    'name' => 'teacher_id',
+                    'value' => backpack_user()->id,
+                    'type' => 'hidden',
+                ]);
+            }
+        }
         CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
         ]);

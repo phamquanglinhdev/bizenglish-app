@@ -125,4 +125,8 @@ class Teacher extends Model
         'extra' => 'json',
     ];
 
+    public function getFullNameAttribute()
+    {
+        return $this->code . ":" . $this->name;
+    }
 }

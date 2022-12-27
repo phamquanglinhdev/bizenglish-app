@@ -63,6 +63,11 @@ class Staff extends Model
         return $this->belongsToMany(Grade::class, "staff_grade", "staff_id", "grade_id");
     }
 
+    public function GradesAsSupport(): BelongsToMany
+    {
+        return $this->belongsToMany(Grade::class, "supporter_grade", "supporter_id", "grade_id");
+    }
+
     public function Students(): HasMany
     {
         return $this->hasMany(User::class, "staff_id", "id");
@@ -89,6 +94,7 @@ class Staff extends Model
         'email_verified_at' => 'datetime',
         'extra' => 'json',
     ];
+
     public function setPrivate()
     {
         $this->attributes['private_key'] = Hash::make($this->name . $this->code);

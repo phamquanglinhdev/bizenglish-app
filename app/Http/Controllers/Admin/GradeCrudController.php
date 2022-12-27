@@ -343,6 +343,7 @@ class GradeCrudController extends CrudController
         CRUD::column('student_id')->type("select")->label("Học viên");
         CRUD::column('teacher_id')->type("select")->label("Giáo viên");
         CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
+        CRUD::column('supporter_id')->type("select")->label("Nhân viên hỗ trợ");
         CRUD::column('client_id')->type("select")->label("Đối tác");
         CRUD::column('zoom')->type("link")->label("Link lớp");
         if (backpack_user()->type != 1) {
@@ -493,6 +494,25 @@ class GradeCrudController extends CrudController
                         // optional
                         'options' => (function ($query) {
                             return $query->orderBy('name', 'ASC')->where('type', 0)->get();
+                        }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+                    ],
+                );
+                CRUD::addField(
+                    [    // Select2Multiple = n-n relationship (with pivot table)
+                        'label' => "Nhân viên hỗ trợ",
+                        'type' => 'select2_multiple',
+                        'name' => 'supporter', // the method that defines the relationship in your Model
+
+                        // optional
+                        'entity' => 'Supporter', // the method that defines the relationship in your Model
+                        'model' => "App\Models\Staff", // foreign key model
+                        'attribute' => 'name', // foreign key attribute that is shown to user
+                        'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
+                        // 'select_all' => true, // show Select All and Clear buttons?
+
+                        // optional
+                        'options' => (function ($query) {
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable",0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );
