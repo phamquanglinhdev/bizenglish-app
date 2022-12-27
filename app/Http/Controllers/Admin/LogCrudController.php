@@ -584,7 +584,7 @@ class LogCrudController extends CrudController
                 'type' => 'select2',
                 'entity' => 'Grade',
                 'model' => "App\Models\Grade",
-                'attribute' => 'fullName',
+                'attribute' => 'name',
                 'label' => trans("backpack::crud.grade_name"),
                 'options' => (function ($query) {
                     return $query->where("disable", 0)->get();
