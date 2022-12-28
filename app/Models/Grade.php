@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class Grade extends Model
@@ -32,6 +33,19 @@ class Grade extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function afterStore()
+    {
+//        if (backpack_user() == 0) {
+//            DB::table("supporter_grade")->where("supporter_id", "=", backpack_user()->id)
+//                ->where("grade_id", "=", backpack_user()->id)->count()==0;
+//            DB::table("staff_grade")->where("grade_id", "=", $this->id)->delete();
+//            DB::table("staff_grade")->insert([
+//                "staff_id" => backpack_user()->id,
+//                "grade_id" => $this->id,
+//            ]);
+//        }
+    }
+
     public function getStatus()
     {
         $status = ["Đang học", "Đã kết thúc", "Đang bảo lưu"];
@@ -121,12 +135,17 @@ class Grade extends Model
     public function scopeOwner($query)
     {
         $grades = DB::table("staff_grade")->where("staff_id", backpack_user()->id)->get();
-        if ($grades->count() > 0) {
-            $query->where("id", $grades->first()->grade_id);
+        $subGrades = DB::table("supporter_grade")->where("supporter_id", backpack_user()->id)->get();
+        if ($grades->count() > 0 || $subGrades->count() > 0) {
+            $query->where("id", -1);
             foreach ($grades as $grade) {
                 $query->orWhere("id", $grade->grade_id);
             }
+            foreach ($subGrades as $grade) {
+                $query->orWhere("id", $grade->grade_id);
+            }
         } else {
+
             $query->where("id", -1);
         }
         return $query;
@@ -134,6 +153,12 @@ class Grade extends Model
 
     }
 
+    public function isNotSupporter($id)
+    {
+        return DB::table("supporter_grade")
+                ->where("grade_id", "=", $id)
+                ->where("supporter_id", "=", backpack_user()->id)->count() == 0;
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
