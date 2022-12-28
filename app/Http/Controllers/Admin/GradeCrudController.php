@@ -505,34 +505,34 @@ class GradeCrudController extends CrudController
 
                         // optional
                         'entity' => 'Supporter', // the method that defines the relationship in your Model
-                        'model' => "App\Models\Staff", // foreign key model
+                        'model' => "App\Models\Supporter", // foreign key model
                         'attribute' => 'name', // foreign key attribute that is shown to user
                         'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
                         // 'select_all' => true, // show Select All and Clear buttons?
 
                         // optional
                         'options' => (function ($query) {
-                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable",0)->get();
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable", 0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );
             } else {
                 CRUD::addField(
                     [    // Select2Multiple = n-n relationship (with pivot table)
-                        'label' => "Nhân viên quản lý",
+                        'label' => "Nhân viên hỗ trợ",
                         'type' => 'select2_multiple',
-                        'name' => 'staff', // the method that defines the relationship in your Model
+                        'name' => 'supporter', // the method that defines the relationship in your Model
 
                         // optional
-                        'entity' => 'Staff', // the method that defines the relationship in your Model
-                        'model' => "App\Models\User", // foreign key model
+                        'entity' => 'Supporter', // the method that defines the relationship in your Model
+                        'model' => "App\Models\Supporter", // foreign key model
                         'attribute' => 'name', // foreign key attribute that is shown to user
                         'pivot' => true, // on create&update, do you need to add/delete pivot table entries?
                         // 'select_all' => true, // show Select All and Clear buttons?
 
                         // optional
                         'options' => (function ($query) {
-                            return $query->orderBy('name', 'ASC')->where('id', backpack_user()->id)->get();
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable", 0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );

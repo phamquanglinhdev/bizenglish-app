@@ -20,7 +20,7 @@
             @endforeach
         </li>
         <li class="list-group-item">Số phút học: {{$grade->minutes}}</li>
-        @if(backpack_user()->type!=1)
+        @if(backpack_user()->type<=0)
             <li class="list-group-item">Gói học phí : {{number_format($grade->pricing)}} đ</li>
         @endif
         <li class="list-group-item">Tài liệu : <a class='' href='/uploads/document/{{ $grade->attachment }}'><i
