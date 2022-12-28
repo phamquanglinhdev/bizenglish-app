@@ -542,73 +542,75 @@ class LogCrudController extends CrudController
      * @return void
      */
     protected
-    function setupCreateOperation()
+    function setupCreateOperation($edit=false)
     {
 
         CRUD::setValidation(LogRequest::class);
 
-        if (backpack_user()->type == 1) {
-            CRUD::addField([
-                'name' => 'grade_id',
-                'type' => 'select2',
-                'entity' => 'Grade',
-                'model' => "App\Models\Grade",
-                'attribute' => 'name',
-                'label' => trans("backpack::crud.grade_name"),
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
-                })
-            ]);
-        }
-        if (backpack_user()->type == 0) {
-            CRUD::addField([
-                'name' => 'grade_id',
-                'type' => 'select2',
-                'entity' => 'Grade',
-                'model' => "App\Models\Grade",
-                'attribute' => 'name',
-                'label' => trans("backpack::crud.grade_name"),
-                'options' => (function ($query) {
-                    return $query->orderBy('name', 'ASC')->
-                    leftJoin("staff_grade", "staff_grade.grade_id", "=", "grades.id")
-                        ->leftJoin("supporter_grade", "supporter_grade.grade_id", "=", "grades.id")
-                        ->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)
-                        ->orWhere("supporter_grade.supporter_id", backpack_user()->id)
-                        ->where("disable", 0)->get();
-                })
-            ]);
-        }
-        if (backpack_user()->type == -1) {
-            CRUD::addField([
-                'name' => 'grade_id',
-                'type' => 'select2',
-                'entity' => 'Grade',
-                'model' => "App\Models\Grade",
-                'attribute' => 'name',
-                'label' => trans("backpack::crud.grade_name"),
-                'options' => (function ($query) {
-                    return $query->where("disable", 0)->get();
-                })
-            ]);
-        }
-
-        if (backpack_user()->type != 1) {
-            CRUD::addField([
-                'name' => 'teacher_id',
-                'label' => 'Điểm danh hộ giáo viên',
-                'type' => 'select2',
-                'attribute' => 'fullName',
-                'options' => (function ($query) {
-                    return $query->where("type", 1)->where("disable", 0)->get();
-                })
-            ]);
-        } else {
+        if(!$edit){
             if (backpack_user()->type == 1) {
                 CRUD::addField([
-                    'name' => 'teacher_id',
-                    'value' => backpack_user()->id,
-                    'type' => 'hidden',
+                    'name' => 'grade_id',
+                    'type' => 'select2',
+                    'entity' => 'Grade',
+                    'model' => "App\Models\Grade",
+                    'attribute' => 'name',
+                    'label' => trans("backpack::crud.grade_name"),
+                    'options' => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
+                    })
                 ]);
+            }
+            if (backpack_user()->type == 0) {
+                CRUD::addField([
+                    'name' => 'grade_id',
+                    'type' => 'select2',
+                    'entity' => 'Grade',
+                    'model' => "App\Models\Grade",
+                    'attribute' => 'name',
+                    'label' => trans("backpack::crud.grade_name"),
+                    'options' => (function ($query) {
+                        return $query->orderBy('name', 'ASC')->
+                        leftJoin("staff_grade", "staff_grade.grade_id", "=", "grades.id")
+                            ->leftJoin("supporter_grade", "supporter_grade.grade_id", "=", "grades.id")
+                            ->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)
+                            ->orWhere("supporter_grade.supporter_id", backpack_user()->id)
+                            ->where("disable", 0)->get();
+                    })
+                ]);
+            }
+            if (backpack_user()->type == -1) {
+                CRUD::addField([
+                    'name' => 'grade_id',
+                    'type' => 'select2',
+                    'entity' => 'Grade',
+                    'model' => "App\Models\Grade",
+                    'attribute' => 'name',
+                    'label' => trans("backpack::crud.grade_name"),
+                    'options' => (function ($query) {
+                        return $query->where("disable", 0)->get();
+                    })
+                ]);
+            }
+
+            if (backpack_user()->type != 1) {
+                CRUD::addField([
+                    'name' => 'teacher_id',
+                    'label' => 'Điểm danh hộ giáo viên',
+                    'type' => 'select2',
+                    'attribute' => 'fullName',
+                    'options' => (function ($query) {
+                        return $query->where("type", 1)->where("disable", 0)->get();
+                    })
+                ]);
+            } else {
+                if (backpack_user()->type == 1) {
+                    CRUD::addField([
+                        'name' => 'teacher_id',
+                        'value' => backpack_user()->id,
+                        'type' => 'hidden',
+                    ]);
+                }
             }
         }
         CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([
@@ -716,7 +718,7 @@ class LogCrudController extends CrudController
     protected
     function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->setupCreateOperation(true);
     }
 
     protected
