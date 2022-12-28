@@ -493,7 +493,7 @@ class GradeCrudController extends CrudController
 
                         // optional
                         'options' => (function ($query) {
-                            return $query->orderBy('name', 'ASC')->where('type', 0)->get();
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable", 0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );
@@ -512,7 +512,7 @@ class GradeCrudController extends CrudController
 
                         // optional
                         'options' => (function ($query) {
-                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable",0)->get();
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable", 0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );
@@ -532,7 +532,7 @@ class GradeCrudController extends CrudController
 
                         // optional
                         'options' => (function ($query) {
-                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("disable",0)->get();
+                            return $query->orderBy('name', 'ASC')->where('type', 0)->where("id", "!=", backpack_user()->id)->where("disable", 0)->get();
                         }), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
                     ],
                 );
