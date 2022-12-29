@@ -519,8 +519,7 @@ class GradeCrudController extends CrudController
                 );
             } else {
                 if ($editing) {
-                    $id = explode("/", $this->crud->getRequest()->path())[2];
-                    if ($this->crud->model->isNotSupporter($id)){
+                    if ($this->crud->model->isNotSupporter($this->crud->getCurrentEntry()->id)) {
                         CRUD::addField(
                             [    // Select2Multiple = n-n relationship (with pivot table)
                                 'label' => "Nhân viên quản lý",

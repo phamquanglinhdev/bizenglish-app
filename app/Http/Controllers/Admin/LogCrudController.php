@@ -216,7 +216,7 @@ class LogCrudController extends CrudController
                 $_SESSION["filtered"] = true;
             }
         );
-        if (backpack_user()->type == 0) {
+        if (backpack_user()->type == 0 && $this->crud->getCurrentOperation() != "update") {
             if (!$_SESSION["filtered"]) {
                 $first = true;
                 if ($logs_id != []) {
@@ -542,12 +542,11 @@ class LogCrudController extends CrudController
      * @return void
      */
     protected
-    function setupCreateOperation($edit=false)
+    function setupCreateOperation($edit = false)
     {
 
         CRUD::setValidation(LogRequest::class);
-
-        if(!$edit){
+        if (!$edit) {
             if (backpack_user()->type == 1) {
                 CRUD::addField([
                     'name' => 'grade_id',
@@ -715,8 +714,7 @@ class LogCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected
-    function setupUpdateOperation()
+    protected function setupUpdateOperation()
     {
         $this->setupCreateOperation(true);
     }

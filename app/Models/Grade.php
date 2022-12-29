@@ -153,10 +153,10 @@ class Grade extends Model
 
     }
 
-    public function isNotSupporter($id)
+    public function isNotSupporter($gradeId)
     {
         return DB::table("supporter_grade")
-                ->where("grade_id", "=", $id)
+                ->where("grade_id", "=", $gradeId)
                 ->where("supporter_id", "=", backpack_user()->id)->count() == 0;
     }
     /*
