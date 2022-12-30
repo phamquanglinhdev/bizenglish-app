@@ -3,7 +3,6 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Handler\SlackWebhookHandler;
 
 return [
 
@@ -76,7 +75,7 @@ return [
 
         'slack' => [
             'driver' => 'slack',
-            'url' => 'https://hooks.slack.com/services/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',
+            'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => 'critical',
