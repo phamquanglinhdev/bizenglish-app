@@ -34,7 +34,7 @@ class LogApiController extends Controller
             $item->end = $log->end;
             $item->grade = $log->Grade()->first(["id", "name"]);
             $item->students = $log->Grade()->first()->Student()->get(["id", "name"]);
-            $item->teachers = Teacher::where("id", $log->teacher_id)->first(["id", "name"]);
+            $item->teachers = Teacher::where("id", $log->teacher_id)->get(["id", "name"]);
             $item->clients = $log->Grade()->first()->Client()->get(["id", "name"]);
             $item->lesson = $log->lesson;
             $item->video = $log->teacher_video;
