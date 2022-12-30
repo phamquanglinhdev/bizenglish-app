@@ -9,7 +9,7 @@ class TestController extends Controller
 {
     public function index()
     {
-        Notification::route('slack', "https://hooks.slack.com/services/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")
+        Notification::route('slack', "https://hooks.slack.com/services/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")
             ->notify(new SlackNotification("Xin chào"));
     }
 }

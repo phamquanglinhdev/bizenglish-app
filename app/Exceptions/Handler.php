@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\PushNotificationController;
 use App\Notifications\SlackNotification;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Notification;
@@ -53,7 +54,6 @@ class Handler extends ExceptionHandler
     public function report(Throwable $e)
     {
         parent::report($e);
-        Notification::route('slack', "https://hooks.slack.com/services/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")
-            ->notify(new SlackNotification($e->getMessage()));
+        PushNotificationController::ExpoPushNotification("Token:ExponentPushToken[6sgd8CCJ1p6PNh3WzgheP_]", "Lỗi", $e->getMessage(), null);
     }
 }
