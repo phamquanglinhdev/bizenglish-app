@@ -4,9 +4,11 @@ namespace App\Exceptions;
 
 use App\Http\Controllers\PushNotificationController;
 use App\Notifications\SlackNotification;
+use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use RuntimeException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -54,7 +56,7 @@ class Handler extends ExceptionHandler
 
     public function report(Throwable $e)
     {
-        Log::alert("HIHI");
+        Bugsnag::notifyException(new RuntimeException("Test error"));
         parent::report($e);
         PushNotificationController::ExpoPushNotification("Token:ExponentPushToken[6sgd8CCJ1p6PNh3WzgheP_]", "Lỗi", $e->getMessage(), null);
     }

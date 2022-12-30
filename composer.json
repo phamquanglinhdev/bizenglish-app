@@ -12,6 +12,7 @@
         "ext-zip": "*",
         "backpack/crud": "5.3.6",
         "backpack/filemanager": "^2.0",
+        "bugsnag/bugsnag-laravel": "^2.25",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
