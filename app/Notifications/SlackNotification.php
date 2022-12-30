@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class SlackNotification extends Notification
 {
-    use Queueable;
+//    use Queueable;
 
     public $message;
 
@@ -32,7 +32,7 @@ class SlackNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'slack'];
+        return ['slack'];
     }
 
     /**
@@ -66,26 +66,26 @@ class SlackNotification extends Notification
     {
         \App\Models\Notification::create(
             [
-                "title" => "Thông báo BizEnglish",
+                "title" => "Thông báo",
                 "message" => $this->message,
 
             ]
         );
         $url = "https://fb.me";
         return (new SlackMessage())
-            ->from('All Laravel')
-            ->to('#reported_class')
+            ->from('Admin')
+            ->to('#log-laravel')
             ->image('https://allaravel.com/themes/allaravel/assets/img/all-laravel-logo.png')
-            ->content($this->message)
-            ->attachment(function ($attachment) use ($url) {
-                $attachment->title('Xem chi tiết', $url);
-//                    ->fields([
-//                        'Title' => 'Server Expenses',
-//                        'Amount' => '$1,234',
-//                        'Via' => 'American Express',
-//                        'Was Overdue' => ':-1:',
-//                    ]);
-            });
+            ->content($this->message);
+//            ->attachment(function ($attachment) use ($url) {
+//                $attachment->title('Xem chi tiết', $url);
+////                    ->fields([
+////                        'Title' => 'Server Expenses',
+////                        'Amount' => '$1,234',
+////                        'Via' => 'American Express',
+////                        'Was Overdue' => ':-1:',
+////                    ]);
+//            });
     }
 
 

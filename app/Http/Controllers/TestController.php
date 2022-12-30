@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\SlackNotification;
 use Illuminate\Support\Facades\DB;
 
 class TestController extends Controller
 {
-    public function index()
+    public static function index()
     {
-        $query = DB::table("grades");
-        $query = $query->rightJoin("staff_grade", "grades.id", "=", "staff_grade.grade_id")
-            ->joinSub("users", "staffes", "users.id", "=", "staff_grade.staff_id");
-        return $query->where("staffes.name", "like", "%Minh%")->get();
+        dispatch(new SlackNotification("Xin chao"));
     }
 }

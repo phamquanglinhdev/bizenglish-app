@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use App\Notifications\SlackNotification;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +48,12 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function report(Throwable $e)
+    {
+        Notification::route('slack', "https://hooks.slack.com/services/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")
+            ->notify(new SlackNotification($e->getMessage()));
+
     }
 }
