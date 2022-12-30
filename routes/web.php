@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\LogApiController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,7 @@ Route::get('upload-file', function () {
 });
 Route::get("/book/{slug}", [BookController::class, "show", "slug"])->name("show-book");
 //Route::get("/auto/v1/{private}", [ApplicationController::class, "autoLogin", "private"]);
-Route::get("/test", [\App\Http\Controllers\TestController::class, "index"]);
+Route::get("/testSlacks", [TestController::class, "index"]);
 Route::get("/language/set", function () {
     Cookie::queue("language", "1", 60 * 24 * 365);
     return redirect()->back();

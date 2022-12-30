@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class SlackNotification extends Notification
 {
-//    use Queueable;
+    use Queueable;
 
     public $message;
 
@@ -32,7 +32,7 @@ class SlackNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['slack'];
+        return ['mail', 'slack'];
     }
 
     /**
@@ -64,28 +64,28 @@ class SlackNotification extends Notification
 
     public function toSlack($notifiable)
     {
-        \App\Models\Notification::create(
-            [
-                "title" => "Thông báo",
-                "message" => $this->message,
-
-            ]
-        );
+//        \App\Models\Notification::create(
+//            [
+//                "title" => "Thông báo BizEnglish",
+//                "message" => $this->message,
+//
+//            ]
+//        );
         $url = "https://fb.me";
         return (new SlackMessage())
-            ->from('Admin')
-            ->to('#log-laravel')
+            ->from('All Laravel')
+            ->to('#reported_class')
             ->image('https://allaravel.com/themes/allaravel/assets/img/all-laravel-logo.png')
-            ->content($this->message);
-//            ->attachment(function ($attachment) use ($url) {
-//                $attachment->title('Xem chi tiết', $url);
-////                    ->fields([
-////                        'Title' => 'Server Expenses',
-////                        'Amount' => '$1,234',
-////                        'Via' => 'American Express',
-////                        'Was Overdue' => ':-1:',
-////                    ]);
-//            });
+            ->content($this->message)
+            ->attachment(function ($attachment) use ($url) {
+                $attachment->title('Xem chi tiết', $url);
+//                    ->fields([
+//                        'Title' => 'Server Expenses',
+//                        'Amount' => '$1,234',
+//                        'Via' => 'American Express',
+//                        'Was Overdue' => ':-1:',
+//                    ]);
+            });
     }
 
 
