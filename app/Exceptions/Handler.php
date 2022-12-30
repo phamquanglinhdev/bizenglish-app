@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
 //            Bugsnag::notifyException(new RuntimeException("Test error"));
-//            PushNotificationController::ExpoPushNotification("Token:ExponentPushToken[6sgd8CCJ1p6PNh3WzgheP_]", "Lỗi", $e->getMessage(), null);
+            PushNotificationController::ExpoPushNotification("Token:ExponentPushToken[6sgd8CCJ1p6PNh3WzgheP_]", "Lỗi", $e->getMessage(), null);
         });
     }
 
