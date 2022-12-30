@@ -58,6 +58,7 @@ return [
         ],
         'bugsnag' => [
             'driver' => 'bugsnag',
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
         'single' => [
             'driver' => 'single',
@@ -77,7 +78,7 @@ return [
             'url' => env('https://hooks.slack.com/services/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'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
+            'level' => env('LOG_LEVEL', 'debug'),
         ],
 
         'papertrail' => [
