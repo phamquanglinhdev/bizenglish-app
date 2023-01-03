@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use App\Http\Controllers\PushNotificationController;
 use App\Notifications\SlackNotification;
-use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;

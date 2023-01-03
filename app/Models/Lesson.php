@@ -36,7 +36,9 @@ class Lesson extends Model
     public function Book(){
         return $this->belongsTo(Book::class,"book_id","id");
     }
+    public function setPdfAttr(){
 
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES
