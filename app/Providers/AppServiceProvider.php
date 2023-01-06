@@ -28,12 +28,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $maintain = DB::table("settings")->where("name", "maintain")->first();
-        if ($maintain != null && $maintain->value == "on") {
-            $remote_ip = DB::table("settings")->where("name", "maintain_ip")->first();
-            if ($remote_ip->value != $_SERVER["REMOTE_ADDR"]) {
-                dd("Sever đang bảo trì, vui lòng quay lại sau");
+        try {
+            $maintain = DB::table("settings")->where("name", "maintain")->first();
+            if ($maintain != null && $maintain->value == "on") {
+                $remote_ip = DB::table("settings")->where("name", "maintain_ip")->first();
+                if ($remote_ip->value != $_SERVER["REMOTE_ADDR"]) {
+                    dd("Sever đang bảo trì, vui lòng quay lại sau");
+                }
             }
+        } catch (\Exception $exception) {
         }
         if (isset($_COOKIE["language"])) {
             app()->setLocale("en");
