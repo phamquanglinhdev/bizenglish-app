@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\TimeCrudController;
 use App\Http\Controllers\Admin\UserCrudController;
 use App\Http\Controllers\Api\SlackController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\SettingController;
 use App\Models\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -59,4 +60,7 @@ Route::group([
     Route::crud('device', 'DeviceCrudController');
     Route::get("/manager/send-notification", [NotificationController::class, "index"])->name("manager.camp");
     Route::post("/manager/send-notification", [NotificationController::class, "send"])->name("manager.send");
+    Route::get("/maintain",[SettingController::class,"maintainList"]);
+    Route::get("/maintain/switch",[SettingController::class,"switchMaintain"])->name("maintain");
+    Route::get("/maintaining",[SettingController::class,"maintaining"])->name("maintaining");
 }); // this should be the absolute last line of this file
