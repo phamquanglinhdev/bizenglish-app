@@ -472,7 +472,12 @@ class LogCrudController extends CrudController
         }
         CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
         CRUD::column('teacher_video')->label(trans("backpack::crud.teacher_video"))->type("video");
-
+        CRUD::addColumn(
+            [
+                'name' => 'drive',
+                'label' => "Drive Video",
+                'type'=>'link'
+            ]);
 
         CRUD::column('duration')->label(trans("backpack::crud.duration"))->type("number");
 
@@ -638,6 +643,11 @@ class LogCrudController extends CrudController
                 'label' => trans("backpack::crud.teacher_video"),
                 'type' => 'video',
                 'youtube_api_key' => 'AIzaSyDc3MoGdCrqbCHq6XRbulelTPy5oWsLwIE',
+            ]);
+        CRUD::addField(
+            [
+                'name' => 'drive',
+                'label' => "Drive Video",
             ]);
         CRUD::addField(
             [   // repeatable

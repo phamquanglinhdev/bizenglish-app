@@ -27,10 +27,17 @@
         <div class="row">
             <div class="col-lg-7 col-md-6 col-12">
                 <div class="video-wrapper">
-                    <iframe src="https://youtube.com/embed/{{$log->getVideo()->id??""}}"
-                            title="{{$log->getVideo()->title??""}}" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen></iframe>
+                    @if($log->teacher_video!=null)
+                        <iframe src="https://youtube.com/embed/{{$log->getVideo()->id??""}}"
+                                title="{{$log->getVideo()->title??""}}" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    @endif
+                    @if($log->drive!=null)
+                        <iframe src="https://drive.google.com/file/d/{{explode("/",$log->drive)[5]}}/preview"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen></iframe>
+                    @endif
                 </div>
                 <hr>
                 <div class="h4 my-2 text-capitalize">{{trans("backpack::crud.lesson_name")}} : {{$log->lesson}}</div>
