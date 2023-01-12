@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\GradeApiController;
 use App\Http\Controllers\Api\LogApiController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\NotificationApiController;
+use App\Http\Controllers\Api\OTPController;
 use App\Http\Controllers\Api\StaffApiController;
 use App\Http\Controllers\Api\StudentApiController;
 use App\Http\Controllers\Api\TeacherApiController;
@@ -100,6 +101,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::post("/login", [LoginController::class, "login"]);
 Route::get("/testNotification", [PushNotificationController::class, "index"]);
-
-
+Route::post("/otp/send", [OTPController::class, "sendOTP"]);
+Route::post("/otp/show", [OTPController::class, "showByPhone"]);
+Route::post("/phone/list", [OTPController::class, "listPhone"]);
 
