@@ -6,6 +6,7 @@
             <i class="las la-plus"></i>
             {{trans("backpack::crud.add")." ".trans("backpack::crud.books")}}
         </a>
+    @else
     @endif
     @foreach($bag as $index => $books)
         <div class="category my-2">
@@ -30,6 +31,7 @@
                                             <a href="{{backpack_url("book/$book->id/edit")}}">
                                                 <i class="la la-edit"></i>
                                             </a>
+                                        @else
                                         @endif
                                     </div>
                                 </a>
