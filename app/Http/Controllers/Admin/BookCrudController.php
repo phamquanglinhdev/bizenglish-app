@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\BookRequest;
+use App\Models\Book;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -44,6 +45,25 @@ class BookCrudController extends CrudController
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
+    protected function index()
+    {
+        $bag = [];
+        $name = [
+            'Không xác định',
+            'Metarial for kid 4-10 year old',
+            'Metarial for kid 11-18 year old',
+            'Metarial for Aldult',
+            'IELTS',
+            'TOEIC',
+
+        ];
+        for ($i = 0; $i <= 5; $i++) {
+            $bag[] = Book::where("type", $i)->get();
+        }
+//        dd($bag);
+        return view("books", ["bag" => $bag,'name'=>$name]);
+    }
+
     protected function setupListOperation()
     {
         CRUD::column('name')->label(trans("backpack::crud.book_name"));
@@ -67,11 +87,25 @@ class BookCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(BookRequest::class);
+        CRUD::addField([
+            'name' => 'type',
+            'label' => 'Danh mục',
+            'type' => 'select2_from_array',
+            'options' => [
+                'Không xác định',
+                'Metarial for kid 4-10 year old',
+                'Metarial for kid 11-18 year old',
+                'Metarial for Aldult',
+                'IELTS',
+                'TOEIC',
 
+            ]
+        ]);
         CRUD::field('name')->label("Tên sách");
         CRUD::field('slug')->type("hidden");
         CRUD::field('description')->label("Mô tả");
         CRUD::field('thumbnail')->label("Ảnh")->type("image")->crop(true)->aspect_ratio(1907 / 2560);
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

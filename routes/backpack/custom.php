@@ -52,6 +52,7 @@ Route::group([
     Route::crud('lesson', 'LessonCrudController');
     Route::get("lesson/detail/{id}", [\App\Http\Controllers\Admin\LessonCrudController::class, "detail"])->name("admin.lesson.detail");
     Route::crud('book', 'BookCrudController');
+    Route::get('book/index', [\App\Http\Controllers\Admin\BookCrudController::class, "index"]);
     Route::crud('teaching', 'TeachingCrudController');
     Route::crud('notification', 'NotificationCrudController');
     Route::crud('time', 'TimeCrudController');
@@ -60,9 +61,9 @@ Route::group([
     Route::crud('device', 'DeviceCrudController');
     Route::get("/manager/send-notification", [NotificationController::class, "index"])->name("manager.camp");
     Route::post("/manager/send-notification", [NotificationController::class, "send"])->name("manager.send");
-    Route::get("/maintain",[SettingController::class,"maintainList"]);
-    Route::get("/maintain/switch",[SettingController::class,"switchMaintain"])->name("maintain");
-    Route::get("/maintaining",[SettingController::class,"maintaining"])->name("maintaining");
-    Route::get("/account/info",[SettingController::class,"userAccount"])->name("account-info");
+    Route::get("/maintain", [SettingController::class, "maintainList"]);
+    Route::get("/maintain/switch", [SettingController::class, "switchMaintain"])->name("maintain");
+    Route::get("/maintaining", [SettingController::class, "maintaining"])->name("maintaining");
+    Route::get("/account/info", [SettingController::class, "userAccount"])->name("account-info");
     Route::crud('post', 'PostCrudController');
 }); // this should be the absolute last line of this file
