@@ -1,7 +1,7 @@
 @extends(backpack_view("blank"))
 @section("content")
     <div class="h2 mt-5">{{trans("backpack::crud.books")}}</div>
-    @if(backpack_user()->role<=0)
+    @if(backpack_user()->type<=0)
         <a href="{{backpack_url("book/create")}}" class="btn btn-primary text-white">
             <i class="las la-plus"></i>
             {{trans("backpack::crud.add")." ".trans("backpack::crud.books")}}
@@ -27,7 +27,7 @@
                                     </div>
                                     <div class="my-1 text-center d-flex justify-content-center align-items-center">
                                         <span>{{$book->name}}</span>
-                                        @if(backpack_user()->role<=0)
+                                        @if(backpack_user()->type<=0)
                                             <a href="{{backpack_url("book/$book->id/edit")}}">
                                                 <i class="la la-edit"></i>
                                             </a>
