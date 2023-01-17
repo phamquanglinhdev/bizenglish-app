@@ -43,8 +43,10 @@
             {{trans("backpack::crud.book")}}
         </a>
         <ul class="nav-dropdown-items">
-            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('menu') }}"><i
-                        class="nav-icon la la-list"></i> Menus</a></li>
+            @if(backpack_user()->type<=0)
+                <li class="nav-item"><a class="nav-link" href="{{ backpack_url('menu') }}"><i
+                            class="nav-icon la la-list"></i> Menus</a></li>
+            @endif
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i
                         class='nav-icon la la-book-open'></i>{{trans("backpack::crud.book")}}</a></li>
         </ul>
