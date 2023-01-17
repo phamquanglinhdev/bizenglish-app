@@ -4,7 +4,7 @@
     @if(backpack_user()->type<=0)
         <a href="{{backpack_url("book/create")}}" class="btn btn-primary text-white">
             <i class="las la-plus"></i>
-            {{trans("backpack::crud.add")." ".trans("backpack::crud.books")}}
+            {{trans("backpack::crud.add")." ".trans("backpack::crud.book")}}
         </a>
     @endif
     <hr>
