@@ -66,4 +66,5 @@ Route::group([
     Route::get("/maintaining", [SettingController::class, "maintaining"])->name("maintaining");
     Route::get("/account/info", [SettingController::class, "userAccount"])->name("account-info");
     Route::crud('post', 'PostCrudController');
+    Route::crud('menu', 'MenuCrudController');
 }); // this should be the absolute last line of this file

@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Book extends Model
+class Menu extends Model
 {
     use CrudTrait;
 
@@ -16,7 +15,7 @@ class Book extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'books';
+    protected $table = 'menus';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -30,16 +29,22 @@ class Book extends Model
     |--------------------------------------------------------------------------
     */
 
-
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function Menu()
+    public function Parent()
     {
-        return $this->belongsTo(Menu::class, "menu_id", "id");
+        return $this->belongsTo(Menu::class, "parent_id", "id");
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Menu::class, "parent_id", "id");
+    }
+    public function Books(){
+        return $this->hasMany(Book::class,"menu_id","id");
     }
     /*
     |--------------------------------------------------------------------------

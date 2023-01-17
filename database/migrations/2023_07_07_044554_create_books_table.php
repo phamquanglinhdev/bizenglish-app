@@ -12,12 +12,14 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger("menu_id");
             $table->string("name");
-            $table->string("pdf")->nullable();
-            $table->unsignedBigInteger("book_id");
-            $table->foreign("book_id")->references("id")->on("books");
+            $table->longText("thumbnail");
+            $table->string("link");
+            $table->string("description")->nullable();
+            $table->foreign("menu_id")->references("id")->on("menus");
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('books');
     }
 };

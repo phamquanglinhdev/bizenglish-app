@@ -43,10 +43,10 @@
             {{trans("backpack::crud.book")}}
         </a>
         <ul class="nav-dropdown-items">
+            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('menu') }}"><i
+                        class="nav-icon la la-list"></i> Menus</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('book') }}'><i
                         class='nav-icon la la-book-open'></i>{{trans("backpack::crud.book")}}</a></li>
-            <li class='nav-item'><a class='nav-link' href='{{ backpack_url('lesson') }}'><i
-                        class='nav-icon la la-file-pdf'></i>{{trans("backpack::crud.curriculum")}}</a></li>
         </ul>
     </li>
 @endif
@@ -89,8 +89,13 @@
     @endif
 @endif
 @if(backpack_user()->type==-1)
-    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('device') }}"><i class="nav-icon la la-mobile"></i>Thiết bị</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{route("manager.camp")}}"><i class="nav-icon la la-bullhorn"></i>Truyền thông</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('post') }}"><i class="nav-icon la la-pinterest"></i>Bài viết</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('device') }}"><i class="nav-icon la la-mobile"></i>Thiết
+            bị</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{route("manager.camp")}}"><i class="nav-icon la la-bullhorn"></i>Truyền
+            thông</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('post') }}"><i class="nav-icon la la-pinterest"></i>Bài
+            viết</a></li>
 @endif
-<li class="nav-item"><a class="nav-link" href="{{ route("account-info") }}"><i class="nav-icon la la-user"></i>{{backpack_user()->name}}</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ route("account-info") }}"><i
+            class="nav-icon la la-user"></i>{{backpack_user()->name}}</a></li>
+
