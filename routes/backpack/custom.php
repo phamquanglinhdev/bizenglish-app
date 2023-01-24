@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GradeCrudController;
 use App\Http\Controllers\Admin\LogCrudController;
 use App\Http\Controllers\Admin\StaffCrudController;
 use App\Http\Controllers\Admin\StudentCrudController;
@@ -28,9 +29,10 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('user', 'UserCrudController');
     Route::crud('grade', 'GradeCrudController');
+    Route::get('meet/{id}', [GradeCrudController::class,"meeting","id"]);
     Route::crud('log', 'LogCrudController');
-    Route::post("slack/send", [SlackController::class, "send"])->name("slack-send");
-    Route::get("slack", [SlackController::class, "show"])->name("slack-show");
+//    Route::post("slack/send", [SlackController::class, "send"])->name("slack-send");
+//    Route::get("slack", [SlackController::class, "show"])->name("slack-show");
     Route::get("/files", [UserCrudController::class, "file"])->name("user.file");
     Route::get('log/detail/{id}', [LogCrudController::class, "detail"])->name("admin.log.detail");
     Route::get('log/report/{id}', function ($id) {

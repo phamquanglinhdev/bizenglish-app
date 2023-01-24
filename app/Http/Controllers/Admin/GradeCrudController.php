@@ -34,6 +34,7 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
+        $this->crud->addButtonFromModelFunction("line","meeting","meeting","line");
         if (backpack_user()->type >= 1) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
         }
@@ -635,5 +636,9 @@ class GradeCrudController extends CrudController
         return Grade::find($id)->update([
             'disable' => 1,
         ]);
+    }
+    public function meeting($id)
+    {
+        return view("meeting",["grade"=>Grade::find($id)]);
     }
 }

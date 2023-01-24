@@ -33,6 +33,10 @@ class Grade extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public function meeting(): string
+    {
+        return '<a href="'.backpack_url("/meet/$this->id").'" class="btn btn-sm btn-link"><i class="la la-chess-board"></i>Phòng học(Thử nghiệm)</a>';
+    }
     public function afterStore()
     {
 //        if (backpack_user() == 0) {
