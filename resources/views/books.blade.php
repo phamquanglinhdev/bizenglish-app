@@ -13,7 +13,7 @@
             <i class="las la-list"></i>
             {{$sub->name}}
         </a>
-        <div class="collapse" id="main-{{$sub->id}}">
+        <div class="collapse show" id="main-{{$sub->id}}">
             <div class="card card-body p-2">
                 @if($sub->books->count()>0)
                     <div class="card card-body">
