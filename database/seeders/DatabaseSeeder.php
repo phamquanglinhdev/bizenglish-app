@@ -13,10 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(SkillSeeder::class);
-        $this->call(UserSeeder::class);
-        $this->call(GradeSeeder::class);
-        $this->call(LogSeeder::class);
-        $this->call(TimeSeeder::class);
+
     }
 }

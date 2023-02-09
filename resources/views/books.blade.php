@@ -15,6 +15,16 @@
         </a>
         <div class="collapse" id="main-{{$sub->id}}">
             <div class="card card-body p-2">
+                @if($sub->books->count()>0)
+                    <div class="card card-body">
+                        @foreach($sub->books as $book)
+                            <div class="my-1">
+                                <img style="width: 30px;" src="{{$book->thumbnail}}">
+                                {{$book->name}}:<a href="{{$book->link}}">Link</a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
                 @foreach($sub->children as $category)
                     <a class="my-1 btn btn-secondary w-100 text-left" data-toggle="collapse"
                        href="#sub-{{$category->id}}">

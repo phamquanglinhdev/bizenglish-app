@@ -104,4 +104,5 @@ Route::get("/testNotification", [PushNotificationController::class, "index"]);
 Route::post("/otp/send", [OTPController::class, "sendOTP"]);
 Route::post("/otp/show", [OTPController::class, "showByPhone"]);
 Route::post("/phone/list", [OTPController::class, "listPhone"]);
+Route::get("/zego/signature", [App\Http\Controllers\Api\ZegoCloudController::class, "signature"]);
 

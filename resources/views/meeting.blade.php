@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
 <script>
     document.addEventListener("contextmenu",
-    event => event.preventDefault()
+        event => event.preventDefault()
     );
     window.onload = function () {
         function getUrlParams(url) {
@@ -34,7 +34,7 @@
         const serverSecret = "74eb720682e208249808cbb6ca79cdf4";
         const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
 
-
+        const role =ZegoUIKitPrebuilt.Host;
         const zp = ZegoUIKitPrebuilt.create(kitToken);
         zp.joinRoom({
             container: document.querySelector("#root"),
@@ -45,13 +45,16 @@
             scenario: {
                 mode: ZegoUIKitPrebuilt.VideoConference,
             },
-            onUserAvatarSetter:(userList) => {
+            config:{
+                role
+            },
+            onUserAvatarSetter: (userList) => {
                 userList.forEach(user => {
                     user.setUserAvatar("{{backpack_user()->avatar}}")
                 })
             },
-            onLeaveRoom:()=>{
-                window.location.header("https://fb.me/linhcuenini")
+            onLeaveRoom: () => {
+                window.history.back()
             },
             turnOnMicrophoneWhenJoining: false,
             turnOnCameraWhenJoining: false,
@@ -65,11 +68,18 @@
             layout: "Auto",
             showLayoutButton: true,
             showPreJoinView: false,
-            branding:{logoURL:"https://files.catbox.moe/no4qdd.png"},
-            showPinButton:true,
-            sharedLinks:false,
+            branding: {logoURL: "https://files.catbox.moe/no4qdd.png"},
+            showPinButton: true,
+            recording: true,
         });
     }
 </script>
+<style>
+    .tQCB5Tj6hsWzMNzTg5og {
+        background: red !important;
+    }
+</style>
+<script>
 
+</script>
 </html>
