@@ -19,6 +19,9 @@
                     <div class="card card-body">
                         @foreach($sub->books as $book)
                             <div class="my-1">
+                                @if(backpack_user()->role=="admin")
+                                    {{$book->name}}:<a href="{{backpack_url("/book/$book->id/edit")}}">Sửa</a>
+                                @endif
                                 <img style="width: 30px;" src="{{$book->thumbnail}}">
                                 {{$book->name}}:<a href="{{$book->link}}">Link</a>
                             </div>
@@ -35,6 +38,9 @@
                         <div class="card card-body">
                             @foreach($category->books as $book)
                                 <div class="my-1">
+                                    @if(backpack_user()->role=="admin")
+                                        {{$book->name}}:<a href="{{backpack_url("/book/$book->id/edit")}}">Sửa</a>
+                                    @endif
                                     <img style="width: 30px;" src="{{$book->thumbnail}}">
                                     {{$book->name}}:<a href="{{$book->link}}">Link</a>
                                 </div>
