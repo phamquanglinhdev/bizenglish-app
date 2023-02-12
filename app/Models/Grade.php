@@ -130,7 +130,10 @@ class Grade extends Model
     {
         return $this->hasMany(Log::class, "grade_id", "id");
     }
-
+    public function Menus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Menu::class,"grade_menus","grade_id","menu_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

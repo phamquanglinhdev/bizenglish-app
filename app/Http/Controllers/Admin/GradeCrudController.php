@@ -34,7 +34,7 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
-        $this->crud->addButtonFromModelFunction("line","meeting","meeting","line");
+        $this->crud->addButtonFromModelFunction("line", "meeting", "meeting", "line");
         if (backpack_user()->type >= 1) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
         }
@@ -607,6 +607,18 @@ class GradeCrudController extends CrudController
                 }
 
             }
+            CRUD::addField([
+                'name' => 'menus',
+                'label' => 'Bộ sách được sử dụng',
+                'type' => 'relationship',
+                'model' => 'App\Models\Menu',
+                'entity' => 'Menus',
+                'attribute' => 'name',
+                'pivot' => true,
+                'options' => (function ($query) {
+                    return $query->where("parent_id", "!=", null)->get();
+                }),
+            ]);
         }
 
         /**
@@ -637,8 +649,9 @@ class GradeCrudController extends CrudController
             'disable' => 1,
         ]);
     }
+
     public function meeting($id)
     {
-        return view("meeting",["grade"=>Grade::find($id)]);
+        return view("meeting", ["grade" => Grade::find($id)]);
     }
 }

@@ -25,6 +25,7 @@
         @endif
         <li class="list-group-item">Tài liệu : <a class='' href='/uploads/document/{{ $grade->attachment }}'><i
                     class="las la-file-alt"></i> Click để đọc</a></li>
+
         <li class="list-group-item">Trạng thái :
             @if($grade->status == 0)
                 Đang học
@@ -40,11 +41,30 @@
         </li>
         <li class="list-group-item">Ngày tạo lớp : {{$grade->created_at}}</li>
     </ul>
-    <a class="nav-link" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-       aria-controls="collapseExample">
-        Xem thêm thông tin chi tiết
-    </a>
-    <div class="collapse" id="collapseExample">
+    <div class="mt-5">
+        <div class="h3">Giáo trình của lớp :</div>
+        <div class="bg-white p-3">
+            @foreach($grade->menus as $menu)
+                <div class="h5">
+                    <i class="las la-book"></i>{{$menu->name}}
+                </div>
+                <hr/>
+                <div class="row">
+                    @foreach($menu->books as $book)
+                        <div class="col-md-2 col-sm-6 col-6">
+                            <a href="{{$book->link}}">
+                                <div class="p-1">
+                                    <img src="{{$book->thumbnail}}" class="w-100 shadow-lg">
+                                </div>
+                                <div class=text-center>{{$book->name}}</div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="collapse show" id="collapseExample">
         <div class="card card-body">
             {!! $grade->information !!}
         </div>
