@@ -72,6 +72,7 @@
         {{trans("backpack::crud.notification")}}
     </a></li>
 @if(backpack_user()->role<=1)
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('demo') }}"><i class="nav-icon lab la-buffer"></i> Demo</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
             <i class="nav-icon la la-files-o"></i> <span>
                 {{trans("backpack::crud.storage")}}
@@ -100,4 +101,6 @@
 @endif
 <li class="nav-item"><a class="nav-link" href="{{ route("account-info") }}"><i
             class="nav-icon la la-user"></i>{{backpack_user()->name}}</a></li>
+
+
 
