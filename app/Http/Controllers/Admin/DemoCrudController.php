@@ -67,26 +67,30 @@ class DemoCrudController extends CrudController
             function ($value) { // if the filter is active
                 $this->crud->query->where('students', 'LIKE', "%$value%");
             });
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'teacher',
-            'label' => 'Giáo viên'
-        ],
-            false,
-            function ($value) { // if the filter is active
-                $this->crud->query->join("users as teachers", "teachers.id", "=", "demos.teacher_id")
-                    ->where("teachers.name", "like", "%$value%");
-            });
-        $this->crud->addFilter([
-            'type' => 'text',
-            'name' => 'client',
-            'label' => 'Đối tác'
-        ],
-            false,
-            function ($value) { // if the filter is active
-                $this->crud->query->join("users as clients", "clients.id", "=", "demos.client_id")
-                    ->where("clients.name", "like", "%$value%");
-            });
+        if (backpack_user()->type != 1) {
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'teacher',
+                'label' => 'Giáo viên'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                    $this->crud->query->join("users as teachers", "teachers.id", "=", "demos.teacher_id")
+                        ->where("teachers.name", "like", "%$value%");
+                });
+        }
+        if (backpack_user()->type != 2) {
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'client',
+                'label' => 'Đối tác'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                    $this->crud->query->join("users as clients", "clients.id", "=", "demos.client_id")
+                        ->where("clients.name", "like", "%$value%");
+                });
+        }
         CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
         CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
         CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
