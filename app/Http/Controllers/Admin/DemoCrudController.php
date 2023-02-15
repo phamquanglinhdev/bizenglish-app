@@ -30,8 +30,8 @@ class DemoCrudController extends CrudController
         CRUD::setModel(\App\Models\Demo::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/demo');
         CRUD::setEntityNameStrings('Buổi học DEMO', 'Các buổi học DEMO');
-        if(backpack_user()->type>0){
-            $this->crud->denyAccess(["create","delete"]);
+        if (backpack_user()->type > 0) {
+            $this->crud->denyAccess(["create", "delete"]);
         }
     }
 
@@ -43,6 +43,12 @@ class DemoCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type == 1) {
+            $this->crud->query->where("teacher_id", backpack_user()->id);
+        }
+        if (backpack_user()->type == 2) {
+            $this->crud->query->where("client_id", backpack_user()->id);
+        }
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'grade',
