@@ -67,6 +67,9 @@ class Demo extends Model
     {
         return $this->belongsTo(Client::class, "client_id", "id");
     }
+    public function Customers(){
+        return $this->belongsToMany(Customer::class,"customer_demo","demo_id","customer_id");
+    }
     /*
     |--------------------------------------------------------------------------
     | SCOPES

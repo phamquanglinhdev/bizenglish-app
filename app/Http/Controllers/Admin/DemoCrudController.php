@@ -67,6 +67,18 @@ class DemoCrudController extends CrudController
             function ($value) { // if the filter is active
                 $this->crud->query->where('students', 'LIKE', "%$value%");
             });
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'customer',
+            'label' => 'Khách hàng'
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $this->crud->query
+                    ->join("customer_demo as ct", "ct.demo_id", "demos.id")
+                    ->join("users as customers", "customers.id", "=", "ct.customer_id")
+                    ->where("customers.name", "like", "%$value%");
+            });
         if (backpack_user()->type != 1) {
             $this->crud->addFilter([
                 'type' => 'text',
@@ -114,6 +126,11 @@ class DemoCrudController extends CrudController
             'name' => 'client',
             'type' => 'select',
             'label' => trans("backpack::crud.client_name"),
+        ]);
+        CRUD::addColumn([
+            'name' => 'customers',
+            'type' => 'select',
+            'label' => 'Khách hàng',
         ]);
         CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
 
@@ -176,7 +193,23 @@ class DemoCrudController extends CrudController
     {
         CRUD::setValidation(DemoRequest::class);
         CRUD::field('grade')->label(trans("backpack::crud.grade_name"));
-        CRUD::field('students')->label(trans("backpack::crud.student_name"));
+
+        CRUD::addField([
+            'label' => "Khách hàng",
+            'name' => 'Customers',
+            'type' => 'relationship',
+            'pivot' => true,
+            'entity' => 'Customers',
+            'model' => 'App\Models\Customer',
+            'options' => (function ($query) {
+                return $query->where("type", 4)->where("disable", 0)->get();
+            }),
+        ]);
+        CRUD::addField([
+            'label' => trans("backpack::crud.student_name"),
+            'name' => 'students',
+            'type' => 'select2_create',
+        ]);
         CRUD::addField([
             'name' => 'teacher_id',
             'label' => 'Giáo viên',
