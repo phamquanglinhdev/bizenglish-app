@@ -208,7 +208,7 @@ class DemoCrudController extends CrudController
         CRUD::addField([
             'label' => trans("backpack::crud.student_name"),
             'name' => 'students',
-            'type' => 'select2_create',
+//            'type' => 'select2_create',
         ]);
         CRUD::addField([
             'name' => 'teacher_id',
