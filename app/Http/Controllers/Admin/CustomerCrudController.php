@@ -49,11 +49,28 @@ class CustomerCrudController extends CrudController
     {
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "4");
-        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã khách hàng"]);
+        CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên khách hàng"]);
+        CRUD::addColumn([
+            'name' => "staff",
+            'type' => 'model_function',
+            "function_name" => "staffs",
+            "label" => "Nhân viên quản lý",
+//            'searchLogic' => function ($query, $column, $searchTerm) {
+//                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
+//            }
+            "searchLogic" => "text",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+//                    if (backpack_user()->type < 0) {
+//                        return backpack_url("/staff/detail/$entry->id");
+//                    }
+                },
+            ]
+        ]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của khách hàng"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
-        CRUD::column("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+        CRUD::column("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Đã học thử"]);
         $this->crud->denyAccess(["show"]);
 
         /**
@@ -80,6 +97,18 @@ class CustomerCrudController extends CrudController
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
+        if (backpack_user()->type == -1) {
+            CRUD::addField([
+                'name' => 'staff_id',
+                'type' => 'select2',
+                'model' => 'App\Models\Customer',
+                'attribute' => 'name',
+                "label" => "Nhân viên quản lý",
+                'options' => (function ($query) {
+                    return $query->where("type", "=", 0)->where("disable", 0)->get();
+                }),
+            ]);
+        }
         if (backpack_user()->type < 1) {
             CRUD::addField([
                 'name' => 'code',
@@ -87,7 +116,7 @@ class CustomerCrudController extends CrudController
                 "label" => "Mã khách hàng",
             ]);
         }
-        CRUD::field("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
+        CRUD::field("student_type")->label("Phân loại khách hàng")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Đã học thử"]);
         CRUD::addField(
             [
                 'name' => 'extra',
@@ -123,7 +152,30 @@ class CustomerCrudController extends CrudController
                 'type' => 'hidden'
             ],
         );
-
+        if (backpack_user()->type <= 0) {
+            CRUD::addField(
+                [
+                    'name' => 'files',
+                    'label' => 'Văn bản',
+                    'type' => 'repeatable',
+                    'new_item_label' => 'Thêm văn bản', // customize the text of the button
+                    'fields' => [
+                        [
+                            'name' => 'name',
+                            'type' => 'text',
+                            'label' => 'Tên',
+                            'wrapper' => ['class' => 'form-group col-md-6'],
+                        ],
+                        [
+                            'name' => 'link',
+                            'type' => 'browse',
+                            'label' => 'File',
+                            'wrapper' => ['class' => 'form-group col-md-6'],
+                        ],
+                    ],
+                ],
+            );
+        }
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

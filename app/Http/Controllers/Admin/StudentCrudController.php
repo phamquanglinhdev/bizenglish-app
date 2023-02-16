@@ -91,14 +91,19 @@ class StudentCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+
         if (backpack_user()->type == 0) {
             $this->crud->query->from("users")->select("users.*")
+                ->where("users.disable", 0)
+                ->where("users.type", 3)
                 ->join("student_grade as stg", "stg.student_id", "users.id")
                 ->join("grades", "grades.id", "stg.grade_id")
                 ->join("staff_grade as sfg", "sfg.grade_id", "grades.id")
                 ->join("users as staffs", "staffs.id", "sfg.staff_id")
                 ->where("staffs.id", "=", backpack_user()->id)
                 ->orWhere("users.staff_id", backpack_user()->id)
+                ->where("users.disable", 0)
+                ->where("users.type", 3)
                 ->get();
 
 //            $this->crud->query->select("users as students")
@@ -135,10 +140,10 @@ class StudentCrudController extends CrudController
 //            if ($grades->count() == 0 && $originStudents->count() == 0) {
 //                $this->crud->addClause("where", "id", "=", -1);
 //            };
-        } else {
-            $this->crud->addClause("where", "users.disable", "=", 0);
-            $this->crud->addClause("where", "users.type", "=", 3);
+        }else{
+            $this->crud->query->where("users.disable", 0)->where("users.type", 3);
         }
+
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
 
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",

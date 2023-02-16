@@ -144,20 +144,22 @@ class DemoCrudController extends CrudController
             ]);
         CRUD::column('duration')->label(trans("backpack::crud.duration"))->type("number");
 
-        CRUD::addColumn([
-            'label' => trans("backpack::crud.hour_salary"),
-            'name' => 'hour_salary',
-            'type' => 'number',
+        if (backpack_user()->type != 2) {
+            CRUD::addColumn([
+                'label' => trans("backpack::crud.hour_salary"),
+                'name' => 'hour_salary',
+                'type' => 'number',
 //            'type' => 'model_function',
 //            'function_name' => 'getHourSalary'
-        ]);
-        CRUD::addColumn([
-            'label' => trans("backpack::crud.log_salary"),
-            'name' => 'log_salary',
-            'type' => 'number',
+            ]);
+            CRUD::addColumn([
+                'label' => trans("backpack::crud.log_salary"),
+                'name' => 'log_salary',
+                'type' => 'number',
 //            'type' => 'model_function',
 //            'function_name' => 'getLogSalary'
-        ]);
+            ]);
+        }
         CRUD::column('assessment')->label(trans("backpack::crud.assessment"))->type("textarea");
         CRUD::addColumn([
             "name" => "attachments",
