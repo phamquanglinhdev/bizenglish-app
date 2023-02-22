@@ -26,6 +26,7 @@ class Demo extends Model
         'status' => 'json',
         'attachments' => 'array',
     ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -67,8 +68,20 @@ class Demo extends Model
     {
         return $this->belongsTo(Client::class, "client_id", "id");
     }
-    public function Customers(){
-        return $this->belongsToMany(Customer::class,"customer_demo","demo_id","customer_id");
+
+    public function Staff()
+    {
+        return $this->belongsTo(Staff::class, "staff_id", "id");
+    }
+
+    public function Supporter()
+    {
+        return $this->belongsTo(Staff::class, "supporter_id", "id");
+    }
+
+    public function Customers()
+    {
+        return $this->belongsToMany(Customer::class, "customer_demo", "demo_id", "customer_id");
     }
     /*
     |--------------------------------------------------------------------------

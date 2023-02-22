@@ -123,6 +123,16 @@ class DemoCrudController extends CrudController
             ],
         ]);
         CRUD::addColumn([
+            'name' => 'staff',
+            'type' => 'select',
+            'label' => "Nhân viên",
+        ]);
+        CRUD::addColumn([
+            'name' => 'supporter',
+            'type' => 'select',
+            'label' => 'NV Hỗ trợ /Supporter',
+        ]);
+        CRUD::addColumn([
             'name' => 'client',
             'type' => 'select',
             'label' => trans("backpack::crud.client_name"),
@@ -215,6 +225,7 @@ class DemoCrudController extends CrudController
         CRUD::addField([
             'name' => 'teacher_id',
             'label' => 'Giáo viên',
+            'type' => 'select2',
             'options' => (function ($query) {
                 return $query->where("type", 1)->where("disable", 0)->get();
             }),
@@ -224,6 +235,26 @@ class DemoCrudController extends CrudController
             'label' => 'Đối tác',
             'options' => (function ($query) {
                 return $query->where("type", 2)->where("disable", 0)->get();
+            }),
+        ]);
+        CRUD::addField([
+            'name' => 'staff_id',
+            'type' => 'select2',
+            'label' => "Nhân viên",
+            'model' => 'App\Models\Staff',
+            'entity' => 'Staff',
+            'options' => (function ($query) {
+                return $query->where("type", 0)->where("disable", 0)->get();
+            }),
+        ]);
+        CRUD::addField([
+            'model' => 'App\Models\Staff',
+            'entity' => 'Supporter',
+            'name' => 'supporter_id',
+            'type' => 'select2',
+            'label' => 'NV Hỗ trợ /Supporter',
+            'options' => (function ($query) {
+                return $query->where("type", 0)->where("disable", 0)->get();
             }),
         ]);
         CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([

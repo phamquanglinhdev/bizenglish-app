@@ -35,13 +35,23 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
-        $this->crud->addButtonFromModelFunction("line", "meeting", "meeting", "line");
+//        $this->crud->addButtonFromModelFunction("line", "meeting", "meeting", "line");
         if (backpack_user()->type >= 1) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
         }
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'grade_filter',
+            'label' => 'Tên lớp'
+        ],
+            false,
+            function ($value) {
+                $this->crud->query->where("name", "like", "%$value%");
+            }
+        );
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
@@ -131,9 +141,17 @@ class GradeCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        $this->crud->addClause("where", "grades.disable", "=", 0);
         if (backpack_user()->type == 0) {
-            $this->crud->addClause("owner");
+            $this->crud->query->whereHas("staff", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            })->orWhereHas("supporter", function (Builder $supporter) {
+                $supporter->where("id", backpack_user()->id);
+            });
+        }
+        if (backpack_user()->type == 1) {
+            $this->crud->query->whereHas("teacher", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            });
         }
         CRUD::column('name')->label("Tên lớp")->wrapper(
             [

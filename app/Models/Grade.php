@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\GradeScope;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -27,7 +28,12 @@ class Grade extends Model
     protected $casts = [
         'time' => 'array'
     ];
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::addGlobalScope(new GradeScope);
+    }
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -139,26 +145,6 @@ class Grade extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
-    public function scopeOwner($query)
-    {
-        $grades = DB::table("staff_grade")->where("staff_id", backpack_user()->id)->get();
-        $subGrades = DB::table("supporter_grade")->where("supporter_id", backpack_user()->id)->get();
-        if ($grades->count() > 0 || $subGrades->count() > 0) {
-            $query->where("id", -1);
-            foreach ($grades as $grade) {
-                $query->orWhere("id", $grade->grade_id);
-            }
-            foreach ($subGrades as $grade) {
-                $query->orWhere("id", $grade->grade_id);
-            }
-        } else {
-
-            $query->where("id", -1);
-        }
-        return $query;
-
-
-    }
 
     public function isNotSupporter($gradeId)
     {
