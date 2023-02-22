@@ -96,7 +96,26 @@ class Student extends Model
     {
         return $this->belongsTo(Staff::class, "staff_id", "id");
     }
+    public function Supporters()
+    {
+        $staff = [];
+        $grades = $this->Grades()->get();
+        foreach ($grades as $grade) {
+            try {
+                if (!in_array($grade->Supporter()->first()->name, $staff)) {
+                    $staff[] = $grade->Supporter()->first()->name;
+                }
+            } catch (\Exception $exception) {
 
+            }
+        }
+        $staff = implode(",", $staff);
+        if ($staff != null) {
+            return $staff;
+        } else {
+            return  "-";
+        }
+    }
     public function Staffs()
     {
         $staff = [];

@@ -20,7 +20,7 @@ return [
     'persistentTable' => true,
 
     // show search bar in the top-right corner?
-    'searchableTable' => true,
+    'searchableTable' => false,
 
     // the time the table will be persisted in minutes
     // after this the table info is cleared from localStorage.

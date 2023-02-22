@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -31,7 +32,6 @@ class StudentCrudController extends CrudController
      */
     public function setup()
     {
-//        dd($this->crud->delete(38));
         CRUD::setModel(Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
@@ -41,42 +41,43 @@ class StudentCrudController extends CrudController
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
-                'name' => 'description',
+                'name' => 'staff_filter',
                 'label' => 'Tìm kiếm nhân viên quản lý'
             ],
                 false,
-                function ($value) { // if the filter is active
-//                    $query = $this->crud->query;
-//                    $query = $query->where("id", "=", 9999);
-//                    $staff = Staff::where("name", "like", "%$value%")->first();
-//                    $grades = $staff->Grades()->get();
-//                    foreach ($grades as $grade) {
-//                        $students = $grade->Student()->get();
-//                        foreach ($students as $student) {
-//                            $query = $query->orWhere("id", "=", $student->id);
-//                        }
-//                    }
-                    $this->crud->query->from("users")->select("users.*")
-                        ->join("student_grade as stg", "stg.student_id", "users.id")
-                        ->join("grades", "grades.id", "stg.grade_id")
-                        ->join("staff_grade as sfg", "sfg.grade_id", "grades.id")
-                        ->join("users as staffs", "staffs.id", "sfg.staff_id")
-                        ->where("staffs.name", "like", "%$value%")
-                        ->orWhere("users.staff_id", backpack_user()->id)
-                        ->get();
+                function ($value) {
+                    $this->crud->query->whereHas("grades", function (Builder $builder) use ($value) {
+                        $builder->whereHas("staff", function (Builder $staff) use ($value) {
+                            $staff->where("name", "like", "%$value%");
+                        });
+                    });
+                }
+            );
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'sp_filter',
+                'label' => 'Tìm kiếm nhân viên hỗ trợ'
+            ],
+                false,
+                function ($value) {
+                    $this->crud->query->whereHas("grades", function (Builder $builder) use ($value) {
+                        $builder->whereHas("supporter", function (Builder $staff) use ($value) {
+                            $staff->where("name", "like", "%$value%");
+                        });
+                    });
                 }
             );
         }
 
         if (backpack_user()->type == 0) {
             $this->crud->addFilter([
-                'type' => 'simple',
+                'type' => 'text',
                 'name' => 'name',
-                'label' => 'Bật chế độ lọc'
+                'label' => 'Tên học sinh'
             ],
                 false,
                 function ($value) { // if the filter is active
-                    $this->crud->query->where("users.name", "=", "%$value%");
+                    $this->crud->query->where("name", "like", "%$value%");
                 }
             );
         }
@@ -93,54 +94,14 @@ class StudentCrudController extends CrudController
     {
 
         if (backpack_user()->type == 0) {
-            $this->crud->query->from("users")->select("users.*")
-                ->where("users.disable", 0)
-                ->where("users.type", 3)
-                ->join("student_grade as stg", "stg.student_id", "users.id")
-                ->join("grades", "grades.id", "stg.grade_id")
-                ->join("staff_grade as sfg", "sfg.grade_id", "grades.id")
-                ->join("users as staffs", "staffs.id", "sfg.staff_id")
-                ->where("staffs.id", "=", backpack_user()->id)
-                ->orWhere("users.staff_id", backpack_user()->id)
-                ->where("users.disable", 0)
-                ->where("users.type", 3)
-                ->get();
-
-//            $this->crud->query->select("users as students")
-//                ->where("students.disable", 0)->where("students.type", 3)
-//                ->leftJoin("users as staffs", "staffs.id", "students.staff_id")
-//                ->where("staffs.id", backpack_user()->id);
-//            dd($students);
-//            $first = true;
-//            $staff = Staff::where("id", "=", backpack_user()->id)->first();
-//            $grades = $staff->Grades()->where("disable", 0)->get();
-//
-//            foreach ($grades as $grade) {
-//                $students = $grade->Student()->where("disable", 0)->where("type", 3)->get();
-//                foreach ($students as $student) {
-//                    if ($first) {
-//                        $this->crud->addClause("where", "id", "=", $student->id);
-//                        $first = false;
-//                    } else {
-//                        $this->crud->addClause("orWhere", "id", "=", $student->id);
-//                    }
-//
-//                }
-//            }
-//
-//            $originStudents = $staff->Students()->where("disable", 0)->where("type", 3)->get();
-//            foreach ($originStudents as $student) {
-//                if ($first) {
-//                    $this->crud->addClause("where", "id", "=", $student->id);
-//                    $first = false;
-//                } else {
-//                    $this->crud->addClause("orWhere", "id", "=", $student->id);
-//                }
-//            }
-//            if ($grades->count() == 0 && $originStudents->count() == 0) {
-//                $this->crud->addClause("where", "id", "=", -1);
-//            };
-        }else{
+            $this->crud->query->whereHas("grades", function (Builder $builder) {
+                $builder->whereHas("staff", function (Builder $staff) {
+                    $staff->where("id", backpack_user()->id);
+                })->orWhereHas("supporter", function (Builder $supporter) {
+                    $supporter->where("id", backpack_user()->id);
+                });
+            });;
+        } else {
             $this->crud->query->where("users.disable", 0)->where("users.type", 3);
         }
 
@@ -178,6 +139,16 @@ class StudentCrudController extends CrudController
 //                $query->orWhere('staff', 'like', '%' . $searchTerm . '%');
 //            }
             "searchLogic" => "text",
+            'wrapper' => [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/staff/detail/$entry->id");
+                },
+            ]
+        ]);
+        CRUD::addColumn([
+            'type' => 'model_function',
+            "function_name" => "supporters",
+            "label" => "Nhân viên hỗ trợ",
             'wrapper' => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url("/staff/detail/$entry->id");
