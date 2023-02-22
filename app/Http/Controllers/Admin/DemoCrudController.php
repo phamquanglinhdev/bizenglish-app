@@ -44,6 +44,23 @@ class DemoCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type == 0) {
+            $this->crud->query->whereHas("supporter", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            })->orWhereHas("staff", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            });
+        }
+        if (backpack_user()->type == 1) {
+            $this->crud->query->whereHas("teacher", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            });
+        }
+        if (backpack_user()->type == 2) {
+            $this->crud->query->whereHas("client", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            });
+        }
         if (backpack_user()->type == 1) {
             $this->crud->query->where("teacher_id", backpack_user()->id);
         }
@@ -51,32 +68,29 @@ class DemoCrudController extends CrudController
             $this->crud->query->where("client_id", backpack_user()->id);
         }
         if (backpack_user()->type == -1) {
-            if (backpack_user()->type != 1) {
-                $this->crud->addFilter([
-                    'type' => 'text',
-                    'name' => 'staff',
-                    'label' => 'Nhân viên'
-                ],
-                    false,
-                    function ($value) { // if the filter is active
-                        $this->crud->query->whereHas("staff", function (Builder $builder) use ($value) {
-                            $builder->where("name", "like", "%$value%");
-                        });
+
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'staff',
+                'label' => 'Nhân viên'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                    $this->crud->query->whereHas("staff", function (Builder $builder) use ($value) {
+                        $builder->where("name", "like", "%$value%");
                     });
-            }
-            if (backpack_user()->type != 1) {
-                $this->crud->addFilter([
-                    'type' => 'text',
-                    'name' => 'supporter',
-                    'label' => 'Nhân viên quản lý'
-                ],
-                    false,
-                    function ($value) { // if the filter is active
-                        $this->crud->query->whereHas("supporter", function (Builder $builder) use ($value) {
-                            $builder->where("name", "like", "%$value%");
-                        });
+                });
+            $this->crud->addFilter([
+                'type' => 'text',
+                'name' => 'supporter',
+                'label' => 'Nhân viên quản lý'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                    $this->crud->query->whereHas("supporter", function (Builder $builder) use ($value) {
+                        $builder->where("name", "like", "%$value%");
                     });
-            }
+                });
         }
         $this->crud->addFilter([
             'type' => 'text',
