@@ -6,6 +6,7 @@ use App\Http\Requests\DemoRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class DemoCrudController
@@ -49,6 +50,34 @@ class DemoCrudController extends CrudController
         if (backpack_user()->type == 2) {
             $this->crud->query->where("client_id", backpack_user()->id);
         }
+        if (backpack_user()->type == -1) {
+            if (backpack_user()->type != 1) {
+                $this->crud->addFilter([
+                    'type' => 'text',
+                    'name' => 'staff',
+                    'label' => 'Nhân viên'
+                ],
+                    false,
+                    function ($value) { // if the filter is active
+                        $this->crud->query->whereHas("staff", function (Builder $builder) use ($value) {
+                            $builder->where("name", "like", "%$value%");
+                        });
+                    });
+            }
+            if (backpack_user()->type != 1) {
+                $this->crud->addFilter([
+                    'type' => 'text',
+                    'name' => 'supporter',
+                    'label' => 'Nhân viên quản lý'
+                ],
+                    false,
+                    function ($value) { // if the filter is active
+                        $this->crud->query->whereHas("supporter", function (Builder $builder) use ($value) {
+                            $builder->where("name", "like", "%$value%");
+                        });
+                    });
+            }
+        }
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'grade',
@@ -74,10 +103,9 @@ class DemoCrudController extends CrudController
         ],
             false,
             function ($value) { // if the filter is active
-                $this->crud->query
-                    ->join("customer_demo as ct", "ct.demo_id", "demos.id")
-                    ->join("users as customers", "customers.id", "=", "ct.customer_id")
-                    ->where("customers.name", "like", "%$value%");
+                $this->crud->query->whereHas("customers", function (Builder $builder) use ($value) {
+                    $builder->where("name", "like", "%$value%");
+                });
             });
         if (backpack_user()->type != 1) {
             $this->crud->addFilter([
@@ -87,8 +115,9 @@ class DemoCrudController extends CrudController
             ],
                 false,
                 function ($value) { // if the filter is active
-                    $this->crud->query->join("users as teachers", "teachers.id", "=", "demos.teacher_id")
-                        ->where("teachers.name", "like", "%$value%");
+                    $this->crud->query->whereHas("teacher", function (Builder $builder) use ($value) {
+                        $builder->where("name", "like", "%$value%");
+                    });
                 });
         }
         if (backpack_user()->type != 2) {
