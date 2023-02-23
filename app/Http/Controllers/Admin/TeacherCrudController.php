@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 /**
@@ -36,6 +37,13 @@ class TeacherCrudController extends CrudController
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
         $this->crud->addFilter([
+            'name' => 'name',
+            'type' => 'text',
+            'label' => 'Tên giáo viên'
+        ], false, function ($value) {
+            $this->crud->query->where("name", "like", "%$value%");
+        });
+        $this->crud->addFilter([
             'name' => 'skills',
             'type' => 'select2_multiple',
             'label' => 'Kỹ năng'
@@ -47,33 +55,12 @@ class TeacherCrudController extends CrudController
             }
             return $skills_arr;
         }, function ($values) {
-
-            $teacher_id = [];
-            if (is_array($values)) {
-                $skills = $values;
-            } else {
-                $skills = json_decode($values);
+            if (is_array(json_decode($values))) {
+                $this->crud->query->whereHas('skills', function (Builder $builder) use ($values) {
+                    $builder->whereIn("id", json_decode($values));
+                });
             }
-            $first = true;
-            foreach ($skills as $id) {
-                if (Skill::where("id", $id)->first() !== null) {
-                    $teachers = Skill::where("id", $id)->first()->Teachers()->get();
-                    foreach ($teachers as $teacher) {
-                        if (!array_search($teacher->id, $teacher_id)) {
-                            $teacher_id[] = $teacher->id;
-                        }
-                    }
-                }
 
-            }
-//            foreach ($teacher_id as $id) {
-//                if ($first) {
-//                    $first = false;
-//
-//                }
-//            }
-            // if the filter is active
-            $this->crud->addClause('whereIn', 'id', $teacher_id);
         });
     }
 
@@ -124,11 +111,6 @@ class TeacherCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ],
-            'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->orWhereHas('grades', function ($q) use ($column, $searchTerm) {
-                    $q->where('name', 'like', '%' . $searchTerm . '%');
-                });
-            }
         ]);
         /**
          * Columns can be defined using the fluent syntax or array syntax:

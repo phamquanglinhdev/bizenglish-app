@@ -14,6 +14,7 @@ use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -36,203 +37,79 @@ class LogCrudController extends CrudController
      */
     public function setup()
     {
-        $_SESSION["filtered"] = false;
-        $load = 0;
-        $logs_id = [];
-        if (isset($_REQUEST["grade_filter"])) {
-            $value = $_REQUEST["grade_filter"];
-            $grades = Grade::where("name", "like", "%$value%")->get();
-            foreach ($grades as $grade) {
-                $logs = $grade->Logs()->get();
-                foreach ($logs as $log) {
-                    $logs_id[] = $log->id;
-                }
-            }
-            $load = 1;
-        }
-        if (backpack_user()->type == 0) {
-            $staff_id = [];
-            $staff = Staff::where("id", "=", backpack_user()->id)->first();
-            $grades = $staff->Grades()->where("disable", 0)->get();
-            foreach ($grades as $grade) {
-                $logs = $grade->Logs()->get();
-                foreach ($logs as $log) {
-                    $staff_id[] = $log->id;
-                }
-            }
-
-            if ($load == 0) {
-                $logs_id = $staff_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $staff_id);
-            }
-
-        }
-        if (isset($_REQUEST["teacher_filter"]) || backpack_user()->type == 1) {
-            $teachers_id = [];
-            $value = $_REQUEST["teacher_filter"] ?? "";
-            $teachers = Teacher::where("name", "like", "%$value%")->get();
-            if (backpack_user()->type == 1) {
-                $teacher = Teacher::find(backpack_user()->id);
-                $logs = $teacher->Logs()->get();
-                foreach ($logs as $log) {
-                    $teachers_id[] = $log->id;
-                }
-            } else {
-                foreach ($teachers as $teacher) {
-                    $logs = $teacher->Logs()->get();
-                    foreach ($logs as $log) {
-                        $teachers_id[] = $log->id;
-                    }
-                }
-            }
-
-            if ($load == 0) {
-                $logs_id = $teachers_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $teachers_id);
-            }
-        }
-        if (isset($_REQUEST["client_filter"]) || backpack_user()->type == 2) {
-            $client_id = [];
-            $value = $_REQUEST["client_filter"] ?? "";
-            $clients = Client::where("name", "like", "%$value%")->get();
-            if (backpack_user()->type == 2) {
-                $client = Client::find(backpack_user()->id);
-                $grades = $client->Grades()->where("disable", 0)->get();
-                foreach ($grades as $grade) {
-                    $logs = $grade->Logs()->get();
-                    foreach ($logs as $log) {
-                        $client_id[] = $log->id;
-                    }
-                }
-            } else {
-                foreach ($clients as $client) {
-                    $grades = $client->Grades()->where("disable", 0)->get();
-                    foreach ($grades as $grade) {
-                        $logs = $grade->Logs()->get();
-                        foreach ($logs as $log) {
-                            $client_id[] = $log->id;
-                        }
-                    }
-                }
-            }
-
-            if ($load == 0) {
-                $logs_id = $client_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $client_id);
-            }
-        }
-        if (isset($_REQUEST["student_filter"])) {
-            $student_id = [];
-            $value = $_REQUEST["student_filter"];
-            $students = Student::where("name", "like", "%$value%")->get();
-            foreach ($students as $student) {
-                $grades = $student->Grades()->where("disable", 0)->get();
-                foreach ($grades as $grade) {
-                    $logs = $grade->Logs()->get();
-                    foreach ($logs as $log) {
-                        $student_id[] = $log->id;
-                    }
-                }
-            }
-            if ($load == 0) {
-                $logs_id = $student_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $student_id);
-            }
-        }
-        if (isset($_REQUEST["status"])) {
-            $status_id = [];
-            $value = $_REQUEST["status"];
-            $logs = Log::where("status", "like", "%\"name\":\"$value\"%")->get();
-            foreach ($logs as $log) {
-                $status_id[] = $log->id;
-            }
-            if ($load == 0) {
-                $logs_id = $status_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $status_id);
-            }
-        }
-        if (isset($_REQUEST["from_to"])) {
-            $day_id = [];
-            $value = $_REQUEST["from_to"];
-            $from = json_decode($value)->from;
-            $to = json_decode($value)->to;
-            $logs = Log::where("date", ">=", $from)->where("date", "<=", $to)->get();
-            foreach ($logs as $log) {
-                $day_id[] = $log->id;
-            }
-            if ($load == 0) {
-                $logs_id = $day_id;
-                $load = 1;
-            } else {
-                $logs_id = array_intersect($logs_id, $day_id);
-            }
-        }
         CRUD::setModel(Log::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/log');
         CRUD::setEntityNameStrings(trans("backpack::crud.history"), trans("backpack::crud.history"));
+        $this->crud->query->where("disable", 0);
+        if (isset($_REQUEST["grade_id"])) {
+            $this->crud->query->where("grade_id", $_REQUEST["grade_id"]);
+        }
+//        filter by role
+        if (backpack_user()->type == 0) {
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("grade", function (Builder $builder) {
+                    $builder->where(function (Builder $child) {
+                        $child->whereHas("staff", function (Builder $staff) {
+                            $staff->where("id", backpack_user()->id);
+                        })->orWhereHas("supporter", function (Builder $sp) {
+                            $sp->where("id", backpack_user()->id);
+                        });
+                    });
+                });
+            });
+        }
+        if (backpack_user()->type == 1) {
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("grade", function (Builder $builder) {
+                    $builder->whereHas("teacher", function (Builder $student) {
+                        $student->where("id", backpack_user()->id);
+                    });
+                });
+            });
+        }
+        if (backpack_user()->type == 2) {
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("grade", function (Builder $builder) {
+                    $builder->whereHas("client", function (Builder $student) {
+                        $student->where("id", backpack_user()->id);
+                    });
+                });
+            });
+        }
+        if (backpack_user()->type == 3) {
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("grade", function (Builder $builder) {
+                    $builder->whereHas("student", function (Builder $student) {
+                        $student->where("id", backpack_user()->id);
+                    });
+                });
+            });
+        }
         if (backpack_user()->type == 3) {
             $this->crud->addButtonFromModelFunction("line", "setAcceptLog", "setAcceptLog", "line");
             $this->crud->addButtonFromModelFunction("line", "pushExercise", "pushExercise", "line");
         }
         $this->crud->addButtonFromModelFunction("line", "detail", "detail", "line");
-
         $this->crud->denyAccess(["show"]);
         if (backpack_user()->type > 1) {
             $this->crud->denyAccess(["update", "create", "delete"]);
         }
-        $this->crud->setResponsiveTable(true);
+        $this->crud->setResponsiveTable(false);
         $this->crud->setOperationSetting('exportButtons', true);
 //        $this->crud->setOperationSetting('detailsRow', true);
-        $this->crud->addFilter([
-            'type' => "text",
-            'name' => 'grade_filter',
-            'label' => trans("backpack::crud.grade_name"),
-        ],
-            false,
-            function ($value) use ($logs_id) {
-                $first = true;
-                if ($logs_id != []) {
-                    foreach ($logs_id as $id) {
-                        if ($first) {
-                            $this->crud->query->where("id", "=", $id);
-                            $first = false;
-                        } else {
-                            $this->crud->query->orWhere("id", "=", $id);
-                        }
-                    }
-                } else {
-                    $this->crud->query->where("id", "=", "-9999");
+        if (!isset($_REQUEST["grade_id"])) {
+            $this->crud->addFilter([
+                'type' => "text",
+                'name' => 'grade_filters',
+                'label' => trans("backpack::crud.grade_name"),
+            ],
+                false,
+                function ($value) {
+                    $this->crud->query->whereHas("grade", function (Builder $builder) use ($value) {
+                        $builder->where("name", "like", "%$value%");
+                    });
                 }
-                $_SESSION["filtered"] = true;
-            }
-        );
-        if (backpack_user()->type == 0 && $this->crud->getCurrentOperation() != "update") {
-            if (!$_SESSION["filtered"]) {
-                $first = true;
-                if ($logs_id != []) {
-                    foreach ($logs_id as $id) {
-                        if ($first) {
-                            $this->crud->query->where("id", "=", $id);
-                            $first = false;
-                        } else {
-                            $this->crud->query->orWhere("id", "=", $id);
-                        }
-                    }
-                } else {
-                    $this->crud->query->where("id", "=", "-9999");
-                }
-                $_SESSION["filtered"] = true;
-            }
+            );
         }
         $this->crud->addFilter([
             'type' => "text",
@@ -240,23 +117,12 @@ class LogCrudController extends CrudController
             'label' => trans("backpack::crud.student_name"),
         ],
             false,
-            function ($value) use ($logs_id) {
-                if (!$_SESSION["filtered"]) {
-                    $first = true;
-                    if ($logs_id != []) {
-                        foreach ($logs_id as $id) {
-                            if ($first) {
-                                $this->crud->query->where("id", "=", $id);
-                                $first = false;
-                            } else {
-                                $this->crud->query->orWhere("id", "=", $id);
-                            }
-                        }
-                    } else {
-                        $this->crud->query->where("id", "=", "-9999");
-                    }
-                    $_SESSION["filtered"] = true;
-                }
+            function ($value) {
+                $this->crud->query->whereHas("grade", function (Builder $builder) use ($value) {
+                    $builder->whereHas("student", function (Builder $student) use ($value) {
+                        $student->where("name", "like", "%$value%");
+                    });
+                });
             }
         );
         $this->crud->addFilter([
@@ -265,23 +131,10 @@ class LogCrudController extends CrudController
             'label' => trans("backpack::crud.teacher_name"),
         ],
             false,
-            function ($value) use ($logs_id) {
-                if (!$_SESSION["filtered"]) {
-                    $first = true;
-                    if ($logs_id != []) {
-                        foreach ($logs_id as $id) {
-                            if ($first) {
-                                $this->crud->query->where("id", "=", $id);
-                                $first = false;
-                            } else {
-                                $this->crud->query->orWhere("id", "=", $id);
-                            }
-                        }
-                    } else {
-                        $this->crud->query->where("id", "=", "-9999");
-                    }
-                    $_SESSION["filtered"] = true;
-                }
+            function ($value) {
+                $this->crud->query->whereHas("teacher", function (Builder $builder) use ($value) {
+                    $builder->where("name", "like", "%$value%");
+                });
             }
         );
 
@@ -289,25 +142,13 @@ class LogCrudController extends CrudController
             'type' => "text",
             'name' => 'client_filter',
             'label' => trans("backpack::crud.client_name"),
-        ],
-            false,
-            function ($value) use ($logs_id) {
-                if (!$_SESSION["filtered"]) {
-                    $first = true;
-                    if ($logs_id != []) {
-                        foreach ($logs_id as $id) {
-                            if ($first) {
-                                $this->crud->query->where("id", "=", $id);
-                                $first = false;
-                            } else {
-                                $this->crud->query->orWhere("id", "=", $id);
-                            }
-                        }
-                    } else {
-                        $this->crud->query->where("id", "=", "-9999");
-                    }
-                    $_SESSION["filtered"] = true;
-                }
+        ], false,
+            function ($value) {
+                $this->crud->query->whereHas("grade", function (Builder $builder) use ($value) {
+                    $builder->whereHas("client", function (Builder $student) use ($value) {
+                        $student->where("name", "like", "%$value%");
+                    });
+                });
             }
         );
         // dropdown filter
@@ -321,23 +162,8 @@ class LogCrudController extends CrudController
             2 => 'Giáo viên vào muộn',
             3 => 'Học viên hủy buổi học',
             4 => 'Giáo viên hủy buổi học',
-        ], function ($value) use ($logs_id) { // if the filter is active
-            if (!$_SESSION["filtered"]) {
-                $first = true;
-                if ($logs_id != []) {
-                    foreach ($logs_id as $id) {
-                        if ($first) {
-                            $this->crud->query->where("id", "=", $id);
-                            $first = false;
-                        } else {
-                            $this->crud->query->orWhere("id", "=", $id);
-                        }
-                    }
-                } else {
-                    $this->crud->query->where("id", "=", "-9999");
-                }
-                $_SESSION["filtered"] = true;
-            }
+        ], function ($value) { // if the filter is active
+            $this->crud->query->where("status", "like", "%\"name\":\"$value\"%");
         });
 
         // daterange filter
@@ -347,45 +173,13 @@ class LogCrudController extends CrudController
             'label' => trans("backpack::crud.date_filter")
         ],
             false,
-            function ($value) use ($logs_id) { // if the filter is active, apply these constraints
-//                $dates = json_decode($value);
+            function ($value) { // if the filter is active, apply these constraints
+                $dates = json_decode($value);
+                $this->crud->query->where("date", ">=", $dates->from);
+                $this->crud->query->where("date", "<=", $dates->to);
 //                $this->crud->addClause('where', 'date', '>=', $dates->from);
 //                $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
-                if (!$_SESSION["filtered"]) {
-                    $first = true;
-                    if ($logs_id != []) {
-                        foreach ($logs_id as $id) {
-                            if ($first) {
-                                $this->crud->query->where("id", "=", $id);
-                                $first = false;
-                            } else {
-                                $this->crud->query->orWhere("id", "=", $id);
-                            }
-                        }
-                    } else {
-                        $this->crud->query->where("id", "=", "-9999");
-                    }
-                    $_SESSION["filtered"] = true;
-                }
             });
-        if (backpack_user()->type == 2 && !$_SESSION["filtered"]) {
-            $first = true;
-            if ($logs_id != []) {
-                foreach ($logs_id as $id) {
-                    if ($first) {
-                        $this->crud->query->where("id", "=", $id);
-                        $first = false;
-                    } else {
-                        $this->crud->query->orWhere("id", "=", $id);
-                    }
-                }
-            } else {
-                $this->crud->query->where("id", "=", "-9999");
-            }
-        }
-//        if (backpack_user()->type == 0) {
-//            $this->crud->denyAccess(["create", "update"]);
-//        }
     }
 
     /**
@@ -397,13 +191,7 @@ class LogCrudController extends CrudController
     protected
     function setupListOperation()
     {
-        if (backpack_user()->type == 1) {
-            $this->crud->addClause("where", "teacher_id", backpack_user()->id);
-        }
-
-        $this->crud->addClause("where", "disable", 0);
-//        $this->crud->addClause('where', 'date', '>=', '2022-08-23 23:59:59');
-        $this->crud->addClause("orderBy", "date", "DESC");
+        $this->crud->query->orderBy("date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));
             $trans = trans('backpack::crud.history');
@@ -414,7 +202,6 @@ class LogCrudController extends CrudController
                 'view' => 'test',
                 'grade' => $grade,
             ]);
-            $this->crud->addClause("where", "grade_id", $grade->id);
         }
 
         if (backpack_user()->type == 3) {

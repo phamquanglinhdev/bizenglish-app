@@ -35,6 +35,7 @@ class GradeCrudController extends CrudController
      */
     public function setup()
     {
+
 //        $this->crud->addButtonFromModelFunction("line", "meeting", "meeting", "line");
         if (backpack_user()->type >= 1) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
@@ -42,6 +43,20 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
+        if (backpack_user()->type == 0) {
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("staff", function (Builder $builder) {
+                    $builder->where("id", backpack_user()->id);
+                })->orWhereHas("supporter", function (Builder $supporter) {
+                    $supporter->where("id", backpack_user()->id);
+                });
+            });
+        }
+        if (backpack_user()->type == 1) {
+            $this->crud->query->whereHas("teacher", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
+            });
+        }
         $this->crud->addFilter([
             'type' => 'text',
             'name' => 'grade_filter',
@@ -128,7 +143,11 @@ class GradeCrudController extends CrudController
                 2 => 'Đang bảo lưu',
             ];
         }, function ($values) { // if the filter is active
-            $this->crud->query->whereIn('status', json_decode($values));
+            if (is_countable(json_decode($values)) && count(json_decode($values)) > 0) {
+                $this->crud->query->whereIn('status', json_decode($values));
+            }
+
+
         });
     }
 
@@ -141,18 +160,8 @@ class GradeCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        if (backpack_user()->type == 0) {
-            $this->crud->query->whereHas("staff", function (Builder $builder) {
-                $builder->where("id", backpack_user()->id);
-            })->orWhereHas("supporter", function (Builder $supporter) {
-                $supporter->where("id", backpack_user()->id);
-            });
-        }
-        if (backpack_user()->type == 1) {
-            $this->crud->query->whereHas("teacher", function (Builder $builder) {
-                $builder->where("id", backpack_user()->id);
-            });
-        }
+
+
         CRUD::column('name')->label("Tên lớp")->wrapper(
             [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here

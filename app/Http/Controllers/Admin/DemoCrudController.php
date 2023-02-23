@@ -45,10 +45,12 @@ class DemoCrudController extends CrudController
     protected function setupListOperation()
     {
         if (backpack_user()->type == 0) {
-            $this->crud->query->whereHas("supporter", function (Builder $builder) {
-                $builder->where("id", backpack_user()->id);
-            })->orWhereHas("staff", function (Builder $builder) {
-                $builder->where("id", backpack_user()->id);
+            $this->crud->query->where(function (Builder $query) {
+                $query->whereHas("supporter", function (Builder $builder) {
+                    $builder->where("id", backpack_user()->id);
+                })->orWhereHas("staff", function (Builder $builder) {
+                    $builder->where("id", backpack_user()->id);
+                });
             });
         }
         if (backpack_user()->type == 1) {
@@ -83,7 +85,7 @@ class DemoCrudController extends CrudController
             $this->crud->addFilter([
                 'type' => 'text',
                 'name' => 'supporter',
-                'label' => 'Nhân viên quản lý'
+                'label' => 'Nhân viên hỗ trợ'
             ],
                 false,
                 function ($value) { // if the filter is active
@@ -185,6 +187,16 @@ class DemoCrudController extends CrudController
             'type' => 'select',
             'label' => 'Khách hàng',
         ]);
+        CRUD::addColumn([
+            'label' => 'Số điện thoại',
+            'name' => 'student_phone',
+//            'type' => 'select2_create',
+        ]);
+        CRUD::addColumn([
+            'label' => 'Faceboook',
+            'name' => 'student_facebook',
+            'type' => 'link',
+        ]);
         CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
 
         CRUD::column('teacher_video')->label(trans("backpack::crud.teacher_video"))->type("video");
@@ -261,6 +273,16 @@ class DemoCrudController extends CrudController
             }),
         ]);
         CRUD::addField([
+            'label' => 'Số điện thoại',
+            'name' => 'student_phone',
+//            'type' => 'select2_create',
+        ]);
+        CRUD::addField([
+            'label' => 'Faceboook',
+            'name' => 'student_facebook',
+//            'type' => 'select2_create',
+        ]);
+        CRUD::addField([
             'label' => trans("backpack::crud.student_name"),
             'name' => 'students',
 //            'type' => 'select2_create',
@@ -280,16 +302,24 @@ class DemoCrudController extends CrudController
                 return $query->where("type", 2)->where("disable", 0)->get();
             }),
         ]);
-        CRUD::addField([
-            'name' => 'staff_id',
-            'type' => 'select2',
-            'label' => "Nhân viên",
-            'model' => 'App\Models\Staff',
-            'entity' => 'Staff',
-            'options' => (function ($query) {
-                return $query->where("type", 0)->where("disable", 0)->get();
-            }),
-        ]);
+        if (backpack_user()->type != 0) {
+            CRUD::addField([
+                'name' => 'staff_id',
+                'type' => 'select2',
+                'label' => "Nhân viên",
+                'model' => 'App\Models\Staff',
+                'entity' => 'Staff',
+                'options' => (function ($query) {
+                    return $query->where("type", 0)->where("disable", 0)->get();
+                }),
+            ]);
+        } else {
+            CRUD::addField([
+                'name' => 'staff_id',
+                'value' => backpack_user()->id,
+                'type' => 'hidden'
+            ]);
+        }
         CRUD::addField([
             'model' => 'App\Models\Staff',
             'entity' => 'Supporter',
