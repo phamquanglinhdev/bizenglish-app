@@ -80,7 +80,53 @@ class StudentCrudController extends CrudController
                     $this->crud->query->where("name", "like", "%$value%");
                 }
             );
+
         }
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'phone',
+            'label' => 'Số điện thoại'
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $this->crud->query->where("phone", "like", "%$value%");
+            }
+        );
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'parent',
+            'label' => 'Người giám hộ'
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $this->crud->query->where("student_parent", "like", "%$value%");
+            }
+        );
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'email',
+            'label' => 'Email của học sinh'
+        ],
+            false,
+            function ($value) { // if the filter is active
+                $this->crud->query->where("email", "like", "%$value%");
+            }
+        );
+        $this->crud->addFilter([
+            'type' => 'select2',
+            'name' => 'status',
+            'label' => 'Tình trạng'
+        ], function () {
+            return [
+                0 => 'Đang học',
+                1 => 'Đã ngừng học',
+                2 => 'Đã bảo lưu',
+            ];
+        },
+            function ($value) { // if the filter is active
+                $this->crud->query->where("student_status", $value);
+            }
+        );
 
     }
 
