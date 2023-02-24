@@ -19,7 +19,23 @@
                 {{$student->name}},
             @endforeach
         </li>
+        <li class="list-group-item">Đối tác :
+            @foreach($grade->client as $client)
+                {{$client->name}},
+            @endforeach
+        </li>
+        <li class="list-group-item">Nhân viên quản lý :
+            @foreach($grade->staff as $client)
+                {{$client->name}}
+            @endforeach
+        </li>
         <li class="list-group-item">Số phút học: {{$grade->minutes}}</li>
+        <li class="list-group-item">Số phút còn lại: {{$grade->getRs()}}</li>
+        <li class="list-group-item">Thông tin chi tiết:
+            <div>
+                {!! $grade->information !!}
+            </div>
+        </li>
         @if(backpack_user()->type<=0)
             <li class="list-group-item">Gói học phí : {{number_format($grade->pricing)}} đ</li>
         @endif
@@ -64,11 +80,11 @@
             @endforeach
         </div>
     </div>
-    <div class="collapse show" id="collapseExample">
-        <div class="card card-body">
-            {!! $grade->information !!}
-        </div>
-    </div>
+    {{--    <div class="collapse show" id="collapseExample">--}}
+    {{--        <div class="card card-body">--}}
+    {{--            {!! $grade->information !!}--}}
+    {{--        </div>--}}
+    {{--    </div>--}}
 </div>
 
 
