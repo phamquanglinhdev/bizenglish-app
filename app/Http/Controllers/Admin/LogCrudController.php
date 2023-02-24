@@ -59,13 +59,7 @@ class LogCrudController extends CrudController
             });
         }
         if (backpack_user()->type == 1) {
-            $this->crud->query->where(function (Builder $query) {
-                $query->whereHas("grade", function (Builder $builder) {
-                    $builder->whereHas("teacher", function (Builder $student) {
-                        $student->where("id", backpack_user()->id);
-                    });
-                });
-            });
+            $this->crud->query->where("teacher_id", backpack_user()->id);
         }
         if (backpack_user()->type == 2) {
             $this->crud->query->where(function (Builder $query) {
