@@ -140,13 +140,15 @@ class StudentCrudController extends CrudController
     {
 
         if (backpack_user()->type == 0) {
-            $this->crud->query->whereHas("grades", function (Builder $builder) {
-                $builder->whereHas("staff", function (Builder $staff) {
-                    $staff->where("id", backpack_user()->id);
-                })->orWhereHas("supporter", function (Builder $supporter) {
-                    $supporter->where("id", backpack_user()->id);
-                });
-            });;
+            $this->crud->query->where(function (Builder $map) {
+                $map->whereHas("grades", function (Builder $builder) {
+                    $builder->whereHas("staff", function (Builder $staff) {
+                        $staff->where("id", backpack_user()->id);
+                    })->orWhereHas("supporter", function (Builder $supporter) {
+                        $supporter->where("id", backpack_user()->id);
+                    });
+                })->orWhere("staff_id", backpack_user()->id);
+            })->where("disable",0)->where("type",3);
         } else {
             $this->crud->query->where("users.disable", 0)->where("users.type", 3);
         }
