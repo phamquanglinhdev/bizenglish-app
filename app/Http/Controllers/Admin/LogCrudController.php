@@ -333,7 +333,6 @@ class LogCrudController extends CrudController
     {
 
         CRUD::setValidation(LogRequest::class);
-        $this->crud->query = $this->crud->query->where("grades.status", 0);
         if (!$edit) {
             if (backpack_user()->type == 1) {
                 CRUD::addField([
@@ -344,7 +343,7 @@ class LogCrudController extends CrudController
                     'attribute' => 'name',
                     'label' => trans("backpack::crud.grade_name"),
                     'options' => (function ($query) {
-                        return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("disable", 0)->get();
+                        return $query->orderBy('name', 'ASC')->leftJoin("teacher_grade", "teacher_grade.grade_id", "=", "grades.id")->where("teacher_grade.teacher_id", backpack_user()->id)->where("grades.status", 0)->where("disable", 0)->get();
                     })
                 ]);
             }
@@ -362,7 +361,8 @@ class LogCrudController extends CrudController
                             ->leftJoin("supporter_grade", "supporter_grade.grade_id", "=", "grades.id")
                             ->where("staff_grade.staff_id", backpack_user()->id)->where("disable", 0)
                             ->orWhere("supporter_grade.supporter_id", backpack_user()->id)
-                            ->where("disable", 0)->get();
+                            ->where("disable", 0)->get()
+                            ->where("grades.status", 0);
                     })
                 ]);
             }
@@ -375,7 +375,7 @@ class LogCrudController extends CrudController
                     'attribute' => 'name',
                     'label' => trans("backpack::crud.grade_name"),
                     'options' => (function ($query) {
-                        return $query->where("disable", 0)->get();
+                        return $query->where("disable", 0)->where("grades.status", 0)->get();
                     })
                 ]);
             }
