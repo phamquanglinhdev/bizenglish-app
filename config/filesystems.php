@@ -28,7 +28,7 @@ return [
     |
     */
     'backups' => [
-        'driver' => 'local',
+        'driver' => 'google',
         'root'   => storage_path('backups'), // that's where your backups are stored by default: storage/backups
     ],
     'disks' => [
