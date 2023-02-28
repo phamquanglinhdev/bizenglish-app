@@ -333,7 +333,7 @@ class LogCrudController extends CrudController
     {
 
         CRUD::setValidation(LogRequest::class);
-        $this->crud->query->where("grades.status", 0);
+        $this->crud->query = $this->crud->query->where("grades.status", 0);
         if (!$edit) {
             if (backpack_user()->type == 1) {
                 CRUD::addField([
