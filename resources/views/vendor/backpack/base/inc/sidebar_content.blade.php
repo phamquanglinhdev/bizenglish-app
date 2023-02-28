@@ -72,7 +72,8 @@
         {{trans("backpack::crud.notification")}}
     </a></li>
 @if(backpack_user()->role<=1)
-    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('demo') }}"><i class="nav-icon lab la-buffer"></i> Demo</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('demo') }}"><i class="nav-icon lab la-buffer"></i>
+            Demo</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
             <i class="nav-icon la la-files-o"></i> <span>
                 {{trans("backpack::crud.storage")}}
@@ -105,4 +106,7 @@
 
 
 
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('backup') }}'><i class='nav-icon la la-hdd-o'></i> Backups</a></li>
+@if(backpack_user()->email=="admin@biz.com")
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('backup') }}'><i class='nav-icon la la-hdd-o'></i>
+            Sao lưu</a></li>
+@endif
