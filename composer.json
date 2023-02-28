@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0.2",
         "ext-zip": "*",
+        "backpack/backupmanager": "^4.0",
         "backpack/crud": "5.3.6",
         "backpack/filemanager": "^2.0",
         "bugsnag/bugsnag-laravel": "^2.25",

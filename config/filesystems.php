@@ -27,7 +27,10 @@ return [
     | Supported Drivers: "local", "ftp", "sftp", "s3"
     |
     */
-
+    'backups' => [
+        'driver' => 'local',
+        'root'   => storage_path('backups'), // that's where your backups are stored by default: storage/backups
+    ],
     'disks' => [
 
         'local' => [
