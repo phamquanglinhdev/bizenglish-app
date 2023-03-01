@@ -34,6 +34,7 @@ class DemoCrudController extends CrudController
         if (backpack_user()->type > 0) {
             $this->crud->denyAccess(["create", "delete"]);
         }
+        $this->crud->setOperationSetting('exportButtons', true);
     }
 
     /**
