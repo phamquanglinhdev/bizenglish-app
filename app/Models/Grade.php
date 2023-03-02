@@ -28,12 +28,14 @@ class Grade extends Model
     protected $casts = [
         'time' => 'array'
     ];
+
     protected static function boot()
     {
         parent::boot();
 
         static::addGlobalScope(new GradeScope);
     }
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -41,8 +43,9 @@ class Grade extends Model
     */
     public function meeting(): string
     {
-        return '<a href="'.backpack_url("/meet/$this->id").'" class="btn btn-sm btn-link"><i class="la la-chess-board"></i>Phòng học(Thử nghiệm)</a>';
+        return '<a href="' . backpack_url("/meet/$this->id") . '" class="btn btn-sm btn-link"><i class="la la-chess-board"></i>Phòng học(Thử nghiệm)</a>';
     }
+
     public function afterStore()
     {
 //        if (backpack_user() == 0) {
@@ -77,7 +80,7 @@ class Grade extends Model
     public function percentCount(): float|int
     {
         $durations = $this->Logs()->sum("duration");
-        return $durations / $this->minutes * 100;
+        return $durations / $this->minutes * 100 ?? 0;
     }
 
     public function toIndex()
@@ -136,10 +139,12 @@ class Grade extends Model
     {
         return $this->hasMany(Log::class, "grade_id", "id");
     }
+
     public function Menus(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(Menu::class,"grade_menus","grade_id","menu_id");
+        return $this->belongsToMany(Menu::class, "grade_menus", "grade_id", "menu_id");
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
