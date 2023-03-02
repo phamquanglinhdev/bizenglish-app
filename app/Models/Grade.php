@@ -80,7 +80,12 @@ class Grade extends Model
     public function percentCount(): float|int
     {
         $durations = $this->Logs()->sum("duration");
-        return $durations / $this->minutes * 100 ?? 0;
+        if ($durations != 0) {
+            return $durations / $this->minutes * 100;
+        } else {
+            return 0;
+        }
+
     }
 
     public function toIndex()
