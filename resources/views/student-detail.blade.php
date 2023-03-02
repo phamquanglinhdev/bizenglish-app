@@ -72,7 +72,7 @@
                     <div class="row justify-content-start">
                         @foreach( $grades as $grade)
                             @if($grade->disable==0)
-                                <div class="col-sm-6 col-lg-3">
+                                <div class="col-sm-12 col-lg-12">
                                     <div class="card border-0 text-white {{$grade->fewDates()?"bg-cyan":"bg-danger"}}">
                                         <div class="card-body">
                                             <div class="text-value">
