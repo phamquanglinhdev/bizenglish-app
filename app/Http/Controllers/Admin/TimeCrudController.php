@@ -7,6 +7,7 @@ use App\Models\Teacher;
 use App\Models\Time;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 /**
@@ -38,6 +39,15 @@ class TimeCrudController extends CrudController
         if (backpack_user()->type == 1) {
             $this->crud->addButtonFromModelFunction("top", "editNow", "RedirectToEdit", "top");
         }
+        $this->crud->addFilter([
+            'name' => 'name',
+            'label' => 'Tên giáo viên',
+            'type' => 'text'
+        ], false, function ($value) {
+            $this->crud->query->whereHas("teacher", function (Builder $builder) use ($value){
+                $builder->where("name", "like", "%$value%");
+            });
+        });
     }
 
     /**
