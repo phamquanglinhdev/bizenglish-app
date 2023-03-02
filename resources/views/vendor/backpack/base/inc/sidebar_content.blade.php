@@ -71,7 +71,7 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('notification') }}"><i class="nav-icon la la-bell"></i>
         {{trans("backpack::crud.notification")}}
     </a></li>
-@if(backpack_user()->role<=1)
+@if(backpack_user()->type<=1)
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('demo') }}"><i class="nav-icon lab la-buffer"></i>
             Demo</a></li>
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('elfinder') }}">
