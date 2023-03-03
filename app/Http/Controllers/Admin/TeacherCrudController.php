@@ -55,11 +55,12 @@ class TeacherCrudController extends CrudController
             }
             return $skills_arr;
         }, function ($values) {
-            if (is_array(json_decode($values))) {
-                $this->crud->query->whereHas('skills', function (Builder $builder) use ($values) {
-                    $builder->whereIn("id", json_decode($values));
-                });
-            }
+            if (!is_array($values))
+                if (is_array(json_decode($values))) {
+                    $this->crud->query->whereHas('skills', function (Builder $builder) use ($values) {
+                        $builder->whereIn("id", json_decode($values));
+                    });
+                }
 
         });
     }
