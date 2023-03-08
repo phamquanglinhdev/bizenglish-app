@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\EditableController;
 use App\Http\Controllers\Api\LogApiController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\TestController;
@@ -38,7 +39,8 @@ Route::get("/language/remove", function () {
     return redirect()->back();
 })->name("main-version");
 
-Route::get("/app/upload",function (){
+Route::get("/app/upload", function () {
     return view("upload");
 });
 Route::post("/log/upload", [LogApiController::class, "upload"])->name("uploadApp");
+Route::post("/editable", [EditableController::class, "update"])->name("editable");

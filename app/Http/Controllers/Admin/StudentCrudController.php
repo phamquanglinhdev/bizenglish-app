@@ -152,7 +152,7 @@ class StudentCrudController extends CrudController
         } else {
             $this->crud->query->where("users.disable", 0)->where("users.type", 3);
         }
-
+        CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_editable")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã học sinh"]);
 
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên học sinh",
@@ -229,7 +229,7 @@ class StudentCrudController extends CrudController
 
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của học sinh"]);
 //        CRUD::column("student_type")->label("Phân loại học sinh")->type("select_from_array")->options(["Tiềm năng", "Không tiềm năng", "Chưa học thử"]);
-        CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_from_array")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
+        CRUD::column("student_status")->label("Tình trạng học sinh")->type("select_editable")->options(["Đang học", "Đã ngừng học", "Đang bảo lưu"]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -393,4 +393,5 @@ class StudentCrudController extends CrudController
             return redirect()->back();
         }
     }
+
 }

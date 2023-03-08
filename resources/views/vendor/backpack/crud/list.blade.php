@@ -166,4 +166,39 @@
 
     <!-- CRUD LIST CONTENT - crud_list_scripts stack -->
     @stack('crud_list_scripts')
+    <script>
+
+        $(document).ajaxComplete(() => {
+            console.log("success")
+            $(".editable-select").change((e) => {
+                let name = e.target.name
+                let id = e.target.getAttribute("data-id")
+                let value = e.target.value
+                $.ajax({
+                    type: "POST",
+                    url: "{{route("editable")}}",
+                    data:
+                        {
+                            name: name,
+                            id: id,
+                            value: value,
+                            model: "{{$crud->model->getTable()}}",
+                        },
+                    success: function (data) {
+                        new Noty({
+                            text: data.message,
+                            type: 'success',
+                        }).show()
+                        Swall.show()
+                    },
+                    error: function (error) {
+                        new Noty({
+                            text: error.message,
+                            type: 'error',
+                        }).show()
+                    }
+                });
+            });
+        })
+    </script>
 @endsection
