@@ -37,7 +37,7 @@ class GradeCrudController extends CrudController
     {
 
 //        $this->crud->addButtonFromModelFunction("line", "meeting", "meeting", "line");
-        if (backpack_user()->type >= 1) {
+        if (backpack_user()->type >= 1 && backpack_user()->type != 5) {
             $this->crud->addButtonFromModelFunction("top", "redirectToIndex", "toIndex", "top");
         }
         CRUD::setModel(Grade::class);
@@ -159,9 +159,13 @@ class GradeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-
-
+        if (backpack_user()->type == 5) {
+            $this->crud->query->whereHas("teacher", function (Builder $builder) {
+                $builder->whereHas("partner", function (Builder $partner) {
+                    $partner->where("id", backpack_user()->id);
+                });
+            });
+        }
         CRUD::column('name')->label("Tên lớp")->wrapper(
             [
                 // 'element' => 'a', // the element will default to "a" so you can skip it here

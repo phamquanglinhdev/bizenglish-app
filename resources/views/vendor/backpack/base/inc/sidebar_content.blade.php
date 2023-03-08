@@ -28,9 +28,14 @@
                         class='nav-icon la la-user-friends'></i> KH đang tư vấn</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('client') }}'><i
                         class='nav-icon la la-user-lock'></i> Đối tác</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('partner') }}"><i class="nav-icon la la-lock"></i> Đối tác cung cấp</a></li>
         </ul>
     </li>
 
+@endif
+@if(backpack_user()->type==5)
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('teacher') }}'><i
+                class='nav-icon la la-chalkboard-teacher'></i> Giáo viên</a></li>
 @endif
 @if(backpack_user()->type<=1)
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('time') }}"><i class="nav-icon la la-calendar"></i>
@@ -110,3 +115,4 @@
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('backup') }}'><i class='nav-icon la la-hdd-o'></i>
             Sao lưu</a></li>
 @endif
+

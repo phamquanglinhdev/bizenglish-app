@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\ClientRequest;
+use App\Http\Requests\PartnerRequest;
 use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Str;
 
 /**
- * Class ClientCrudController
+ * Class PartnerCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class ClientCrudController extends CrudController
+class PartnerCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -28,9 +28,9 @@ class ClientCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Client::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/client');
-        CRUD::setEntityNameStrings('Đối tác', 'Đối tác');
+        CRUD::setModel(\App\Models\Partner::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/partner');
+        CRUD::setEntityNameStrings('Đối tác cung cấp', 'Đối tác cung cấp');
     }
 
     /**
@@ -42,7 +42,7 @@ class ClientCrudController extends CrudController
     protected function setupListOperation()
     {
         $this->crud->addClause("where", "disable", 0);
-        $this->crud->addClause("where", "type", "2");
+        $this->crud->addClause("where", "type", "5");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã đối tác"]);
         CRUD::addColumn(['name' => 'name', 'type' => 'text', 'label' => "Tên đối tác"]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của đối tác"]);
@@ -70,6 +70,7 @@ class ClientCrudController extends CrudController
             }
 
         ]);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -85,12 +86,12 @@ class ClientCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(ClientRequest::class);
+        CRUD::setValidation(PartnerRequest::class);
         CRUD::field('name')->label("Tên đối tác");
         CRUD::addField(['name' => 'code', 'type' => 'text', 'label' => "Mã đối tác"]);
         CRUD::field('email')->label("Email đối tác");
         CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
-        CRUD::field('type')->type("hidden")->value(2);
+        CRUD::field('type')->type("hidden")->value(5);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
@@ -156,7 +157,6 @@ class ClientCrudController extends CrudController
                 'type' => 'hidden'
             ],
         );
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

@@ -55,11 +55,12 @@ class TeacherCrudController extends CrudController
             }
             return $skills_arr;
         }, function ($values) {
-            if (is_array(json_decode($values))) {
-                $this->crud->query->whereHas('skills', function (Builder $builder) use ($values) {
-                    $builder->whereIn("id", json_decode($values));
-                });
-            }
+            if (!is_array($values))
+                if (is_array(json_decode($values))) {
+                    $this->crud->query->whereHas('skills', function (Builder $builder) use ($values) {
+                        $builder->whereIn("id", json_decode($values));
+                    });
+                }
 
         });
     }
@@ -72,6 +73,9 @@ class TeacherCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        if (backpack_user()->type == 5) {
+            $this->crud->query->where("partner_id", backpack_user()->id);
+        }
         $this->crud->addClause("where", "disable", 0);
         $this->crud->addClause("where", "type", "1");
         CRUD::addColumn(['name' => 'code', 'type' => 'text', 'label' => "Mã giáo viên"]);
@@ -83,6 +87,11 @@ class TeacherCrudController extends CrudController
                 },
             ]
 
+        ]);
+        CRUD::addColumn([
+            'name' => 'partner_id',
+
+            'label' => 'Đối tác cung cấp',
         ]);
         CRUD::addColumn(['name' => 'email', 'type' => 'text', "label" => "Email của giáo viên"]);
         CRUD::addColumn(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
@@ -129,6 +138,17 @@ class TeacherCrudController extends CrudController
     {
         CRUD::setValidation(TeacherRequest::class);
         CRUD::field('name')->label("Tên giáo viên")->wrapper([]);
+        CRUD::addField([
+            'name' => 'partner_id',
+            'type' => 'select2',
+            'model' => 'App\Models\Partner',
+            'entity' => 'Partner',
+            'attribute' => 'name',
+            'label' => 'Đối tác cung cấp',
+            'options' => (function ($query) {
+                return $query->orderBy('name', 'ASC')->where('type', 5)->where("disable", 0)->get();
+            }),
+        ]);
         CRUD::field('email')->label("Email giáo viên");
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");

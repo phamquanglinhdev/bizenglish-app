@@ -117,22 +117,22 @@ class Grade extends Model
 
     public function Student()
     {
-        return $this->belongsToMany(User::class, "student_grade", "grade_id", "student_id")->where("disable", 0);
+        return $this->belongsToMany(Student::class, "student_grade", "grade_id", "student_id")->where("disable", 0);
     }
 
     public function Teacher()
     {
-        return $this->belongsToMany(User::class, "teacher_grade", "grade_id", "teacher_id");
+        return $this->belongsToMany(Teacher::class, "teacher_grade", "grade_id", "teacher_id");
     }
 
     public function Client()
     {
-        return $this->belongsToMany(User::class, "client_grade", "grade_id", "client_id");
+        return $this->belongsToMany(Client::class, "client_grade", "grade_id", "client_id");
     }
 
     public function Staff(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(User::class, "staff_grade", "grade_id", "staff_id");
+        return $this->belongsToMany(Staff::class, "staff_grade", "grade_id", "staff_id");
     }
 
     public function Supporter(): \Illuminate\Database\Eloquent\Relations\BelongsToMany

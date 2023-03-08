@@ -25,6 +25,12 @@
     @endphp
     @include("manager.user-dashboard",["posts"=>$posts])
 @endif
+@if(backpack_user()->type==5)
+    @php
+        $posts = \App\Models\Post::where("type",2)->orWhere("type",5)->orderBy("pin","DESC")->limit(3)->get();
+    @endphp
+    @include("manager.user-dashboard",["posts"=>$posts])
+@endif
 @if(backpack_user()->type==3)
     @php
         $posts = \App\Models\Post::where("type",3)->orWhere("type",5)->orderBy("pin","DESC")->limit(3)->get();

@@ -185,6 +185,15 @@ class LogCrudController extends CrudController
     protected
     function setupListOperation()
     {
+        if (backpack_user()->type == 5) {
+            $this->crud->query->whereHas("grade", function (Builder $builder) {
+                $builder->whereHas("teacher", function (Builder $teacher) {
+                    $teacher->whereHas("partner", function (Builder $partner) {
+                        $partner->where("id", backpack_user()->id);
+                    });
+                });
+            });
+        }
         $this->crud->query->orderBy("date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
             $grade = Grade::find(($_REQUEST["grade_id"]));

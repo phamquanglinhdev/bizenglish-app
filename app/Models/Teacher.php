@@ -39,7 +39,10 @@ class Teacher extends Model
     {
         return $this->belongsToMany(Grade::class, "teacher_grade", "teacher_id", "grade_id");
     }
-
+    public function Partner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Partner::class, "partner_id", "id");
+    }
     public function Logs()
     {
         return $this->hasMany(Log::class, "teacher_id", "id");
