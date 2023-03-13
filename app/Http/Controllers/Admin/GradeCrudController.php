@@ -13,6 +13,7 @@ use App\Models\Teacher;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class GradeCrudController
@@ -150,6 +151,55 @@ class GradeCrudController extends CrudController
             }
 
 
+        });
+        $this->crud->addFilter([
+            'name' => 'few',
+            'type' => 'select2',
+            'label' => 'Thơi gian học'
+        ], function () {
+            return [
+                0 => 'Trên 90 phút',
+                1 => 'Dưới 90 phút',
+                2 => 'Quá thời hạn'
+            ];
+        }, function ($value) {
+            switch ($value) {
+                case 0:
+                    $ids = [];
+                    $grades = Grade::where("disable", 0)->get();
+                    foreach ($grades as $grade) {
+                        if (($grade->minutes - $grade->Logs()->sum("duration")) > 90) {
+                            $ids[] = $grade->id;
+                        }
+                    }
+                    $this->crud->query->where(function (Builder $builder) use ($ids) {
+                        $builder->whereIn("id", $ids);
+                    });
+                    break;
+                case 1:
+                    $ids = [];
+                    $grades = Grade::where("disable", 0)->get();
+                    foreach ($grades as $grade) {
+                        if ((($grade->minutes - $grade->Logs()->sum("duration")) < 90) && ($grade->minutes - $grade->Logs()->sum("duration")) > 0) {
+                            $ids[] = $grade->id;
+                        }
+                    }
+                    $this->crud->query->where(function (Builder $builder) use ($ids) {
+                        $builder->whereIn("id", $ids);
+                    });
+                    break;
+                case 2:
+                    $ids = [];
+                    $grades = Grade::where("disable", 0)->get();
+                    foreach ($grades as $grade) {
+                        if (($grade->minutes - $grade->Logs()->sum("duration")) < 0) {
+                            $ids[] = $grade->id;
+                        }
+                    }
+                    $this->crud->query->where(function (Builder $builder) use ($ids) {
+                        $builder->whereIn("id", $ids);
+                    });
+            }
         });
     }
 
