@@ -49,16 +49,14 @@ class GradeCrudController extends CrudController
                     $builder->where("id", backpack_user()->id);
                 })->orWhereHas("supporter", function (Builder $supporter) {
                     $supporter->where("id", backpack_user()->id);
+                })->orWhereHas("student", function (Builder $student) {
+                    $student->where("staff_id", backpack_user()->id);
                 });
             });
         }
         if (backpack_user()->type == 1) {
-            $this->crud->query->where(function (Builder $builder) {
-                $builder->whereHas("teacher", function (Builder $builder) {
-                    $builder->where("id", backpack_user()->id);
-                })->orWhereHas("student", function (Builder $student) {
-                    $student->where("staff_id",backpack_user()->id);
-                });
+            $this->crud->query->whereHas("teacher", function (Builder $builder) {
+                $builder->where("id", backpack_user()->id);
             });
         }
         $this->crud->addFilter([
