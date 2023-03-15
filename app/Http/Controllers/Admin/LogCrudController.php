@@ -411,8 +411,8 @@ class LogCrudController extends CrudController
         CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([
             "class" => "col-md-4 col-12 mb-2",
         ])->attributes([
-            'min' => Carbon::now()->subDays(2)->format("Y-m-d"),
-            'max' => Carbon::now()->format("Y-m-d"),
+            'min' => backpack_user()->type > 0 ? Carbon::now()->subDays(2)->format("Y-m-d") : "",
+            'max' => backpack_user()->type > 0 ? Carbon::now()->format("Y-m-d") : "",
             'required' => true,
         ]);
         CRUD::field('start')->label(trans("backpack::crud.start"))->type("time")->wrapper([
