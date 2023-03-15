@@ -14,6 +14,7 @@ use App\Models\User;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -408,7 +409,11 @@ class LogCrudController extends CrudController
             }
         }
         CRUD::field('date')->label(trans("backpack::crud.date"))->type("date")->wrapper([
-            "class" => "col-md-4 col-12 mb-2"
+            "class" => "col-md-4 col-12 mb-2",
+        ])->attributes([
+            'min' => Carbon::now()->subDays(2)->format("Y-m-d"),
+            'max' => Carbon::now()->format("Y-m-d"),
+            'required' => true,
         ]);
         CRUD::field('start')->label(trans("backpack::crud.start"))->type("time")->wrapper([
             "class" => "col-md-4 col-12 mb-2"
