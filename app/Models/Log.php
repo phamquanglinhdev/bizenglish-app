@@ -85,6 +85,9 @@ class Log extends Model
     {
         if ($this->status != null) {
             $status = $this->status[0];
+            if ($status["name"] == "") {
+                $status["name"] = 9;
+            }
             $time = $status["time"];
             $name = $status["name"] * 1;
             switch ($name * 1) {
@@ -98,6 +101,8 @@ class Log extends Model
                     return "Học viên hủy buổi học trước $time giờ";
                 case 4:
                     return "Giáo viên hủy buổi học trước $time giờ";
+                case 9:
+                    return "Lỗi";
                 default:
                     return $status["message"];
             }
