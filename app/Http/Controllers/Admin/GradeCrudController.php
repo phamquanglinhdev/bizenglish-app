@@ -227,7 +227,13 @@ class GradeCrudController extends CrudController
                 // 'target' => '_blank',
                 // 'class' => 'some-class',
             ]);
-        CRUD::column('student_id')->type("select")->label("Học viên");
+        CRUD::column('student_id')->type("select")->label("Học viên")->wrapper(
+            [
+                'href' => function ($crud, $column, $entry, $related_key) {
+                    return backpack_url("/student/detail/$related_key");
+                },
+            ]
+        );
         CRUD::column('teacher_id')->type("select")->label("Giáo viên");
         CRUD::column('staff_id')->type("select")->label("Nhân viên quản lý");
         CRUD::column('supporter_id')->type("select")->label("Nhân viên hỗ trợ");

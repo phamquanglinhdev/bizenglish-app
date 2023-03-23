@@ -38,11 +38,21 @@ class StudentCrudController extends CrudController
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
         $this->crud->disableReorder();
+        $this->crud->addFilter([
+            'type' => 'text',
+            'name' => 'student_filter',
+            'label' => 'Học sinh'
+        ],
+            false,
+            function ($value) {
+                $this->crud->query->where("name","like","%$value%");
+            }
+        );
         if (backpack_user()->type == -1) {
             $this->crud->addFilter([
                 'type' => 'text',
                 'name' => 'staff_filter',
-                'label' => 'Tìm kiếm nhân viên quản lý'
+                'label' => 'Nhân viên quản lý'
             ],
                 false,
                 function ($value) {
@@ -56,7 +66,7 @@ class StudentCrudController extends CrudController
             $this->crud->addFilter([
                 'type' => 'text',
                 'name' => 'sp_filter',
-                'label' => 'Tìm kiếm nhân viên hỗ trợ'
+                'label' => 'Nhân viên hỗ trợ'
             ],
                 false,
                 function ($value) {
