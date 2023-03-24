@@ -184,6 +184,7 @@ return [
     'student_name' => 'Học viên',
     'teacher_name' => 'Giáo viên',
     'client_name' => 'Đối tác',
+    'partner_name' => 'Đối tác cung cấp',
     'accept_student' => 'Xác nhận',
     'Lesson_name' => 'Bài học',
     'date' => 'Ngày',

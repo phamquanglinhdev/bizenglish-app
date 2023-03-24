@@ -57,6 +57,16 @@ class Log extends Model
         return implode(",", $rs);
     }
 
+    public function Partner()
+    {
+        if ($this->Teacher()->first()) {
+            if ($this->Teacher()->first()->Partner()->first()) {
+                return $this->Teacher()->first()->Partner()->first()->name;
+            }
+        } else
+            return "-";
+    }
+
     public function detail()
     {
         return view("components.detail", ['route' => route("admin.log.detail", $this->id)]);

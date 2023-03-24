@@ -146,6 +146,19 @@ class LogCrudController extends CrudController
                 });
             }
         );
+        $this->crud->addFilter([
+            'type' => "text",
+            'name' => 'partner_filter',
+            'label' => trans("backpack::crud.partner_name"),
+        ], false,
+            function ($value) {
+                $this->crud->query->whereHas("teacher", function (Builder $teacher) use ($value) {
+                    $teacher->whereHas("partner", function (Builder $partner) use ($value) {
+                        $partner->where("name", "like", "%$value%");
+                    });
+                });
+            }
+        );
         // dropdown filter
         $this->crud->addFilter([
             'name' => 'status',
@@ -258,6 +271,7 @@ class LogCrudController extends CrudController
 
         if (backpack_user()->type != 3) {
             CRUD::column("clients")->label(trans("backpack::crud.client_name"))->type("model_function")->function_name("client");
+            CRUD::column("partners")->label(trans("backpack::crud.partner_name"))->type("model_function")->function_name("partner");
         }
         CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
         CRUD::column('teacher_video')->label(trans("backpack::crud.teacher_video"))->type("video");
