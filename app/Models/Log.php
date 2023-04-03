@@ -175,16 +175,16 @@ class Log extends Model
 
     }
 
-    public function setTeacherVideoAttribute($value)
-    {
-        $attribute_name = "teacher_video";
-        $disk = "uploads_video";
-        $destination_path = "";
-
-        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
-
-//         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
-    }
+//    public function setTeacherVideoAttribute($value)
+//    {
+//        $attribute_name = "teacher_video";
+//        $disk = "uploads_video";
+//        $destination_path = "";
+//
+//        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+//
+////         return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+//    }
 
     public function reported($id)
     {

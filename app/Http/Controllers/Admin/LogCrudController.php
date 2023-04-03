@@ -451,7 +451,7 @@ class LogCrudController extends CrudController
                 'name' => 'teacher_video',
                 'label' => trans("backpack::crud.teacher_video"),
                 'type' => 'video',
-                'youtube_api_key' => 'AIzaSyDc3MoGdCrqbCHq6XRbulelTPy5oWsLwIE',
+//                'youtube_api_key' => 'AIzaSyDc3MoGdCrqbCHq6XRbulelTPy5oWsLwIE',
                 'tab' => 'Video from youtube',
             ]);
         CRUD::addField(
