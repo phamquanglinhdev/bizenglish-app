@@ -58,7 +58,7 @@
                     {{-- Table columns --}}
                     @foreach ($crud->columns() as $column)
                         <th
-                            data-orderable="{{ var_export($column['orderable']), false }}"
+                            {{--                            data-orderable="{{ var_export($column['orderable']), false }}"--}}
                             data-priority="{{ $column['priority'] }}"
                             {{--
                             data-visible-in-table => if developer forced field in table with 'visibleInTable => true'
@@ -156,7 +156,8 @@
           href="{{ asset('packages/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css"
           href="{{ asset('packages/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}">
-
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/fixedcolumns/4.2.2/css/fixedColumns.dataTables.min.css">
     <!-- CRUD LIST CONTENT - crud_list_styles stack -->
     @stack('crud_list_styles')
 @endsection
@@ -167,7 +168,6 @@
     <!-- CRUD LIST CONTENT - crud_list_scripts stack -->
     @stack('crud_list_scripts')
     <script>
-
         $(document).ajaxComplete(() => {
             console.log("success")
             $(".editable-select").change((e) => {

@@ -199,6 +199,7 @@ class LogCrudController extends CrudController
     protected
     function setupListOperation()
     {
+//        CRUD::setOperationSetting('showEntryCount', false);
         if (backpack_user()->type == 5) {
             $this->crud->query->whereHas("teacher", function (Builder $teacher) {
                 $teacher->whereHas("partner", function (Builder $partner) {
@@ -355,7 +356,7 @@ class LogCrudController extends CrudController
     protected
     function setupCreateOperation($edit = false)
     {
-
+        $this->crud->setTitle(1);
         CRUD::setValidation(LogRequest::class);
         if (!$edit) {
             if (backpack_user()->type == 1) {

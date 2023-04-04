@@ -44,6 +44,7 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
+        $this->crud->setOperationSetting('exportButtons', true);
         if (backpack_user()->type == 0) {
             $this->crud->query->where(function (Builder $query) {
                 $query->whereHas("staff", function (Builder $builder) {
