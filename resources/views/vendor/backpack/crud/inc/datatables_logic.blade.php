@@ -170,7 +170,7 @@
             scrollY: "30em",
             scrollCollapse: true,
             fixedColumns: {
-                left: {{1}},
+                left: {{$crud->model->fixColumn??0}},
             },
             @if ($crud->getPersistentTable())
             stateSave: true,

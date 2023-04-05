@@ -10,6 +10,7 @@ class Log extends Model
 {
     use CrudTrait;
 
+    public int $fixColumn = 2;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES

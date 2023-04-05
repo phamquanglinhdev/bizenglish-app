@@ -223,10 +223,6 @@ class LogCrudController extends CrudController
         if (backpack_user()->type == 3) {
             $this->crud->addClause('rep');
         }
-        CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
-        CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
-        CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
-
         CRUD::addColumn([
             'name' => 'grade_id',
             'type' => 'select',
@@ -244,6 +240,11 @@ class LogCrudController extends CrudController
             ],
 
         ]);
+        CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
+        CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
+        CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
+
+
 
         if (backpack_user()->type != 3) {
             CRUD::addColumn([
