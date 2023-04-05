@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class Grade extends Model
 {
     use CrudTrait;
-
+    public int $fixColumn = 1;
     /*
     |--------------------------------------------------------------------------
     | GLOBAL VARIABLES

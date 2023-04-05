@@ -267,7 +267,7 @@ class GradeCrudController extends CrudController
     {
 
         CRUD::setValidation(GradeRequest::class);
-
+        $this->crud->query->orderBy("status", "ASC");
         if (backpack_user()->type <= 0) {
             CRUD::field('name')->label("Tên lớp");
             CRUD::field('zoom')->label("Link lớp");
