@@ -164,7 +164,7 @@ return [
     | By default the registration is open only on localhost.
     */
 
-//    'registration_open' => env('BACKPACK_REGISTRATION_OPEN', env('APP_ENV') === 'fa'),
+//    'registration_open' => .env('BACKPACK_REGISTRATION_OPEN', .env('APP_ENV') === 'fa'),
     'registration_open' => false,
 
     /*
@@ -318,7 +318,7 @@ return [
     | your token username here, if you're getting yellow alerts on your
     | admin panel's pages. Normally this is not needed, it is
     | preferred to add this as an environment variable
-    | (most likely in your .env file).
+    | (most likely in your ..env file).
     |
     | More info and payment form on:
     | https://www.backpackforlaravel.com

@@ -1,8 +1,16 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 @if(backpack_user()->type!=1 && backpack_user()->type!=3 && backpack_user()->type!=2)
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
-                class='nav-icon la la-graduation-cap'></i>Lớp học</a></li>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-list"></i> Lớp học</a>
+        <ul class="nav-dropdown-items">
+            <li class='nav-item'><a class='nav-link' href='{{ backpack_url('grade') }}'><i
+                        class='nav-icon la la-graduation-cap'></i>Lớp học</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('stop-grade') }}"><i
+                        class="nav-icon la la-graduation-cap"></i>Lớp đã kết thúc</a></li>
+        </ul>
+    </li>
+
 @endif
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>
@@ -28,7 +36,8 @@
                         class='nav-icon la la-user-friends'></i> KH đang tư vấn</a></li>
             <li class='nav-item'><a class='nav-link' href='{{ backpack_url('client') }}'><i
                         class='nav-icon la la-user-lock'></i> Đối tác</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('partner') }}"><i class="nav-icon la la-lock"></i> Đối tác cung cấp</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ backpack_url('partner') }}"><i
+                        class="nav-icon la la-lock"></i> Đối tác cung cấp</a></li>
         </ul>
     </li>
 
@@ -115,4 +124,5 @@
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('backup') }}'><i class='nav-icon la la-hdd-o'></i>
             Sao lưu</a></li>
 @endif
+
 

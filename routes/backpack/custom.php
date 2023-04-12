@@ -72,4 +72,5 @@ Route::group([
     Route::crud('demo', 'DemoCrudController');
     Route::crud('partner', 'PartnerCrudController');
     Route::crud('caring', 'CaringCrudController');
+    Route::crud('stop-grade', 'StopGradeCrudController');
 }); // this should be the absolute last line of this file
