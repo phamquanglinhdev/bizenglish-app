@@ -139,9 +139,16 @@ class Teaching extends Model
     public function Client()
     {
         $client = "";
-        foreach ($this->Grade()->first()->Client()->get() as $data) {
-            $client .= "$data->name, ";
+        $grade = $this->Grade()->first() ?? null;
+        if ($grade) {
+            $clients = $grade->Client()->get();
+            if($clients->count()!=0){
+                foreach ($clients as $client){
+                    $client .= "$data->name, ";
+                }
+            }
         }
+
         return $client;
     }
     /*
