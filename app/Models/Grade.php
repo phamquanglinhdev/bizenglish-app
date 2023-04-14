@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\CurrentGradeScope;
 use App\Models\Scopes\GradeScope;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class Grade extends Model
 {
     use CrudTrait;
+
     public int $fixColumn = 1;
     /*
     |--------------------------------------------------------------------------
@@ -33,6 +35,13 @@ class Grade extends Model
     {
         parent::boot();
 
+        static::addGlobalScope(new GradeScope);
+        static::addGlobalScope(new CurrentGradeScope);
+    }
+
+    protected static function subBoot()
+    {
+        parent::boot();
         static::addGlobalScope(new GradeScope);
     }
 

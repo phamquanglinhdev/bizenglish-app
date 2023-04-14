@@ -44,6 +44,16 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
+
+    }
+
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    public function subSetup(){
         $this->crud->setOperationSetting('exportButtons', true);
         if (backpack_user()->type == 0) {
             $this->crud->query->where(function (Builder $query) {
@@ -143,7 +153,6 @@ class GradeCrudController extends CrudController
         ], function () {
             return [
                 0 => 'Đang học',
-                1 => 'Đã kết thúc',
                 2 => 'Đang bảo lưu',
             ];
         }, function ($values) { // if the filter is active
@@ -203,15 +212,9 @@ class GradeCrudController extends CrudController
             }
         });
     }
-
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
+        $this->subSetup();
         if (backpack_user()->type == 5) {
             $this->crud->query->whereHas("teacher", function (Builder $builder) {
                 $builder->whereHas("partner", function (Builder $partner) {
