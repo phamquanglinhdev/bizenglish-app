@@ -143,7 +143,7 @@ class Teaching extends Model
         if ($grade) {
             $clients = $grade->Client()->get();
             if($clients->count()!=0){
-                foreach ($clients as $client){
+                foreach ($clients as $data){
                     $client .= "$data->name, ";
                 }
             }
