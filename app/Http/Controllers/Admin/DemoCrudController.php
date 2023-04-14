@@ -149,6 +149,19 @@ class DemoCrudController extends CrudController
                         ->where("clients.name", "like", "%$value%");
                 });
         }
+        if (backpack_user()->type != 1) {
+            $this->crud->addFilter([
+                'type' => 'date_range',
+                'name' => 'from_to',
+                'label' => 'Ngày'
+            ],
+                false,
+                function ($value) { // if the filter is active
+                     $dates = json_decode($value);
+                     $this->crud->addClause('where', 'date', '>=', $dates->from);
+                     $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+                });
+        }
         CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
         CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
         CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
