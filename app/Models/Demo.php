@@ -88,7 +88,14 @@ class Demo extends Model
     | SCOPES
     |--------------------------------------------------------------------------
     */
+    public function setAttachmentsAttribute($value)
+    {
+        $attribute_name = "attachments";
+        $disk = "uploads_document";
+        $destination_path = "/";
 
+        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS
