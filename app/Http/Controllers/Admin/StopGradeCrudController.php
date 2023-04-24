@@ -59,20 +59,21 @@ class StopGradeCrudController extends GradeCrudController
      */
     protected function setupCreateOperation($editing = false)
     {
+        parent::setupCreateOperation($editing)
         CRUD::setValidation(StopGradeRequest::class);
 
-        CRUD::field('attachment');
-        CRUD::field('created_at');
-        CRUD::field('disable');
-        CRUD::field('id');
-        // CRUD::field('information');
-        CRUD::field('minutes');
-        CRUD::field('name');
-        CRUD::field('pricing');
-        CRUD::field('status');
-        CRUD::field('time');
-        CRUD::field('updated_at');
-        CRUD::field('zoom');
+        // CRUD::field('attachment');
+        // CRUD::field('created_at');
+        // CRUD::field('disable');
+        // CRUD::field('id');
+        // // CRUD::field('information');
+        // CRUD::field('minutes');
+        // CRUD::field('name');
+        // CRUD::field('pricing');
+        // CRUD::field('status');
+        // CRUD::field('time');
+        // CRUD::field('updated_at');
+        // CRUD::field('zoom');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
