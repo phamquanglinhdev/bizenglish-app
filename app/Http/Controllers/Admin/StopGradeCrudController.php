@@ -65,7 +65,7 @@ class StopGradeCrudController extends GradeCrudController
         CRUD::field('created_at');
         CRUD::field('disable');
         CRUD::field('id');
-        CRUD::field('information');
+        // CRUD::field('information');
         CRUD::field('minutes');
         CRUD::field('name');
         CRUD::field('pricing');
