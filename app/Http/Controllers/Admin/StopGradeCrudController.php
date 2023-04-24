@@ -59,7 +59,7 @@ class StopGradeCrudController extends GradeCrudController
      */
     protected function setupCreateOperation($editing = false)
     {
-        parent::setupCreateOperation($editing)
+        parent::setupCreateOperation($editing);
         CRUD::setValidation(StopGradeRequest::class);
 
         // CRUD::field('attachment');
