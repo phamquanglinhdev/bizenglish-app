@@ -24,7 +24,9 @@ class GradeCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation {
+        update as traitUpdate;
+    }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
@@ -53,7 +55,8 @@ class GradeCrudController extends CrudController
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
-    public function subSetup(){
+    public function subSetup()
+    {
         $this->crud->setOperationSetting('exportButtons', true);
         if (backpack_user()->type == 0) {
             $this->crud->query->where(function (Builder $query) {
@@ -212,6 +215,7 @@ class GradeCrudController extends CrudController
             }
         });
     }
+
     protected function setupListOperation()
     {
         $this->subSetup();
@@ -549,5 +553,14 @@ class GradeCrudController extends CrudController
     public function meeting($id)
     {
         return view("meeting", ["grade" => Grade::find($id)]);
+    }
+
+    public function update()
+    {
+        DB::table("supporter_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
+        DB::table("staff_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
+        DB::table("student_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
+        DB::table("teacher_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
+        return $this->traitUpdate();
     }
 }
