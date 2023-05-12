@@ -245,7 +245,6 @@ class LogCrudController extends CrudController
         CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
 
 
-
         if (backpack_user()->type != 3) {
             CRUD::addColumn([
                 'name' => trans("backpack::crud.student_name"),
@@ -278,6 +277,7 @@ class LogCrudController extends CrudController
             }
         }
         CRUD::column('lesson')->label(trans("backpack::crud.lesson_name"));
+        CRUD::column('number_of_student')->label(trans("backpack::crud.number_of_student"));
         CRUD::column('teacher_video')->label(trans("backpack::crud.teacher_video"))->type("video");
         CRUD::addColumn(
             [
@@ -449,6 +449,7 @@ class LogCrudController extends CrudController
             "class" => "col-md-4 col-12 mb-2"
         ]);
         CRUD::field('lesson')->label(trans("backpack::crud.lesson_name"));
+        CRUD::field('number_of_student')->type("number")->label(trans("backpack::crud.number_of_student"));
         CRUD::field('information')->label(trans("backpack::crud.content"))->type("tinymce");
         CRUD::addField(
             [
