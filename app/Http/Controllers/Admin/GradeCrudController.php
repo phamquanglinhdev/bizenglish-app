@@ -558,9 +558,6 @@ class GradeCrudController extends CrudController
     public function update()
     {
         DB::table("supporter_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
-        DB::table("staff_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
-        DB::table("student_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
-        DB::table("teacher_grade")->where("grade_id", $this->crud->getCurrentEntryId())->delete();
         return $this->traitUpdate();
     }
 }
