@@ -46,7 +46,9 @@ class GradeCrudController extends CrudController
         CRUD::setModel(Grade::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/grade');
         CRUD::setEntityNameStrings('Lớp học', 'Các lớp học');
-
+        if (backpack_user()->type >= 2) {
+            $this->crud->denyAccess(["create", "update", "edit"]);
+        }
     }
 
     /**

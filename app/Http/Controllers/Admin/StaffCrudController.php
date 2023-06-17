@@ -33,6 +33,12 @@ class StaffCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/staff');
         CRUD::setEntityNameStrings('Nhân viên', 'Danh sách nhân viên');
         $this->crud->denyAccess(["show"]);
+        if (backpack_user()->type >=0) {
+            $this->crud->denyAccess(["list"]);
+        }
+        if (backpack_user()->type >= 0) {
+            $this->crud->denyAccess(["create", "update", "edit"]);
+        }
     }
 
     /**

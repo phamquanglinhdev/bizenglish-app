@@ -35,6 +35,12 @@ class StudentCrudController extends CrudController
         CRUD::setModel(Student::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/student');
         CRUD::setEntityNameStrings('Học sinh', 'Học sinh');
+        if (backpack_user()->type == 3) {
+            $this->crud->denyAccess(["list"]);
+        }
+        if (backpack_user()->type >= 1) {
+            $this->crud->denyAccess(["create", "update", "edit"]);
+        }
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
         $this->crud->denyAccess(["show"]);
         $this->crud->disableReorder();
@@ -45,7 +51,7 @@ class StudentCrudController extends CrudController
         ],
             false,
             function ($value) {
-                $this->crud->query->where("name","like","%$value%");
+                $this->crud->query->where("name", "like", "%$value%");
             }
         );
         if (backpack_user()->type == -1) {
@@ -158,7 +164,7 @@ class StudentCrudController extends CrudController
                         $supporter->where("id", backpack_user()->id);
                     });
                 })->orWhere("staff_id", backpack_user()->id);
-            })->where("disable",0)->where("type",3);
+            })->where("disable", 0)->where("type", 3);
         } else {
             $this->crud->query->where("users.disable", 0)->where("users.type", 3);
         }

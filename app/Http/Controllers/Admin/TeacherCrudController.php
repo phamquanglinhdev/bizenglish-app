@@ -35,6 +35,12 @@ class TeacherCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/teacher');
         CRUD::setEntityNameStrings('Giáo viên', 'Giáo viên');
         $this->crud->addButtonFromModelFunction("line", "Detail", "Detail", "line");
+        if (backpack_user()->type == 1 || backpack_user()->type >= 3) {
+            $this->crud->denyAccess(["list"]);
+        }
+        if (backpack_user()->type >= 1) {
+            $this->crud->denyAccess(["create", "update", "edit"]);
+        }
         $this->crud->denyAccess(["show"]);
         $this->crud->addFilter([
             'name' => 'name',
