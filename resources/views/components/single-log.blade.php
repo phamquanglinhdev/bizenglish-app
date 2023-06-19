@@ -27,24 +27,26 @@
             </thead>
             <div style="overflow: hidden">
                 <tbody>
-                @foreach($grade->logs as $log)
-                    <tr class="text-center">
-                        <td>{{\Carbon\Carbon::parse($log->date)->isoFormat("DD-MM-YYYY")}}</td>
-                        <td>{{$log->start}}</td>
-                        <td>{{$log->end}}</td>
-                        <td>{{$log->Grade->name}}</td>
-                        <td>{{$log->teacher->name}}</td>
-                        @if(backpack_user()->type<=0)
-                            <td >{{$log->client()}}</td>
-                        @endif
-                        <td>{{$log->lesson}}</td>
-                        <td>{{$log->video}}</td>
-                        <td><a href="{{$log->drive}}">Link</a></td>
-                        <td>{{$log->duration}} phút</td>
-                        <td>{{$log->StatusShow()}}</td>
-                        <td>{{$log->assessment}}</td>
-                    </tr>
-                @endforeach
+               @if($grade)
+                   @foreach($grade->logs as $log)
+                       <tr class="text-center">
+                           <td>{{\Carbon\Carbon::parse($log->date)->isoFormat("DD-MM-YYYY")}}</td>
+                           <td>{{$log->start}}</td>
+                           <td>{{$log->end}}</td>
+                           <td>{{$log->Grade->name}}</td>
+                           <td>{{$log->teacher->name}}</td>
+                           @if(backpack_user()->type<=0)
+                               <td >{{$log->client()}}</td>
+                           @endif
+                           <td>{{$log->lesson}}</td>
+                           <td>{{$log->video}}</td>
+                           <td><a href="{{$log->drive}}">Link</a></td>
+                           <td>{{$log->duration}} phút</td>
+                           <td>{{$log->StatusShow()}}</td>
+                           <td>{{$log->assessment}}</td>
+                       </tr>
+                   @endforeach
+               @endif
                 </tbody>
             </div>
 
