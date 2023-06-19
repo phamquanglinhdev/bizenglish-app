@@ -209,7 +209,7 @@ class LogCrudController extends CrudController
         }
         $this->crud->query->orderBy("date", "DESC");
         if (isset($_REQUEST["grade_id"])) {
-            $grade = Grade::find(($_REQUEST["grade_id"]));
+            $grade = Grade::query()->withoutGlobalScopes()->findOrFail(($_REQUEST["grade_id"]));
             $trans = trans('backpack::crud.history');
             $tran = trans('backpack::crud.history') . ": " . $grade->name;
             CRUD::setEntityNameStrings($trans, $tran);

@@ -41,7 +41,7 @@ class Log extends Model
 
     public function Grade()
     {
-        return $this->belongsTo(Grade::class, "grade_id", "id");
+        return $this->belongsTo(Grade::class, "grade_id", "id")->withoutGlobalScopes();
     }
 
     public function Client()
