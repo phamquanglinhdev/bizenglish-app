@@ -37,7 +37,7 @@ class Teacher extends Model
 
     public function Grades()
     {
-        return $this->belongsToMany(Grade::class, "teacher_grade", "teacher_id", "grade_id");
+        return $this->belongsToMany(Grade::class, "teacher_grade", "teacher_id", "grade_id")->withoutGlobalScopes();
     }
     public function Partner(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

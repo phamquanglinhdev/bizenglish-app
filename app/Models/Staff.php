@@ -60,7 +60,7 @@ class Staff extends Model
 
     public function Grades(): BelongsToMany
     {
-        return $this->belongsToMany(Grade::class, "staff_grade", "staff_id", "grade_id");
+        return $this->belongsToMany(Grade::class, "staff_grade", "staff_id", "grade_id")->withoutGlobalScopes();
     }
 
     public function GradesAsSupport(): BelongsToMany

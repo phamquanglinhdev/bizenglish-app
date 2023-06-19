@@ -43,7 +43,7 @@ class Client extends Model
 
     public function Grades()
     {
-        return $this->belongsToMany(Grade::class, "client_grade", "client_id", "grade_id");
+        return $this->belongsToMany(Grade::class, "client_grade", "client_id", "grade_id")->withoutGlobalScopes();
     }
     /*
     |--------------------------------------------------------------------------

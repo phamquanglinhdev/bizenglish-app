@@ -57,7 +57,7 @@ class Customer extends Model
 
     public function Grades()
     {
-        return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id");
+        return $this->belongsToMany(Grade::class, "student_grade", "student_id", "grade_id")->withoutGlobalScopes();
     }
 
     public function Switch()

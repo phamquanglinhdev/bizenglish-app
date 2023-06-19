@@ -32,7 +32,7 @@ class Teaching extends Model
     */
     public function Grade()
     {
-        return $this->belongsTo(Grade::class, "grade_id", "id");
+        return $this->belongsTo(Grade::class, "grade_id", "id")->withoutGlobalScopes();
     }
 
     public function detail()
@@ -142,8 +142,8 @@ class Teaching extends Model
         $grade = $this->Grade()->first() ?? null;
         if ($grade) {
             $clients = $grade->Client()->get();
-            if($clients->count()!=0){
-                foreach ($clients as $data){
+            if ($clients->count() != 0) {
+                foreach ($clients as $data) {
                     $client .= "$data->name, ";
                 }
             }
