@@ -157,15 +157,16 @@ class DemoCrudController extends CrudController
             ],
                 false,
                 function ($value) { // if the filter is active
-                     $dates = json_decode($value);
-                     $this->crud->addClause('where', 'date', '>=', $dates->from);
-                     $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
+                    $dates = json_decode($value);
+                    $this->crud->addClause('where', 'date', '>=', $dates->from);
+                    $this->crud->addClause('where', 'date', '<=', $dates->to . ' 23:59:59');
                 });
         }
         CRUD::column('date')->label(trans("backpack::crud.date"))->type("date");
         CRUD::column('start')->label(trans("backpack::crud.start"))->type("time");
         CRUD::column('end')->label(trans("backpack::crud.end"))->type("time");
         CRUD::column('grade')->label(trans("backpack::crud.grade_name"));
+        CRUD::column('student_quantity')->label(trans("backpack::crud.student_quantity"));
         CRUD::addColumn([
             'label' => trans("backpack::crud.student_name"),
             'name' => 'students',
@@ -274,7 +275,7 @@ class DemoCrudController extends CrudController
     {
         CRUD::setValidation(DemoRequest::class);
         CRUD::field('grade')->label(trans("backpack::crud.grade_name"));
-
+        CRUD::field('student_quantity')->label(trans("backpack::crud.student_quantity"));
         CRUD::addField([
             'label' => "Khách hàng",
             'name' => 'Customers',

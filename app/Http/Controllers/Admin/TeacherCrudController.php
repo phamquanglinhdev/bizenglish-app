@@ -39,7 +39,7 @@ class TeacherCrudController extends CrudController
             $this->crud->denyAccess(["list"]);
         }
         if (backpack_user()->type >= 1) {
-            $this->crud->denyAccess(["create", "update", "edit"]);
+            $this->crud->denyAccess(["create"]);
         }
         $this->crud->denyAccess(["show"]);
         $this->crud->addFilter([

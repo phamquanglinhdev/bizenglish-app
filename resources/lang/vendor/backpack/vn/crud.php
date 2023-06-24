@@ -19,7 +19,7 @@ return [
     'save_action_save_and_back' => 'Lưu và quay lại',
     'save_action_save_and_preview' => 'Lưu và xem trước',
     'save_action_changed_notification' => 'Hành vi mặc định sau khi lưu đã được thay đổi.',
-    'number_of_student'=>'Số lượng học sinh',
+    'number_of_student' => 'Số lượng học sinh',
     // Create form
     'add' => 'Thêm',
     'back_to_all' => 'Quay về ',
@@ -245,4 +245,6 @@ return [
     'document' => 'Tài liệu',
     'lesson_name' => 'Bài học',
     'has_time' => 'Số phút còn lại',
+    //
+    'student_quantity' => 'Số lượng học sinh'
 ];
