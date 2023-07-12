@@ -94,7 +94,7 @@ class Log extends Model
 
     public function StatusShow()
     {
-        if ($this->status != null) {
+        if ($this->status != null && is_array($this->status)) {
             $status = $this->status[0];
             if ($status["name"] == "") {
                 $status["name"] = 9;
@@ -118,6 +118,7 @@ class Log extends Model
                     return $status["message"];
             }
         }
+        return "Giáo viên chưa cập nhật trạng thái";
 
     }
 
