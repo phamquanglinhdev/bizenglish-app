@@ -474,6 +474,7 @@ class LogCrudController extends CrudController
                     [
 //                        dd($_SERVER),
                         'name' => 'name',
+                        'allows_null' => false,
                         'label' => trans("backpack::crud.status"),
                         'type' => "select_from_array",
                         'options' => [
@@ -484,7 +485,7 @@ class LogCrudController extends CrudController
                             trans("backpack::crud.teacher") . " " . trans("backpack::crud.drop"),
                             trans('backpack::crud.other'),
                         ],
-                        "value" => 0,
+                        "default" => 0,
                         "attributes" => ["id" => "status_name"],
                         'wrapper' => ['class' => 'form-group col-md-6 '],
                     ],
