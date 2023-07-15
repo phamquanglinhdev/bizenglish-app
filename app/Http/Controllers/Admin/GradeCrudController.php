@@ -308,6 +308,11 @@ class GradeCrudController extends CrudController
                     'attributes' => [
                         'placeholder' => 'Ví dụ : 8pm-10pm',
                     ]
+                ],
+                [
+                    "name" => 'start',
+                    'label' => 'Thời gian thông báo (Thời gian app thông báo cho học sinh)',
+                    'type' => 'time'
                 ]
             ],
             'new_item_label' => 'Thêm lịch',
