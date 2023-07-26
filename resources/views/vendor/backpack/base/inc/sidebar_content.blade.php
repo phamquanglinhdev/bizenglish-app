@@ -1,6 +1,6 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i
             class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
-@if(backpack_user()->type!=1 && backpack_user()->type!=3 && backpack_user()->type!=2)
+@if(!in_array(backpack_user()->type,[1,2,3,4]))
     <li class="nav-item nav-dropdown">
         <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-list"></i> Lớp học</a>
         <ul class="nav-dropdown-items">
@@ -12,11 +12,13 @@
     </li>
 
 @endif
-<li class='nav-item'>
-    <a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>
-        {{trans("backpack::crud.history")}}
-    </a>
-</li>
+@if(!in_array(backpack_user()->type,[4]))
+    <li class='nav-item'>
+        <a class='nav-link' href='{{ backpack_url('log') }}'><i class='nav-icon la la-pen'></i>
+            {{trans("backpack::crud.history")}}
+        </a>
+    </li>
+@endif
 @if(backpack_user()->type == -1)
     {{--    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('user') }}'><i class='nav-icon la la-user'></i> Tài--}}
     {{--            khoản</a></li>--}}
@@ -114,8 +116,10 @@
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('post') }}"><i class="nav-icon la la-pinterest"></i>Bài
             viết</a></li>
 @endif
-<li class="nav-item"><a class="nav-link" href="{{ route("account-info") }}"><i
-            class="nav-icon la la-user"></i>{{backpack_user()->name}}</a></li>
+@if(backpack_user()->type!==4)
+    <li class="nav-item"><a class="nav-link" href="{{ route("account-info") }}"><i
+                class="nav-icon la la-user"></i>{{backpack_user()->name}}</a></li>
+@endif
 
 
 
@@ -126,3 +130,7 @@
 @endif
 
 
+@if(in_array(backpack_user()->type,[-1,0]))
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('contest') }}"><i
+                class="nav-icon la la-question"></i> Bài test</a></li>
+@endif

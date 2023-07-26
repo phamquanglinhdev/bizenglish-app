@@ -73,4 +73,5 @@ Route::group([
     Route::crud('partner', 'PartnerCrudController');
     Route::crud('caring', 'CaringCrudController');
     Route::crud('stop-grade', 'StopGradeCrudController');
+    Route::crud('contest', 'ContestCrudController');
 }); // this should be the absolute last line of this file

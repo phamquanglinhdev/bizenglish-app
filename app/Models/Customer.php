@@ -5,6 +5,7 @@ namespace App\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Hash;
 
 class Customer extends Model
@@ -69,6 +70,7 @@ class Customer extends Model
     {
         $this->attributes['private_key'] = Hash::make($this->name . $this->code);
     }
+
     public function originStaff()
     {
         return $this->belongsTo(Staff::class, "staff_id", "id");
@@ -93,5 +95,11 @@ class Customer extends Model
         } else {
             return $this->originStaff()->first()->name ?? "-";
         }
+    }
+
+    public function Contests(): BelongsToMany
+    {
+        return $this->belongsToMany(Contest::class, "customer_contest", "customer_id", "contest_id")
+            ->withPivot(["score", "correct", "total", "correct_task"]);
     }
 }

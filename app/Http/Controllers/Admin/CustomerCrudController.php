@@ -10,6 +10,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Support\Str;
 use function MongoDB\BSON\toJSON;
+use function Symfony\Component\Translation\t;
 
 /**
  * Class CustomerCrudController
@@ -93,10 +94,22 @@ class CustomerCrudController extends CrudController
         CRUD::field('name')->label("Tên khách hàng");
         CRUD::field('email')->label("Email khách hàng");
         CRUD::addField(['name' => 'phone', 'type' => 'text', 'label' => "Số điện thoại"]);
+        CRUD::addField(
+            [
+                'label' => "Bài test cho KH",
+                'name' => 'contests',
+                'type' => 'relationship',
+                'pivot' => true,
+                'model' => 'App\Models\Contest',
+                'entity' => 'contests',
+                'attribute' => 'title'
+            ]
+        );
         CRUD::field('type')->type("hidden")->value(4);
         CRUD::field('avatar')->type("image")->crop(true)->aspect_ratio(1);
         CRUD::field("facebook")->label("Link Facebook");
         CRUD::field("address")->label("Địa chỉ");
+
         if (backpack_user()->type == -1) {
             CRUD::addField([
                 'name' => 'staff_id',
@@ -152,6 +165,7 @@ class CustomerCrudController extends CrudController
                 'type' => 'hidden'
             ],
         );
+
         if (backpack_user()->type <= 0) {
             CRUD::addField(
                 [

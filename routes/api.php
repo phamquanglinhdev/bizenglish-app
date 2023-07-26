@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ClientApiController;
+use App\Http\Controllers\Api\ContestController;
 use App\Http\Controllers\Api\CustomerApiController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\FileApiController;

@@ -39,7 +39,14 @@
 @endif
 @if(backpack_user()->type==4)
     @php
+        /**
+* @var \App\Models\Customer $customer
+ */
         $posts = \App\Models\Post::where("type",4)->orWhere("type",5)->orderBy("pin","DESC")->limit(3)->get();
+        $customer = \App\Models\Customer::query()->where("id",backpack_user()->id)->first();
+        $contests = $customer->Contests()->get()
     @endphp
-    @include("manager.user-dashboard",["posts"=>$posts])
+    @include("contest-list",['contests'=>$contests])
+{{--    @include("manager.user-dashboard",["posts"=>$posts])--}}
+
 @endif
