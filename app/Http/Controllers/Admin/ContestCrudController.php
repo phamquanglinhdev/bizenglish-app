@@ -73,6 +73,40 @@ class ContestCrudController extends CrudController
                     'type' => 'textarea'
                 ],
                 [
+                    'name' => 'image',
+                    'label' => 'Ảnh',
+                    'type' => 'browse',
+                    'wrapper' => [
+                        'class' => 'col-md-6 mb-3'
+                    ]
+                ],
+                [
+                    'name' => 'audio',
+                    'label' => 'Audio',
+                    'type' => 'browse',
+                    'wrapper' => [
+                        'class' => 'col-md-6 mb-3'
+                    ]
+                ],
+                [
+                    'name' => 'delay',
+                    'label' => 'Phát âm thanh sau',
+                    'type' => 'number',
+                    'suffix' => 'Giây',
+                    'default' => 3,
+                    'wrapper' => [
+                        'class' => 'col-md-6 mb-3'
+                    ]
+                ],
+                [
+                    'name' => 'video',
+                    'label' => 'Link video Youtube',
+                    'type' => 'text',
+                    'wrapper' => [
+                        'class' => 'col-md-6 mb-3'
+                    ]
+                ],
+                [
                     'name' => 'a',
                     'label' => 'Đáp án A',
                     'wrapper' => [
