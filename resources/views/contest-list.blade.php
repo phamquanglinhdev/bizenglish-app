@@ -24,7 +24,7 @@
                     </div>
                     @if($contest["pivot"]["correct"]==null)
                         <div class="mt-2">
-                            <a href="https://server.bizsoft.store/api/{{$contest["id"]}}/{{backpack_user()->id}}">Bắt
+                            <a href="https://server.bizsoft.store/api/contest/{{$contest["id"]}}/{{backpack_user()->id}}">Bắt
                                 đầu
                                 làm bài test</a>
                         </div>
