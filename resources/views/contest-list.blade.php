@@ -24,7 +24,8 @@
                     </div>
                     @if($contest["pivot"]["correct"]==null)
                         <div class="mt-2">
-                            <a href="{{route("play-contest",['contest_id'=>$contest["pivot"]["contest_id"],"user_id"=>backpack_user()->id])}}">Bắt đầu
+                            <a href="https://server.bizsoft.store/api/{{$contest["id"]}}/{{backpack_user()->id}}">Bắt
+                                đầu
                                 làm bài test</a>
                         </div>
                     @else
