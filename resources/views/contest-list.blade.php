@@ -24,7 +24,8 @@
                     </div>
                     @if($contest["pivot"]["correct"]==null)
                         <div class="mt-2">
-                            <a class="">Bắt đầu làm bài test</a>
+                            <a href="{{route("play-contest",['contest_id'=>$contest["pivot"]["contest_id"]])}}">Bắt đầu
+                                làm bài test</a>
                         </div>
                     @else
                         <div class="border p-2 rounded mt-2">
