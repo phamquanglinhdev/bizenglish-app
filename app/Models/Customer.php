@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Model
 {
     use HasFactory;
     use CrudTrait;
+    use HasApiTokens;
 
     /*
     |--------------------------------------------------------------------------

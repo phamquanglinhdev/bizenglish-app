@@ -45,4 +45,4 @@ Route::get("/app/upload", function () {
 });
 Route::post("/log/upload", [LogApiController::class, "upload"])->name("uploadApp");
 Route::post("/editable", [EditableController::class, "update"])->name("editable");
-Route::get("/contest/play/{contest_id}",[ContestController::class,"playRequest"])->name("play-contest");
+Route::get("/contest/play/{contest_id}/user/{user_id}",[ContestController::class,"playRequest"])->name("play-contest");
