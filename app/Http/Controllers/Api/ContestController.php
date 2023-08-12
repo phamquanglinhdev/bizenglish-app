@@ -30,7 +30,7 @@ class ContestController extends Controller
         }
         $user = Customer::query()->where("id", backpack_user()->id)->first();
         $token = "Bearer " . $user->createToken("Bearer")->plainTextToken;
-        return redirect("http://localhost:3000?token=" . $token . "&contest=" . $contest_id . "&user_id=" . backpack_user()->id);
+        return redirect("https://bizenglish.web.app?token=" . $token . "&contest=" . $contest_id . "&user_id=" . backpack_user()->id);
     }
 
     public function checkContest(Request $request): bool
