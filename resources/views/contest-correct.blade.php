@@ -9,12 +9,12 @@
 @extends(backpack_view("blank"))
 @section("content")
     <div class="container-fluid">
-        <div class="row">
+        <div class=" w-100">
             {{--            @dd($correct_tasks)--}}
-            <div class="font-weight-bold h3 mt-4">
+            <div class="font-weight-bold h3 mt-4 col-12">
                 Xem kết quả bài test
             </div>
-            <div>
+            <div class="">
                 @foreach($correct_tasks as $task)
                     @php
                         $task = (array) $task
