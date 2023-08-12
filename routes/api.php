@@ -106,4 +106,6 @@ Route::post("/otp/send", [OTPController::class, "sendOTP"]);
 Route::post("/otp/show", [OTPController::class, "showByPhone"]);
 Route::post("/phone/list", [OTPController::class, "listPhone"]);
 Route::get("/zego/signature", [App\Http\Controllers\Api\ZegoCloudController::class, "signature"]);
+Route::post("/get-contest", [ContestController::class, "getContest"]);
+Route::post("/submit-contest", [ContestController::class, "checkContest"]);
 

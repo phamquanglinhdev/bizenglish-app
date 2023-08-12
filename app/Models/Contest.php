@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Contest extends Model
@@ -23,9 +24,10 @@ class Contest extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
-    protected $casts =[
-        'body'=>'array'
+    protected $casts = [
+        'body' => 'array'
     ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -35,6 +37,7 @@ class Contest extends Model
     {
         return count($this->body ?? 0);
     }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -43,14 +46,18 @@ class Contest extends Model
     public function Customers(): BelongsToMany
     {
         return $this->belongsToMany(Customer::class, "customer_contest", "contest_id", "customer_id")
-            ->withPivot(["score", "correct", "total", "correct_task"]);
+            ->withPivot(["score", "correct", "total", "correct_task", "id"]);
     }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
-
+    public function nextContest(): BelongsTo
+    {
+        return $this->belongsTo(Contest::class, "next_contest", "id");
+    }
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS

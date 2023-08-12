@@ -210,7 +210,7 @@ class CustomerCrudController extends CrudController
 
     protected function detail($id)
     {
-        return view("student-detail", ['data' => Student::find($id)]);
+        return view("customer-detail", ['data' => Customer::find($id)]);
     }
 
     protected function switcher($id)

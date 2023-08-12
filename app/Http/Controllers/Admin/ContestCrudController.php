@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\ContestRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class ContestCrudController
@@ -60,6 +61,8 @@ class ContestCrudController extends CrudController
     {
         CRUD::setValidation(ContestRequest::class);
         CRUD::field('title')->label("Tiêu đề bài Test");
+        CRUD::field("next_contest")->label("Bài test cấp tiếp theo")->type("select2")->model("App\Models\Contest")->entity("nextContest");
+        CRUD::field("min_point")->label("Điểm tối thiểu cần đạt (thang điểm 100)")->type("number");
         CRUD::field('limit_time')->suffix("phút")->label("Giới hạn thời gian");
         CRUD::addField([
             'name' => 'body',
@@ -171,5 +174,14 @@ class ContestCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+    }
+
+    protected function correctContest($id)
+    {
+        $case = DB::table("customer_contest")->where("id", $id)->first();
+        if ($case) {
+            return view("contest-correct", ["case" => $case]);
+        }
+        abort(404);
     }
 }

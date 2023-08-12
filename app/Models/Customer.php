@@ -55,7 +55,7 @@ class Customer extends Model
     */
     public function Detail()
     {
-        return view("components.detail", ['route' => route("admin.student.detail", $this->id)]);
+        return view("components.detail", ['route' => route("admin.customer.detail", $this->id)]);
     }
 
     public function Grades()
@@ -102,6 +102,6 @@ class Customer extends Model
     public function Contests(): BelongsToMany
     {
         return $this->belongsToMany(Contest::class, "customer_contest", "customer_id", "contest_id")
-            ->withPivot(["score", "correct", "total", "correct_task"]);
+            ->withPivot(["score", "correct", "total", "correct_task", "id"]);
     }
 }

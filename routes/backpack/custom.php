@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContestCrudController;
 use App\Http\Controllers\Admin\GradeCrudController;
 use App\Http\Controllers\Admin\LogCrudController;
 use App\Http\Controllers\Admin\StaffCrudController;
@@ -7,7 +8,6 @@ use App\Http\Controllers\Admin\StudentCrudController;
 use App\Http\Controllers\Admin\TeacherCrudController;
 use App\Http\Controllers\Admin\TimeCrudController;
 use App\Http\Controllers\Admin\UserCrudController;
-use App\Http\Controllers\Api\SlackController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SettingController;
 use App\Models\Log;
@@ -48,6 +48,7 @@ Route::group([
     Route::get("teacher/detail/{id}", [TeacherCrudController::class, "detail"])->name("admin.teacher.detail");
     Route::crud('client', 'ClientCrudController');
     Route::crud('customer', 'CustomerCrudController');
+    Route::get("customer/detail/{id}", [\App\Http\Controllers\Admin\CustomerCrudController::class, "detail"])->name("admin.customer.detail");
     Route::get('customer/switcher/{id}', 'CustomerCrudController@switcher')->name("admin.customer.switch");
     Route::crud('staff', 'StaffCrudController');
     Route::get("staff/detail/{id}", [StaffCrudController::class, "detail"])->name("admin.staff.detail");
@@ -74,4 +75,5 @@ Route::group([
     Route::crud('caring', 'CaringCrudController');
     Route::crud('stop-grade', 'StopGradeCrudController');
     Route::crud('contest', 'ContestCrudController');
+    Route::get("contest/correct/{id}",[ContestCrudController::class,"correctContest"]);
 }); // this should be the absolute last line of this file
