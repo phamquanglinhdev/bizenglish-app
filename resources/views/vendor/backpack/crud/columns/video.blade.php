@@ -12,7 +12,7 @@
         } else {
             $video = $value;
         }
-        $bgColor ='#DA2724'
+        $bgColor ='#DA2724';
     }
 @endphp
 
