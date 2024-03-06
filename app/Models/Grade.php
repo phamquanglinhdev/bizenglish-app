@@ -70,19 +70,30 @@ class Grade extends Model
 
     public function getStatus()
     {
-        $status = ["Đang học", "Đã kết thúc", "Đang bảo lưu"];
-        return $status[$this->attributes["status"]];
+        $status = [
+            0 => "Đang học",
+            1 => "Đã kết thúc",
+            2 => "Đang bảo lưu"
+        ];
+
+        if (! in_array($this->attributes['status'], array_keys($status))) {
+            return  "";
+        }
+
+        return $status[$this->attributes['status']] ?? "";
     }
 
     public function fewDates(): bool
     {
         $durations = $this->Logs()->sum("duration");
+
         return ($this->minutes) - $durations > 60;
     }
 
     public function getRs()
     {
         $durations = $this->Logs()->sum("duration");
+
         return ($this->minutes) - $durations;
     }
 
@@ -94,7 +105,6 @@ class Grade extends Model
         } else {
             return 0;
         }
-
     }
 
     public function toIndex()
@@ -122,7 +132,6 @@ class Grade extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-
 
     public function Student()
     {
